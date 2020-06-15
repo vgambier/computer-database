@@ -12,6 +12,7 @@ public class Computer {
 
 	public Computer(int id, String name, Date introduced, Date discontinued,
 			int company_id) {
+
 		super();
 		this.id = id;
 		this.name = name;
