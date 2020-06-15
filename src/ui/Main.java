@@ -2,6 +2,9 @@ package ui;
 
 import java.util.Scanner;
 
+import service.DatabaseConnection;
+import service.QueryHub;
+
 public class Main {
 
 	private static String helpMessage = String.join("\n", "List of commands:",
@@ -16,6 +19,11 @@ public class Main {
 	public static void main(String[] args) {
 
 		Scanner scanner = new Scanner(System.in); // Create a Scanner object
+
+		DatabaseConnection dbConnection = new DatabaseConnection(); // Does not
+																	// actually
+																	// create a
+																	// connection
 
 		System.out
 				.println("Welcome to CDB. Type 'help' for a list of commands.");
@@ -35,6 +43,7 @@ public class Main {
 
 				case "computers" :
 					System.out.println("Here is the list of all computers:");
+					QueryHub.listComputers(dbConnection);
 					// TODO call a function / SQL query
 					break;
 
