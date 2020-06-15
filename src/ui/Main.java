@@ -7,14 +7,12 @@ import service.QueryHub;
 
 public class Main {
 
-	private static String helpMessage = String.join("\n", "List of commands:",
-			"help: shows this message",
-			"computers: shows the list of all computers",
-			"companies: shows the list of all companies",
+	private static String helpMessage = String.join("\n", "List of commands:", "help: shows this message",
+			"computers: shows the list of all computers", "companies: shows the list of all companies",
 			"computerinfo <id>: shows all details pertaining to a given computer",
 			"create <data>: create a computer using the input data",
-			"update <id> <data>: update the data of a given computer",
-			"delete <id>: delete a given computer", "quit: exit the program");
+			"update <id> <data>: update the data of a given computer", "delete <id>: delete a given computer",
+			"quit: exit the program");
 
 	public static void main(String[] args) {
 
@@ -25,8 +23,7 @@ public class Main {
 																	// create a
 																	// connection
 
-		System.out
-				.println("Welcome to CDB. Type 'help' for a list of commands.");
+		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
 
 		while (true) {
 
@@ -42,18 +39,19 @@ public class Main {
 					break;
 
 				case "computers" :
-					System.out.println("Here is the list of all computers:");
 					QueryHub.listComputers(dbConnection);
-					// TODO call a function / SQL query
 					break;
 
 				case "companies" :
-					System.out.println("Here is the list of all companies:");
-					// TODO call a function / SQL query
+					QueryHub.listCompanies(dbConnection);
 					break;
 
 				case "computerinfo" :
-					// TODO
+					if (arr.length >= 2)
+						QueryHub.computerInfo(dbConnection, Integer.valueOf(arr[1]));
+					else
+						System.out.println(
+								"Please include the id of the computer you're looking for, e.g.: 'computerinfo 13'.");
 					break;
 
 				case "create" :
@@ -72,8 +70,7 @@ public class Main {
 					return; // Exit the program
 
 				default :
-					System.out
-							.println("Please enter a command, such as 'help'.");
+					System.out.println("Please enter a valid command, such as 'help'.");
 			}
 
 		}
