@@ -83,6 +83,14 @@ public class QueryHub {
 		printResultSet(statement, dbConnection);
 	}
 
+	/**
+	 * Prints all details about the given computer
+	 * 
+	 * @param dbConnection
+	 *            a generic DatabaseConnection object
+	 * @param id
+	 *            the id of the relevant computer
+	 */
 	public static void computerInfo(DatabaseConnection dbConnection, int id) {
 
 		String sql = "SELECT * FROM `company` WHERE id = ?";
@@ -98,4 +106,40 @@ public class QueryHub {
 		printResultSet(statement, dbConnection);
 	}
 
+	public static void addComputer(DatabaseConnection dbConnection, int id) {
+		// TODO
+		// INSERT INTO computer VALUES ('valeur 1', 'valeur 2', ...)
+	}
+
+	public static void updateComputer(DatabaseConnection dbConnection, int id) {
+		// TODO
+		// UPDATE computer SET colonne_1 = 'valeur 1', colonne_2 = * 'valeur 2',
+		// colonne_3 = 'valeur 3' WHERE id = %user_input%
+	}
+
+	/**
+	 * Deletes the entry of the given computer
+	 * 
+	 * @param dbConnection
+	 *            a generic DatabaseConnection object
+	 * @param id
+	 *            the id of the relevant computer
+	 */
+	public static void deleteComputer(DatabaseConnection dbConnection, int id) {
+
+		String sql = "DELETE FROM `computer` WHERE id = ?";
+		PreparedStatement statement = null;
+		Connection connection = dbConnection.connect();
+
+		try {
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, id);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Entry deleted.");
+
+	}
 }

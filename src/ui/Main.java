@@ -63,10 +63,15 @@ public class Main {
 					break;
 
 				case "delete" :
-					// TODO
+					if (arr.length >= 2)
+						QueryHub.deleteComputer(dbConnection, Integer.valueOf(arr[1]));
+					else
+						System.out.println(
+								"Please include the id of the computer you're looking for, e.g.: 'delete 54'.");
 					break;
 
 				case "quit" :
+					System.out.println("Exiting...");
 					return; // Exit the program
 
 				default :
