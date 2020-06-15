@@ -72,6 +72,7 @@ public class Main {
 
 				case "quit" :
 					System.out.println("Exiting...");
+					scanner.close();
 					return; // Exit the program
 
 				default :
