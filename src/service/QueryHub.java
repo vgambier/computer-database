@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-// TODO: delete this class
+// TODO: move everything to DAO and delete this class
 
 public class QueryHub {
 
@@ -39,9 +39,7 @@ public class QueryHub {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} // TODO remove finally {
-			// dbConnection.disconnect();
-			// }
+		}
 	}
 
 	/**
@@ -82,9 +80,6 @@ public class QueryHub {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		// TODO edit printResultSet(statement, dbConnection);
+		printResultSet(statement);
 	}
-
-	// TODO remove these functions
-
 }

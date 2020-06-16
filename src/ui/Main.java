@@ -21,7 +21,6 @@ public class Main {
 	private static Scanner scanner = new Scanner(System.in);
 	static DatabaseConnection dbConnection = new DatabaseConnection();
 	// Note: Does not actually create a connection
-	// TODO remove this useless object?
 
 	public static void main(String[] args) {
 

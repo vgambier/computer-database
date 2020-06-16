@@ -50,8 +50,6 @@ public class ComputerDAO {
 
 	}
 
-	// TODO change this function
-
 	/**
 	 * Adds an entry for a new computer
 	 * 
