@@ -17,17 +17,12 @@ public class Main {
 			"update <id> <data>: update the data of a given computer", "delete <id>: delete a given computer",
 			"quit: exit the program");
 
-	private static Scanner scanner = new Scanner(System.in); // Create a Scanner
-																// object
-	// scanner.useDelimiter(System.lineSeparator()); // Treat newlines as
-	// input separator
+	private static Scanner scanner = new Scanner(System.in);
 
 	public static void main(String[] args) {
 
-		DatabaseConnection dbConnection = new DatabaseConnection(); // Does not
-																	// actually
-																	// create a
-																	// connection
+		DatabaseConnection dbConnection = new DatabaseConnection();
+		// Note: Does not actually create a connection
 
 		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
 
@@ -64,8 +59,8 @@ public class Main {
 
 					// Name field
 
-					String computerName = null;
-					while (computerName == null) {
+					String computerName = "";
+					while (computerName.equals("")) {
 						System.out.println("Please enter the name of the new computer (mandatory):");
 						computerName = scanner.nextLine();
 					}
@@ -81,7 +76,8 @@ public class Main {
 					// Company ID field
 
 					System.out.println("Please enter the id of the company of the computer (optional):");
-					int companyID = scanner.nextInt();
+					String companyIDString = scanner.nextLine();
+					Integer companyID = companyIDString.equals("") ? null : Integer.valueOf(companyIDString);
 
 					QueryHub.addComputer(dbConnection, computerName, introducedDate, discontinuedDate, companyID);
 
@@ -119,8 +115,10 @@ public class Main {
 	}
 
 	/**
-	 * Asks the user for a date, parses it to verify it is a correct format, and
-	 * returns it as a Date object.
+	 * Asks the user for a date and parses it to verify it is a correct format
+	 * (until the input is either empty or correct) and returns it as a Date
+	 * object. If the input is empty at any point, the method returns null,
+	 * which is intended behavior.
 	 * 
 	 * @param string
 	 *            the name of the date that will be displayed to the user
@@ -129,7 +127,7 @@ public class Main {
 	private static Date askForDate(String string) {
 
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		formatter.setLenient(false);
+		formatter.setLenient(false); // allows format check
 
 		boolean isDateValid = false;
 		Date date = null;

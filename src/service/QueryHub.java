@@ -108,7 +108,7 @@ public class QueryHub {
 	}
 
 	public static void addComputer(DatabaseConnection dbConnection, String computerName, Date introducedDate,
-			Date discontinuedDate, int companyID) {
+			Date discontinuedDate, Integer companyID) {
 
 		String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 		PreparedStatement statement = null;
@@ -118,11 +118,16 @@ public class QueryHub {
 
 		try {
 			statement = connection.prepareStatement(sql);
+
 			statement.setString(1, computerName);
-			statement.setDate(2, introducedDate);
-			statement.setDate(3, discontinuedDate);
-			statement.setInt(4, companyID);
-			statement.executeUpdate();
+			statement.setDate(2, introducedDate); // possibly null
+			statement.setDate(3, discontinuedDate); // possibly null
+
+			if (companyID == null)
+				statement.setNull(4, java.sql.Types.INTEGER);
+			else
+				statement.setInt(4, companyID);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
