@@ -1,5 +1,9 @@
 package ui;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 import service.DatabaseConnection;
@@ -9,14 +13,16 @@ public class Main {
 
 	private static String helpMessage = String.join("\n", "List of commands:", "help: shows this message",
 			"computers: shows the list of all computers", "companies: shows the list of all companies",
-			"computerinfo <id>: shows all details pertaining to a given computer",
-			"create <data>: create a computer using the input data",
+			"computerinfo <id>: shows all details pertaining to a given computer", "create: create a computer",
 			"update <id> <data>: update the data of a given computer", "delete <id>: delete a given computer",
 			"quit: exit the program");
 
-	public static void main(String[] args) {
+	private static Scanner scanner = new Scanner(System.in); // Create a Scanner
+																// object
+	// scanner.useDelimiter(System.lineSeparator()); // Treat newlines as
+	// input separator
 
-		Scanner scanner = new Scanner(System.in); // Create a Scanner object
+	public static void main(String[] args) {
 
 		DatabaseConnection dbConnection = new DatabaseConnection(); // Does not
 																	// actually
@@ -55,11 +61,40 @@ public class Main {
 					break;
 
 				case "create" :
-					// TODO
+
+					// Name field
+
+					String computerName = null;
+					while (computerName == null) {
+						System.out.println("Please enter the name of the new computer (mandatory):");
+						computerName = scanner.nextLine();
+					}
+
+					// Introduced field
+
+					Date introducedDate = askForDate("introduction");
+
+					// Discontinued field
+
+					Date discontinuedDate = askForDate("discontinuation");
+
+					// Company ID field
+
+					System.out.println("Please enter the id of the company of the computer (optional):");
+					int companyID = scanner.nextInt();
+
+					QueryHub.addComputer(dbConnection, computerName, introducedDate, discontinuedDate, companyID);
+
 					break;
 
 				case "update" :
 					// TODO
+					// optionally and successively give:
+					// existing ID MANDATORY
+					// name varchar(255) MANDATORY
+					// introduced datetime
+					// discontinued datetime
+					// company_id bigint
 					break;
 
 				case "delete" :
@@ -67,7 +102,7 @@ public class Main {
 						QueryHub.deleteComputer(dbConnection, Integer.valueOf(arr[1]));
 					else
 						System.out.println(
-								"Please include the id of the computer you're looking for, e.g.: 'delete 54'.");
+								"Please include the id of the computer you want to delete, e.g.: 'delete 54'.");
 					break;
 
 				case "quit" :
@@ -80,6 +115,46 @@ public class Main {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Asks the user for a date, parses it to verify it is a correct format, and
+	 * returns it as a Date object.
+	 * 
+	 * @param string
+	 *            the name of the date that will be displayed to the user
+	 * @return the corresponding Date object
+	 */
+	private static Date askForDate(String string) {
+
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		formatter.setLenient(false);
+
+		boolean isDateValid = false;
+		Date date = null;
+		while (isDateValid == false) {
+
+			try {
+
+				System.out.println("Please enter the date of " + string + " of the computer (YYYY-MM-DD) (optional):");
+
+				String userInput = scanner.nextLine();
+
+				if (userInput.equals(""))
+					break;
+
+				formatter.parse(userInput); // throws a ParseException if the
+											// input is not properly formatted
+				isDateValid = true;
+				date = java.sql.Date.valueOf(userInput);
+
+			} catch (ParseException e) {
+				System.out.println("Wrong format!");
+			}
+		}
+
+		return date;
 
 	}
 

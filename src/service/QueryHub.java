@@ -1,6 +1,7 @@
 package service;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -93,7 +94,7 @@ public class QueryHub {
 	 */
 	public static void computerInfo(DatabaseConnection dbConnection, int id) {
 
-		String sql = "SELECT * FROM `company` WHERE id = ?";
+		String sql = "SELECT * FROM `computer` WHERE id = ?";
 		PreparedStatement statement = null;
 		Connection connection = dbConnection.connect();
 
@@ -106,9 +107,27 @@ public class QueryHub {
 		printResultSet(statement, dbConnection);
 	}
 
-	public static void addComputer(DatabaseConnection dbConnection, int id) {
-		// TODO
-		// INSERT INTO computer VALUES ('valeur 1', 'valeur 2', ...)
+	public static void addComputer(DatabaseConnection dbConnection, String computerName, Date introducedDate,
+			Date discontinuedDate, int companyID) {
+
+		String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
+		PreparedStatement statement = null;
+		Connection connection = dbConnection.connect();
+
+		// Converting to dates
+
+		try {
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, computerName);
+			statement.setDate(2, introducedDate);
+			statement.setDate(3, discontinuedDate);
+			statement.setInt(4, companyID);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Entry added.");
 	}
 
 	public static void updateComputer(DatabaseConnection dbConnection, int id) {
