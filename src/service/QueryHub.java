@@ -118,7 +118,6 @@ public class QueryHub {
 
 		try {
 			statement = connection.prepareStatement(sql);
-
 			statement.setString(1, computerName);
 			statement.setDate(2, introducedDate); // possibly null
 			statement.setDate(3, discontinuedDate); // possibly null
@@ -127,6 +126,8 @@ public class QueryHub {
 				statement.setNull(4, java.sql.Types.INTEGER);
 			else
 				statement.setInt(4, companyID);
+
+			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
