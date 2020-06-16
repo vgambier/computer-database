@@ -107,6 +107,20 @@ public class QueryHub {
 		printResultSet(statement, dbConnection);
 	}
 
+	/**
+	 * Adds an entry for a new computer
+	 * 
+	 * @param dbConnection
+	 *            a generic DatabaseConnection object
+	 * @param computerName
+	 *            the name of the new computer - cannot be null
+	 * @param introducedDate
+	 *            the date of introduction of the new computer - may be null
+	 * @param discontinuedDate
+	 *            the date of discontinuation of the new computer - may be null
+	 * @param companyID
+	 *            the ID of the company of the new computer - may be null
+	 */
 	public static void addComputer(DatabaseConnection dbConnection, String computerName, Date introducedDate,
 			Date discontinuedDate, Integer companyID) {
 
@@ -136,10 +150,51 @@ public class QueryHub {
 		System.out.println("Entry added.");
 	}
 
-	public static void updateComputer(DatabaseConnection dbConnection, int id) {
-		// TODO
-		// UPDATE computer SET colonne_1 = 'valeur 1', colonne_2 = * 'valeur 2',
-		// colonne_3 = 'valeur 3' WHERE id = %user_input%
+	/**
+	 * Adds an entry for a new computer
+	 * 
+	 * @param dbConnection
+	 *            a generic DatabaseConnection object
+	 * @param id
+	 *            the id of the existing computer
+	 * @param newComputerName
+	 *            the new name of the computer - cannot be null
+	 * @param newIntroducedDate
+	 *            the new date of introduction of the computer - may be null
+	 * @param newDiscontinuedDate
+	 *            the new date of discontinuation of the computer - may be null
+	 * @param newCompanyID
+	 *            the new ID of the company of the computer - may be null
+	 */
+	public static void updateComputer(DatabaseConnection dbConnection, int id, String newComputerName,
+			Date newIntroducedDate, Date newDiscontinuedDate, Integer newCompanyID) {
+
+		String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
+		PreparedStatement statement = null;
+		Connection connection = dbConnection.connect();
+
+		// Converting to dates
+
+		try {
+			statement = connection.prepareStatement(sql);
+			statement.setString(1, newComputerName);
+			statement.setDate(2, newIntroducedDate); // possibly null
+			statement.setDate(3, newDiscontinuedDate); // possibly null
+
+			if (newCompanyID == null)
+				statement.setNull(4, java.sql.Types.INTEGER);
+			else
+				statement.setInt(4, newCompanyID);
+
+			statement.setInt(5, id);
+			statement.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Entry updated.");
+
 	}
 
 	/**

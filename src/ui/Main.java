@@ -14,7 +14,7 @@ public class Main {
 	private static String helpMessage = String.join("\n", "List of commands:", "help: shows this message",
 			"computers: shows the list of all computers", "companies: shows the list of all companies",
 			"computerinfo <id>: shows all details pertaining to a given computer", "create: create a computer",
-			"update <id> <data>: update the data of a given computer", "delete <id>: delete a given computer",
+			"update: update the data of a given computer", "delete <id>: delete a given computer",
 			"quit: exit the program");
 
 	private static Scanner scanner = new Scanner(System.in);
@@ -84,13 +84,48 @@ public class Main {
 					break;
 
 				case "update" :
-					// TODO
-					// optionally and successively give:
-					// existing ID MANDATORY
-					// name varchar(255) MANDATORY
-					// introduced datetime
-					// discontinued datetime
-					// company_id bigint
+
+					// ID field
+
+					String computerIDString = "";
+					while (computerIDString.equals("")) {
+						System.out.println("Please enter the ID of the computer you wish to update:");
+						computerIDString = scanner.nextLine();
+					}
+					Integer computerID = Integer.valueOf(computerIDString);
+
+					// Displaying current info
+
+					System.out.println("Here is the current data on record:");
+					QueryHub.computerInfo(dbConnection, computerID);
+					System.out
+							.println("Now, please enter the new data. Leave fields blank if you wish to remove them.");
+
+					// Name field
+
+					String newComputerName = "";
+					while (newComputerName.equals("")) {
+						System.out.println("Please enter the name of the computer:");
+						newComputerName = scanner.nextLine();
+					}
+
+					// Introduced field
+
+					Date newIntroducedDate = askForDate("introduction");
+
+					// Discontinued field
+
+					Date newDiscontinuedDate = askForDate("discontinuation");
+
+					// Company ID field
+
+					System.out.println("Please enter the id of the company of the computer:");
+					String newCompanyIDString = scanner.nextLine();
+					Integer newCompanyID = newCompanyIDString.equals("") ? null : Integer.valueOf(newCompanyIDString);
+
+					QueryHub.updateComputer(dbConnection, computerID, newComputerName, newIntroducedDate,
+							newDiscontinuedDate, newCompanyID);
+
 					break;
 
 				case "delete" :
@@ -109,9 +144,7 @@ public class Main {
 				default :
 					System.out.println("Please enter a valid command, such as 'help'.");
 			}
-
 		}
-
 	}
 
 	/**
