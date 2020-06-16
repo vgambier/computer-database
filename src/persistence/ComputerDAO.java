@@ -1,90 +1,57 @@
-package service;
+package persistence;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-public class QueryHub {
+import model.Computer;
+import service.DatabaseConnection;
+
+public class ComputerDAO {
+
+	private Connection connection;
+
+	public ComputerDAO(Connection connection) {
+		this.connection = connection;
+	}
 
 	/**
-	 * Given a DatabaseConnection object and a PreparedStatement, prints all of
-	 * the results. Useful for listComputers(), listCompanies(), and
-	 * computerInfo().
+	 * Finds a computer in the database, and returns a corresponding Java object
 	 * 
-	 * @param statement
-	 *            a PreparedStatement
-	 * @param dbConnection
-	 *            a generic DatabaseConnection object
+	 * @param id
+	 *            the id of the computer in the database
+	 * @return a Computer object, with the same attributes as the computer entry
+	 *         in the database
 	 */
-	public static void printResultSet(PreparedStatement statement) {
+	public Computer find(int id) {
+
+		Computer computer = new Computer();
+
+		String sql = "SELECT * FROM `computer` WHERE id = ?";
+		PreparedStatement statement = null;
 
 		try {
-
-			// Connecting to the database and executing the query
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
-			ResultSetMetaData rsmd = resultSet.getMetaData();
 
-			// Formatting the dataset
-			int columnsNumber = rsmd.getColumnCount();
-			while (resultSet.next()) {
-				for (int i = 1; i <= columnsNumber; i++) {
-					System.out.print(rsmd.getColumnName(i) + ": " + resultSet.getString(i) + "\t");
-				}
-				System.out.println(""); // linebreak
+			if (resultSet.first()) {
+				computer = new Computer(id, resultSet.getString("name"), resultSet.getDate("introduced"),
+						resultSet.getDate("discontinued"), resultSet.getInt("company_id"));
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} // TODO remove finally {
-			// dbConnection.disconnect();
-			// }
-	}
-
-	/**
-	 * Lists all computers from the database, giving their id and name
-	 * 
-	 * @param dbConnection
-	 *            a generic DatabaseConnection object
-	 */
-	public static void listComputers(DatabaseConnection dbConnection) {
-
-		String sql = "SELECT id, name FROM `computer`";
-		PreparedStatement statement = null;
-		Connection connection = dbConnection.connect();
-
-		try {
-			statement = connection.prepareStatement(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 
-		// TODO edit printResultSet(statement, dbConnection);
+		return computer;
+
 	}
 
-	/**
-	 * Lists all companies from the database, giving their id and name
-	 * 
-	 * @param dbConnection
-	 *            a generic DatabaseConnection object
-	 */
-	public static void listCompanies(DatabaseConnection dbConnection) {
-
-		String sql = "SELECT id, name FROM `company`";
-		PreparedStatement statement = null;
-		Connection connection = dbConnection.connect();
-
-		try {
-			statement = connection.prepareStatement(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		// TODO edit printResultSet(statement, dbConnection);
-	}
-
-	// TODO remove these functions
+	// TODO change this function
 
 	/**
 	 * Adds an entry for a new computer
@@ -100,8 +67,8 @@ public class QueryHub {
 	 * @param companyID
 	 *            the ID of the company of the new computer - may be null
 	 */
-	public static void addComputer(DatabaseConnection dbConnection, String computerName, Date introducedDate,
-			Date discontinuedDate, Integer companyID) {
+	public void add(DatabaseConnection dbConnection, String computerName, Date introducedDate, Date discontinuedDate,
+			Integer companyID) {
 
 		String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 		PreparedStatement statement = null;
@@ -129,6 +96,8 @@ public class QueryHub {
 		System.out.println("Entry added.");
 	}
 
+	// TODO change this function
+
 	/**
 	 * Adds an entry for a new computer
 	 * 
@@ -145,8 +114,8 @@ public class QueryHub {
 	 * @param newCompanyID
 	 *            the new ID of the company of the computer - may be null
 	 */
-	public static void updateComputer(DatabaseConnection dbConnection, int id, String newComputerName,
-			Date newIntroducedDate, Date newDiscontinuedDate, Integer newCompanyID) {
+	public void update(DatabaseConnection dbConnection, int id, String newComputerName, Date newIntroducedDate,
+			Date newDiscontinuedDate, Integer newCompanyID) {
 
 		String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 		PreparedStatement statement = null;
@@ -179,16 +148,13 @@ public class QueryHub {
 	/**
 	 * Deletes the entry of the given computer
 	 * 
-	 * @param dbConnection
-	 *            a generic DatabaseConnection object
 	 * @param id
 	 *            the id of the relevant computer
 	 */
-	public static void deleteComputer(DatabaseConnection dbConnection, int id) {
+	public void delete(int id) {
 
 		String sql = "DELETE FROM `computer` WHERE id = ?";
 		PreparedStatement statement = null;
-		Connection connection = dbConnection.connect();
 
 		try {
 			statement = connection.prepareStatement(sql);
@@ -201,4 +167,10 @@ public class QueryHub {
 		System.out.println("Entry deleted.");
 
 	}
+
+	// TODO
+	public ArrayList<Computer> listAll() {
+		return null;
+	}
+
 }

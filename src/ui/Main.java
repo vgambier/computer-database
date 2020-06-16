@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
+import model.Computer;
+import persistence.ComputerDAO;
 import service.DatabaseConnection;
 import service.QueryHub;
 
@@ -18,11 +20,11 @@ public class Main {
 			"quit: exit the program");
 
 	private static Scanner scanner = new Scanner(System.in);
+	static DatabaseConnection dbConnection = new DatabaseConnection();
+	// Note: Does not actually create a connection
+	// TODO remove this useless object?
 
 	public static void main(String[] args) {
-
-		DatabaseConnection dbConnection = new DatabaseConnection();
-		// Note: Does not actually create a connection
 
 		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
 
@@ -47,9 +49,10 @@ public class Main {
 					QueryHub.listCompanies(dbConnection);
 					break;
 
+				// TODO: check the id exists
 				case "computerinfo" :
 					if (arr.length >= 2)
-						QueryHub.computerInfo(dbConnection, Integer.valueOf(arr[1]));
+						printComputerByID(Integer.valueOf(arr[1]));
 					else
 						System.out.println(
 								"Please include the id of the computer you're looking for, e.g.: 'computerinfo 13'.");
@@ -106,7 +109,7 @@ public class Main {
 					// Displaying current info
 
 					System.out.println("Here is the current data on record:");
-					QueryHub.computerInfo(dbConnection, computerID);
+					printComputerByID(computerID);
 					System.out
 							.println("Now, please enter the new data. Leave fields blank if you wish to remove them.");
 
@@ -139,8 +142,12 @@ public class Main {
 					break;
 
 				case "delete" :
-					if (arr.length >= 2)
-						QueryHub.deleteComputer(dbConnection, Integer.valueOf(arr[1]));
+					if (arr.length >= 2) {
+						ComputerDAO computerDAO = new ComputerDAO(dbConnection.connect());
+						computerDAO.delete(Integer.valueOf(arr[1]));
+					}
+					// TODO remove this QueryHub.deleteComputer(dbConnection,
+					// Integer.valueOf(arr[1]));
 					else
 						System.out.println(
 								"Please include the id of the computer you want to delete, e.g.: 'delete 54'.");
@@ -197,6 +204,19 @@ public class Main {
 
 		return date;
 
+	}
+
+	/**
+	 * Queries the database for the desired computer and prints all of its
+	 * information
+	 * 
+	 * @param id
+	 *            the id of the computer
+	 */
+	public static void printComputerByID(int id) {
+		ComputerDAO computerDAO = new ComputerDAO(dbConnection.connect());
+		Computer computer = computerDAO.find(id);
+		System.out.println(computer);
 	}
 
 }
