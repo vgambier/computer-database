@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
-import model.Computer;
 import persistence.ComputerDAO;
 import service.DatabaseConnection;
 import service.QueryHub;
@@ -27,6 +26,8 @@ public class Main {
 	public static void main(String[] args) {
 
 		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
+
+		ComputerDAO computerDAO = new ComputerDAO(dbConnection.connect());
 
 		while (true) {
 
@@ -52,7 +53,7 @@ public class Main {
 				// TODO: check the id exists
 				case "computerinfo" :
 					if (arr.length >= 2)
-						printComputerByID(Integer.valueOf(arr[1]));
+						System.out.println(computerDAO.find(Integer.valueOf(arr[1])));
 					else
 						System.out.println(
 								"Please include the id of the computer you're looking for, e.g.: 'computerinfo 13'.");
@@ -91,7 +92,7 @@ public class Main {
 					String companyIDString = scanner.nextLine();
 					Integer companyID = companyIDString.equals("") ? null : Integer.valueOf(companyIDString);
 
-					QueryHub.addComputer(dbConnection, computerName, introducedDate, discontinuedDate, companyID);
+					computerDAO.add(computerName, introducedDate, discontinuedDate, companyID);
 
 					break;
 
@@ -109,7 +110,7 @@ public class Main {
 					// Displaying current info
 
 					System.out.println("Here is the current data on record:");
-					printComputerByID(computerID);
+					System.out.println(computerDAO.find(computerID));
 					System.out
 							.println("Now, please enter the new data. Leave fields blank if you wish to remove them.");
 
@@ -136,18 +137,14 @@ public class Main {
 					String newCompanyIDString = scanner.nextLine();
 					Integer newCompanyID = newCompanyIDString.equals("") ? null : Integer.valueOf(newCompanyIDString);
 
-					QueryHub.updateComputer(dbConnection, computerID, newComputerName, newIntroducedDate,
-							newDiscontinuedDate, newCompanyID);
+					computerDAO.update(computerID, newComputerName, newIntroducedDate, newDiscontinuedDate,
+							newCompanyID);
 
 					break;
 
 				case "delete" :
-					if (arr.length >= 2) {
-						ComputerDAO computerDAO = new ComputerDAO(dbConnection.connect());
+					if (arr.length >= 2)
 						computerDAO.delete(Integer.valueOf(arr[1]));
-					}
-					// TODO remove this QueryHub.deleteComputer(dbConnection,
-					// Integer.valueOf(arr[1]));
 					else
 						System.out.println(
 								"Please include the id of the computer you want to delete, e.g.: 'delete 54'.");
@@ -205,18 +202,4 @@ public class Main {
 		return date;
 
 	}
-
-	/**
-	 * Queries the database for the desired computer and prints all of its
-	 * information
-	 * 
-	 * @param id
-	 *            the id of the computer
-	 */
-	public static void printComputerByID(int id) {
-		ComputerDAO computerDAO = new ComputerDAO(dbConnection.connect());
-		Computer computer = computerDAO.find(id);
-		System.out.println(computer);
-	}
-
 }

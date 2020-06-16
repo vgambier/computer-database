@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.Computer;
-import service.DatabaseConnection;
 
 public class ComputerDAO {
 
@@ -56,8 +55,6 @@ public class ComputerDAO {
 	/**
 	 * Adds an entry for a new computer
 	 * 
-	 * @param dbConnection
-	 *            a generic DatabaseConnection object
 	 * @param computerName
 	 *            the name of the new computer - cannot be null
 	 * @param introducedDate
@@ -67,12 +64,10 @@ public class ComputerDAO {
 	 * @param companyID
 	 *            the ID of the company of the new computer - may be null
 	 */
-	public void add(DatabaseConnection dbConnection, String computerName, Date introducedDate, Date discontinuedDate,
-			Integer companyID) {
+	public void add(String computerName, Date introducedDate, Date discontinuedDate, Integer companyID) {
 
 		String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 		PreparedStatement statement = null;
-		Connection connection = dbConnection.connect();
 
 		// Converting to dates
 
@@ -96,13 +91,9 @@ public class ComputerDAO {
 		System.out.println("Entry added.");
 	}
 
-	// TODO change this function
-
 	/**
 	 * Adds an entry for a new computer
 	 * 
-	 * @param dbConnection
-	 *            a generic DatabaseConnection object
 	 * @param id
 	 *            the id of the existing computer
 	 * @param newComputerName
@@ -114,12 +105,11 @@ public class ComputerDAO {
 	 * @param newCompanyID
 	 *            the new ID of the company of the computer - may be null
 	 */
-	public void update(DatabaseConnection dbConnection, int id, String newComputerName, Date newIntroducedDate,
-			Date newDiscontinuedDate, Integer newCompanyID) {
+	public void update(int id, String newComputerName, Date newIntroducedDate, Date newDiscontinuedDate,
+			Integer newCompanyID) {
 
 		String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 		PreparedStatement statement = null;
-		Connection connection = dbConnection.connect();
 
 		// Converting to dates
 

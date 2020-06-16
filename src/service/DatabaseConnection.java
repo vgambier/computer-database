@@ -18,15 +18,11 @@ public class DatabaseConnection {
 	 */
 	public Connection connect() {
 
-		System.out.println("Connecting to the database...");
-
 		try {
-			connection = DriverManager.getConnection(DATABASE_URL, USERNAME,
-					PASSWORD);
+			connection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("Cannot connect to the database");
-			throw new IllegalStateException(
-					"Exception: cannot connect to the database.", e);
+			throw new IllegalStateException("Exception: cannot connect to the database.", e);
 		}
 
 		return connection;
@@ -47,5 +43,4 @@ public class DatabaseConnection {
 			}
 		}
 	}
-
 }
