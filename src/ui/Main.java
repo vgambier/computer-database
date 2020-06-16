@@ -73,6 +73,15 @@ public class Main {
 
 					Date discontinuedDate = askForDate("discontinuation");
 
+					// If both dates have been given, we must check that the
+					// discontinuation comes later
+					if (introducedDate != null) {
+						while (discontinuedDate != null && discontinuedDate.before(introducedDate)) {
+							System.out.println("The date of discontinuation must be after the date of introduction.");
+							discontinuedDate = askForDate("discontinuation");
+						}
+					}
+
 					// Company ID field
 
 					System.out.println("Please enter the id of the company of the computer (optional):");
@@ -118,6 +127,7 @@ public class Main {
 					Date newDiscontinuedDate = askForDate("discontinuation");
 
 					// Company ID field
+					// TODO: check this ID exists
 
 					System.out.println("Please enter the id of the company of the computer:");
 					String newCompanyIDString = scanner.nextLine();
@@ -160,7 +170,7 @@ public class Main {
 	private static Date askForDate(String string) {
 
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		formatter.setLenient(false); // allows format check
+		formatter.setLenient(false); // allows stricter format check
 
 		boolean isDateValid = false;
 		Date date = null;
