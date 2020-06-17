@@ -26,7 +26,7 @@ public class Main {
 
 	private static Scanner scanner = new Scanner(System.in);
 	static DatabaseConnection dbConnection = new DatabaseConnection();
-	// Note: Does not actually create a connection
+	// Note: Does not actually create a connection to the database
 
 	public static void main(String[] args) throws NumberFormatException, CDBException {
 
@@ -43,17 +43,18 @@ public class Main {
 		while (!isQuitting) {
 
 			String userInput = scanner.nextLine(); // Read user input
-			String[] arr = userInput.split(" ", 2); // Splits the user input
-													// into 2 arrays
+			String[] arr = userInput.split(" ", 2); // Splits the user input into 2 arrays
 			String command = arr[0]; // First word of the user input
 
 			switch (command) {
 
 				case "help" :
+
 					System.out.println(helpMessage);
 					break;
 
 				case "computers" :
+
 					for (Computer computer : computerDAO.listAll())
 						System.out.println(computer);
 					break;
@@ -83,12 +84,14 @@ public class Main {
 					break;
 
 				case "companies" :
+
 					for (Company company : companyDAO.listAll())
 						System.out.println(company);
 					break;
 
-				// TODO: check the ID exists
 				case "computerinfo" :
+
+					// TODO: check the ID exists
 					if (arr.length >= 2)
 						System.out.println(computerDAO.find(Integer.valueOf(arr[1])));
 					else
@@ -97,91 +100,16 @@ public class Main {
 					break;
 
 				case "create" :
-
-					// Name field
-
-					String computerName = "";
-					while (computerName.equals("")) {
-						System.out.println("Please enter the name of the new computer (mandatory):");
-						computerName = scanner.nextLine();
-					}
-
-					// Introduced field
-
-					Date introducedDate = askForDate("introduction");
-
-					// Discontinued field
-
-					Date discontinuedDate = askForDate("discontinuation");
-
-					// If both dates have been given, we must check that the
-					// discontinuation comes later
-					if (introducedDate != null) {
-						while (discontinuedDate != null && discontinuedDate.before(introducedDate)) {
-							System.out.println("The date of discontinuation must be after the date of introduction.");
-							discontinuedDate = askForDate("discontinuation");
-						}
-					}
-
-					// Company ID field
-					// TODO: check this ID exists
-
-					System.out.println("Please enter the id of the company of the computer (optional):");
-					String companyIDString = scanner.nextLine();
-					Integer companyID = companyIDString.equals("") ? null : Integer.valueOf(companyIDString);
-
-					computerDAO.add(computerName, introducedDate, discontinuedDate, companyID);
-
+					create(computerDAO);
 					break;
 
 				case "update" :
-
-					// ID field
-
-					String computerIDString = "";
-					while (computerIDString.equals("")) {
-						System.out.println("Please enter the ID of the computer you wish to update:");
-						computerIDString = scanner.nextLine();
-					}
-					Integer computerID = Integer.valueOf(computerIDString);
-
-					// Displaying current info
-
-					System.out.println("Here is the current data on record:");
-					System.out.println(computerDAO.find(computerID));
-					System.out
-							.println("Now, please enter the new data. Leave fields blank if you wish to remove them.");
-
-					// Name field
-
-					String newComputerName = "";
-					while (newComputerName.equals("")) {
-						System.out.println("Please enter the name of the computer:");
-						newComputerName = scanner.nextLine();
-					}
-
-					// Introduced field
-
-					Date newIntroducedDate = askForDate("introduction");
-
-					// Discontinued field
-
-					Date newDiscontinuedDate = askForDate("discontinuation");
-
-					// Company ID field
-					// TODO: check this ID exists
-
-					System.out.println("Please enter the id of the company of the computer:");
-					String newCompanyIDString = scanner.nextLine();
-					Integer newCompanyID = newCompanyIDString.equals("") ? null : Integer.valueOf(newCompanyIDString);
-
-					computerDAO.update(computerID, newComputerName, newIntroducedDate, newDiscontinuedDate,
-							newCompanyID);
-
+					update(computerDAO);
 					break;
 
-				// Check that id exists
 				case "delete" :
+
+					// TODO: check the ID exists
 					if (arr.length >= 2)
 						computerDAO.delete(Integer.valueOf(arr[1]));
 					else
@@ -203,6 +131,104 @@ public class Main {
 		System.out.println("Exiting...");
 		dbConnection.disconnect();
 		scanner.close();
+	}
+
+	/**
+	 * create command logic: prompts the user and adds a corresponding entry to
+	 * the database
+	 * 
+	 * @param computerDAO
+	 *            a (Singleton) computerDAO object
+	 * @throws CDBException
+	 */
+	private static void create(ComputerDAO computerDAO) throws CDBException {
+
+		// Name field
+
+		String computerName = "";
+		while (computerName.equals("")) {
+			System.out.println("Please enter the name of the new computer (mandatory):");
+			computerName = scanner.nextLine();
+		}
+
+		// Introduced field
+
+		Date introducedDate = askForDate("introduction");
+
+		// Discontinued field
+
+		Date discontinuedDate = askForDate("discontinuation");
+
+		// If both dates have been given, we must check that the discontinuation comes later
+		if (introducedDate != null) {
+			while (discontinuedDate != null && discontinuedDate.before(introducedDate)) {
+				System.out.println("The date of discontinuation must be after the date of introduction.");
+				discontinuedDate = askForDate("discontinuation");
+			}
+		}
+
+		// Company ID field
+		// TODO: check this ID exists
+
+		System.out.println("Please enter the id of the company of the computer (optional):");
+		String companyIDString = scanner.nextLine();
+		Integer companyID = companyIDString.equals("") ? null : Integer.valueOf(companyIDString);
+
+		computerDAO.add(computerName, introducedDate, discontinuedDate, companyID);
+
+	}
+
+	/**
+	 * update command logic: prompts the user and adds a corresponding entry to
+	 * the database
+	 * 
+	 * @param computerDAO
+	 *            a (Singleton) computerDAO object
+	 * @throws CDBException
+	 */
+	private static void update(ComputerDAO computerDAO) throws CDBException {
+
+		// ID field
+		// TODO: check this ID exists
+
+		String computerIDString = "";
+		while (computerIDString.equals("")) {
+			System.out.println("Please enter the ID of the computer you wish to update:");
+			computerIDString = scanner.nextLine();
+		}
+		Integer computerID = Integer.valueOf(computerIDString);
+
+		// Displaying current info
+
+		System.out.println("Here is the current data on record:");
+		System.out.println(computerDAO.find(computerID));
+		System.out.println("Now, please enter the new data. Leave fields blank if you wish to remove them.");
+
+		// Name field
+
+		String newComputerName = "";
+		while (newComputerName.equals("")) {
+			System.out.println("Please enter the name of the computer:");
+			newComputerName = scanner.nextLine();
+		}
+
+		// Introduced field
+
+		Date newIntroducedDate = askForDate("introduction");
+
+		// Discontinued field
+
+		Date newDiscontinuedDate = askForDate("discontinuation");
+
+		// Company ID field
+		// TODO: check this ID exists
+
+		System.out.println("Please enter the id of the company of the computer:");
+		String newCompanyIDString = scanner.nextLine();
+		Integer newCompanyID = newCompanyIDString.equals("") ? null : Integer.valueOf(newCompanyIDString);
+
+		computerDAO.update(computerID, newComputerName, newIntroducedDate, newDiscontinuedDate, newCompanyID);
+
 	}
 
 	/**
