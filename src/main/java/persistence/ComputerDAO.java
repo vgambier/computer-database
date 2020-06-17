@@ -15,12 +15,20 @@ import service.CDBException;
 
 public class ComputerDAO {
 
-	private static ComputerDAO INSTANCE = new ComputerDAO();
-	private Connection connection;
+	private static ComputerDAO INSTANCE = null;
 
-	public ComputerDAO() {
-		connection = new DatabaseConnection().connect();
+	private ComputerDAO() {
+		connection = DatabaseConnection.getInstance().connect();
 	}
+
+	// Singleton instance getter
+	public static ComputerDAO getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new ComputerDAO();
+		return INSTANCE;
+	}
+
+	private Connection connection;
 
 	/**
 	 * Finds a computer in the database, and returns a corresponding Java object
@@ -265,13 +273,6 @@ public class ComputerDAO {
 	}
 
 	// Getters and setters
-
-	// Singleton instance getter
-	public static ComputerDAO getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new ComputerDAO();
-		return INSTANCE;
-	}
 
 	public void setConnection(Connection connection) {
 		this.connection = connection;

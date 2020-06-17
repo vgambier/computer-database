@@ -6,7 +6,21 @@ import java.sql.SQLException;
 
 import service.CDBException;
 
+/* This class uses the Singleton pattern */
+
 public class DatabaseConnection implements AutoCloseable {
+
+	private static DatabaseConnection INSTANCE = null;
+
+	private DatabaseConnection() {
+	}
+
+	public static DatabaseConnection getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new DatabaseConnection();
+		}
+		return INSTANCE;
+	}
 
 	private static Connection connection;
 	private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/computer-database-db?serverTimezone=UTC";
