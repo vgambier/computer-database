@@ -10,6 +10,7 @@ import model.Company;
 import model.Computer;
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
+import service.CDBException;
 import service.DatabaseConnection;
 
 public class Main {
@@ -24,7 +25,7 @@ public class Main {
 	static DatabaseConnection dbConnection = new DatabaseConnection();
 	// Note: Does not actually create a connection
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NumberFormatException, CDBException {
 
 		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
 

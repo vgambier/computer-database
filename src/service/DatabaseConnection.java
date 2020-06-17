@@ -31,15 +31,17 @@ public class DatabaseConnection {
 
 	/**
 	 * Disconnects from the database
+	 * 
+	 * @throws CDBException
 	 */
-	public void disconnect() {
+	public void disconnect() throws CDBException {
 
 		if (connection != null) {
 			try {
 				connection.close();
 				connection = null;
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new CDBException("Couldn't close the connection!");
 			}
 		}
 	}

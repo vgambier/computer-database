@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.Computer;
+import service.CDBException;
 
 public class ComputerDAO {
 
@@ -24,8 +25,9 @@ public class ComputerDAO {
 	 *            the id of the computer in the database
 	 * @return a Computer object, with the same attributes as the computer entry
 	 *         in the database
+	 * @throws CDBException
 	 */
-	public Computer find(int id) {
+	public Computer find(int id) throws CDBException {
 
 		Computer computer = new Computer();
 
@@ -35,6 +37,11 @@ public class ComputerDAO {
 		try {
 			statement = connection.prepareStatement(sql);
 			statement.setInt(1, id);
+		} catch (SQLException e) {
+			throw new CDBException("Couldn't prepare the SQL statement!");
+		}
+
+		try {
 			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.first()) {
@@ -43,7 +50,7 @@ public class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new CDBException("Couldn't execute the query!");
 		}
 
 		return computer;
@@ -61,8 +68,10 @@ public class ComputerDAO {
 	 *            the date of discontinuation of the new computer - may be null
 	 * @param companyID
 	 *            the ID of the company of the new computer - may be null
+	 * @throws CDBException
 	 */
-	public void add(String computerName, Date introducedDate, Date discontinuedDate, Integer companyID) {
+	public void add(String computerName, Date introducedDate, Date discontinuedDate, Integer companyID)
+			throws CDBException {
 
 		String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 		PreparedStatement statement = null;
@@ -79,11 +88,14 @@ public class ComputerDAO {
 				statement.setNull(4, java.sql.Types.INTEGER);
 			else
 				statement.setInt(4, companyID);
-
-			statement.executeUpdate();
-
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new CDBException("Couldn't prepare the SQL statement!");
+		}
+
+		try {
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new CDBException("Couldn't execute the query!");
 		}
 
 		System.out.println("Entry added.");
@@ -102,9 +114,10 @@ public class ComputerDAO {
 	 *            the new date of discontinuation of the computer - may be null
 	 * @param newCompanyID
 	 *            the new ID of the company of the computer - may be null
+	 * @throws CDBException
 	 */
 	public void update(int id, String newComputerName, Date newIntroducedDate, Date newDiscontinuedDate,
-			Integer newCompanyID) {
+			Integer newCompanyID) throws CDBException {
 
 		String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 		PreparedStatement statement = null;
@@ -123,10 +136,16 @@ public class ComputerDAO {
 				statement.setInt(4, newCompanyID);
 
 			statement.setInt(5, id);
+
+		} catch (SQLException e) {
+			throw new CDBException("Couldn't prepare the SQL statement!");
+		}
+
+		try {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new CDBException("Couldn't execute the query!");
 		}
 
 		System.out.println("Entry updated.");
@@ -138,8 +157,9 @@ public class ComputerDAO {
 	 * 
 	 * @param id
 	 *            the id of the relevant computer
+	 * @throws CDBException
 	 */
-	public void delete(int id) {
+	public void delete(int id) throws CDBException {
 
 		String sql = "DELETE FROM `computer` WHERE id = ?";
 		PreparedStatement statement = null;
@@ -149,7 +169,7 @@ public class ComputerDAO {
 			statement.setInt(1, id);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new CDBException("Couldn't prepare the SQL statement!");
 		}
 
 		System.out.println("Entry deleted.");
@@ -158,17 +178,22 @@ public class ComputerDAO {
 
 	/**
 	 * Returns all computers from the database as Java objects
+	 * 
+	 * @throws CDBException
 	 */
-	public ArrayList<Computer> listAll() {
+	public ArrayList<Computer> listAll() throws CDBException {
 
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		String sql = "SELECT id, name, introduced, discontinued, company_id FROM `computer`";
 		PreparedStatement statement = null;
 
 		try {
-
 			statement = connection.prepareStatement(sql);
+		} catch (SQLException e) {
+			throw new CDBException("Couldn't prepare the SQL statement!");
+		}
 
+		try {
 			// Connecting to the database and executing the query
 			ResultSet resultSet = statement.executeQuery();
 
@@ -178,7 +203,7 @@ public class ComputerDAO {
 						resultSet.getInt("company_id")));
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new CDBException("Couldn't execute the query!");
 		}
 
 		return computers;
