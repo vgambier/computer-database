@@ -25,7 +25,7 @@ public class Main {
 			"quit: exit the program");
 
 	private static Scanner scanner = new Scanner(System.in);
-	static DatabaseConnection dbConnection = new DatabaseConnection();
+	private static DatabaseConnection dbConnection = new DatabaseConnection();
 	// Note: Does not actually create a connection to the database
 
 	public static void main(String[] args) throws NumberFormatException, CDBException {
@@ -33,7 +33,7 @@ public class Main {
 		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
 		// TODO: password prompt?
 
-		ComputerDAO computerDAO = new ComputerDAO();
+		ComputerDAO computerDAO = ComputerDAO.getInstance();
 		computerDAO.setConnection(dbConnection.connect());
 		CompanyDAO companyDAO = CompanyDAO.getInstance();
 		companyDAO.setConnection(dbConnection.connect());
@@ -63,7 +63,7 @@ public class Main {
 
 					if (arr.length >= 2) {
 
-						if (!isStringPositiveInt(arr[1])) {
+						if (!isStringNonZeroPositiveInt(arr[1])) {
 							System.out.println("Page number must be an non-zero positive integer!");
 							break;
 						}
@@ -91,10 +91,18 @@ public class Main {
 
 				case "computerinfo" :
 
-					// TODO: check the ID exists
-					if (arr.length >= 2)
-						System.out.println(computerDAO.find(Integer.valueOf(arr[1])));
-					else
+					if (arr.length >= 2) {
+
+						if (!isComputerIDStringValid(arr[1])) {
+							System.out.println(
+									"Computer ID must be a positive integer between 1 and the number of entries");
+							break;
+						} else {
+							int computerID = Integer.valueOf(arr[1]);
+							System.out.println(computerDAO.find(computerID));
+						}
+
+					} else
 						System.out.println(
 								"Please include the id of the computer you're looking for, e.g.: 'computerinfo 13'.");
 					break;
@@ -109,10 +117,15 @@ public class Main {
 
 				case "delete" :
 
-					// TODO: check the ID exists
-					if (arr.length >= 2)
-						computerDAO.delete(Integer.valueOf(arr[1]));
-					else
+					if (arr.length >= 2) {
+						if (!isComputerIDStringValid(arr[1])) {
+							System.out.println(
+									"Computer ID must be a positive integer between 1 and the number of entries");
+							break;
+						} else {
+							computerDAO.delete(Integer.valueOf(arr[1]));
+						}
+					} else
 						System.out.println(
 								"Please include the id of the computer you want to delete, e.g.: 'delete 54'.");
 					break;
@@ -168,7 +181,7 @@ public class Main {
 		}
 
 		// Company ID field
-		// TODO: check this ID exists
+		// TODO: check this company ID exists
 
 		System.out.println("Please enter the id of the company of the computer (optional):");
 		String companyIDString = scanner.nextLine();
@@ -189,7 +202,7 @@ public class Main {
 	private static void update(ComputerDAO computerDAO) throws CDBException {
 
 		// ID field
-		// TODO: check this ID exists
+		// TODO: check this computer ID exists
 
 		String computerIDString = "";
 		while (computerIDString.equals("")) {
@@ -221,7 +234,7 @@ public class Main {
 		Date newDiscontinuedDate = askForDate("discontinuation");
 
 		// Company ID field
-		// TODO: check this ID exists
+		// TODO: check this company ID exists
 
 		System.out.println("Please enter the id of the company of the computer:");
 		String newCompanyIDString = scanner.nextLine();
@@ -281,7 +294,7 @@ public class Main {
 	 * @return true if and only the string represents a non-zero positive
 	 *         integer
 	 */
-	public static boolean isStringPositiveInt(String s) {
+	private static boolean isStringNonZeroPositiveInt(String s) {
 
 		boolean isValid = false;
 
@@ -293,6 +306,43 @@ public class Main {
 		}
 
 		return isValid && Integer.valueOf(s) > 0;
+	}
+
+	/**
+	 * Checks if a computer id is greater than 0 and lesser than the total
+	 * number of pages
+	 * 
+	 * @param id
+	 *            the id of the computer entry we want to check
+	 * @return true if and only if the id is valid
+	 * @throws CDBException
+	 */
+	private static boolean isComputerIDValid(int id) throws CDBException {
+
+		int nbEntries = ComputerDAO.getInstance().countComputerEntries();
+		return 0 <= id && id <= nbEntries;
+	}
+
+	/**
+	 * Checks if a given String is a valid computer ID, using
+	 * isStringNonZeroPositiveInt() and isComputerIDValid()
+	 * 
+	 * @param id
+	 *            the id of the computer entry we want to check
+	 * @return true if and only if the id is valid
+	 * @throws CDBException
+	 */
+	private static boolean isComputerIDStringValid(String stringID) throws CDBException {
+
+		boolean isValid = false;
+
+		if (isStringNonZeroPositiveInt(stringID)) {
+			int id = Integer.valueOf(stringID);
+			isValid = isComputerIDValid(id);
+		}
+
+		return isValid;
+
 	}
 
 }

@@ -5,21 +5,23 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.Computer;
 import service.CDBException;
+import service.DatabaseConnection;
 
 /* This class uses the Singleton pattern */
 
 public class ComputerDAO {
 
 	private static ComputerDAO INSTANCE = new ComputerDAO();
+	private Connection connection;
 
 	public ComputerDAO() {
+		connection = new DatabaseConnection().connect();
 	}
-
-	private Connection connection;
 
 	/**
 	 * Finds a computer in the database, and returns a corresponding Java object
@@ -243,4 +245,33 @@ public class ComputerDAO {
 		this.connection = connection;
 	}
 
+	/**
+	 * Count the number of entries in the computer database
+	 * 
+	 * @return the number of entries in the computer database
+	 * @throws CDBException
+	 */
+	public int countComputerEntries() throws CDBException {
+
+		String sql = "SELECT COUNT(*) FROM `computer`";
+
+		Statement statement;
+		try {
+			statement = connection.createStatement();
+		} catch (SQLException e) {
+			throw new CDBException("Couldn't create the SQL statement!");
+		}
+
+		int nbEntries = -1; // Initializing
+
+		try {
+			ResultSet rs = statement.executeQuery(sql);
+			if (rs.next())
+				nbEntries = rs.getInt(1);
+		} catch (SQLException e) {
+			throw new CDBException("Failed to gather the entry count!");
+		}
+
+		return nbEntries;
+	}
 }

@@ -4,34 +4,32 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
+import persistence.ComputerDAO;
 import service.CDBException;
 import service.PageNumberException;
 
 public class ComputerPage {
 
 	private static final int MAX_ITEMS_PER_PAGE = 25;
-
 	private static int nbPages;
 
 	private int pageNumber;
 	private ArrayList<Computer> list = new ArrayList<Computer>();
 	private Connection connection;
 
-	// TODO: factorize this method into 2-3 methods
 	public ComputerPage(int pageNumber, Connection connection) throws CDBException, PageNumberException {
 
 		this.connection = connection;
 
 		// Checking the database to count the number of entries
-		int nbEntries = countEntries();
+		int nbEntries = ComputerDAO.getInstance().countComputerEntries();
 
 		nbPages = nbEntries / MAX_ITEMS_PER_PAGE;
 
 		// Checking if the input page number is valid
-		checkPageNumber();
+		checkPageNumber(pageNumber);
 
 		this.pageNumber = pageNumber;
 
@@ -41,43 +39,15 @@ public class ComputerPage {
 	}
 
 	/**
-	 * Count the number of entries in the computer database
+	 * Checks if the given page number is smaller than the total number of pages
 	 * 
-	 * @return the number of entries in the computer database
-	 * @throws CDBException
-	 */
-	private int countEntries() throws CDBException {
-
-		String sql = "SELECT COUNT(*) FROM `computer`";
-
-		Statement statement;
-		try {
-			statement = connection.createStatement();
-		} catch (SQLException e) {
-			throw new CDBException("Couldn't create the SQL statement!");
-		}
-
-		int nbEntries = -1; // Initializing
-
-		try {
-			ResultSet rs = statement.executeQuery(sql);
-			if (rs.next())
-				nbEntries = rs.getInt(1);
-		} catch (SQLException e) {
-			throw new CDBException("Failed to gather the entry count!");
-		}
-
-		return nbEntries;
-	}
-
-	/**
-	 * Checks if the desired page number is smaller than the total number of
-	 * pages
-	 * 
+	 * @param pageNumber
+	 *            the page number we want to check
 	 * @throws PageNumberException
 	 *             if the page number is not valid
+	 * 
 	 */
-	private void checkPageNumber() throws PageNumberException {
+	private void checkPageNumber(int pageNumber) throws PageNumberException {
 		if (pageNumber > nbPages) {
 			StringBuilder str = new StringBuilder();
 			str.append("Invalid page number. With the current database, there are only ").append(nbPages)
