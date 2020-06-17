@@ -1,10 +1,12 @@
-package service;
+package persistence;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnection {
+import service.CDBException;
+
+public class DatabaseConnection implements AutoCloseable {
 
 	private static Connection connection;
 	private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/computer-database-db?serverTimezone=UTC";
@@ -34,7 +36,8 @@ public class DatabaseConnection {
 	 * 
 	 * @throws CDBException
 	 */
-	public void disconnect() throws CDBException {
+	@Override
+	public void close() throws Exception {
 
 		if (connection != null) {
 			try {

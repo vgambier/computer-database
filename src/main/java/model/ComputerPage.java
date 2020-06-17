@@ -10,7 +10,7 @@ import persistence.ComputerDAO;
 import service.CDBException;
 import service.PageNumberException;
 
-public class ComputerPage {
+public class ComputerPage implements Page {
 
 	private static final int MAX_ITEMS_PER_PAGE = 25;
 	private static int nbPages;
@@ -64,6 +64,7 @@ public class ComputerPage {
 	 */
 	private void fillList() throws CDBException {
 
+		// TODO: move to ComputerDAO
 		String sqlList = "SELECT * FROM `computer` LIMIT ? OFFSET ?"; // works even for the last page which only has
 		// (nbEntries % MAX_ITEMS_PER_PAGE) entries
 

@@ -11,8 +11,8 @@ import model.Computer;
 import model.ComputerPage;
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
+import persistence.DatabaseConnection;
 import service.CDBException;
-import service.DatabaseConnection;
 import service.PageNumberException;
 
 public class Main {
@@ -109,6 +109,7 @@ public class Main {
 					break;
 
 				case "create" :
+					// TODO: move create to service package
 					create(computerDAO);
 					break;
 
@@ -142,9 +143,8 @@ public class Main {
 
 		// Exiting
 
-		System.out.println("Exiting...");
-		dbConnection.disconnect();
 		scanner.close();
+		System.out.println("Thank you for using CDB!");
 	}
 
 	/**
@@ -289,7 +289,6 @@ public class Main {
 		}
 
 		return date;
-
 	}
 
 	/**
@@ -348,7 +347,43 @@ public class Main {
 		}
 
 		return isValid;
+	}
 
+	/**
+	 * Checks if a company id is greater than 0 and lesser than the total number
+	 * of pages
+	 * 
+	 * @param id
+	 *            the id of the company entry we want to check
+	 * @return true if and only if the id is valid
+	 * @throws CDBException
+	 */
+	private static boolean isCompanyIDValid(int id) throws CDBException {
+
+		int nbEntries = CompanyDAO.getInstance().countCompanyEntries();
+		return 0 <= id && id <= nbEntries;
+	}
+
+	// TODO: don't just check range, check if it exists via SQL
+	/**
+	 * Checks if a given String is a valid company ID, using
+	 * isStringNonZeroPositiveInt() and isCompanyIDValid()
+	 * 
+	 * @param id
+	 *            the id of the computer entry we want to check
+	 * @return true if and only if the id is valid
+	 * @throws CDBException
+	 */
+	private static boolean isCompanyIDStringValid(String stringID) throws CDBException {
+
+		boolean isValid = false;
+
+		if (isStringNonZeroPositiveInt(stringID)) {
+			int id = Integer.valueOf(stringID);
+			isValid = isComputerIDValid(id);
+		}
+
+		return isValid;
 	}
 
 }

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import model.Computer;
 import service.CDBException;
-import service.DatabaseConnection;
 
 /* This class uses the Singleton pattern */
 
@@ -53,6 +52,7 @@ public class ComputerDAO {
 		try {
 			ResultSet resultSet = statement.executeQuery();
 
+			// TODO: move to mapper package
 			if (resultSet.first()) {
 				computer = new Computer(id, resultSet.getString("name"), resultSet.getDate("introduced"),
 						resultSet.getDate("discontinued"), resultSet.getInt("company_id"));
