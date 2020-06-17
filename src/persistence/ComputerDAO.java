@@ -159,11 +159,7 @@ public class ComputerDAO {
 	// TODO
 
 	/**
-	 * Returns all computers from the database, as Java objects with only their
-	 * id and name initialized
-	 * 
-	 * @param dbConnection
-	 *            a generic DatabaseConnection object
+	 * Returns all computers from the database as Java objects
 	 */
 	public ArrayList<Computer> listAll() {
 

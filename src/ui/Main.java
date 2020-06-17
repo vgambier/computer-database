@@ -6,10 +6,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
+import model.Company;
 import model.Computer;
+import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import service.DatabaseConnection;
-import service.QueryHub;
 
 public class Main {
 
@@ -28,6 +29,7 @@ public class Main {
 		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
 
 		ComputerDAO computerDAO = new ComputerDAO(dbConnection.connect());
+		CompanyDAO companyDAO = new CompanyDAO(dbConnection.connect());
 
 		while (true) {
 
@@ -48,7 +50,8 @@ public class Main {
 					break;
 
 				case "companies" :
-					QueryHub.listCompanies(dbConnection);
+					for (Company company : companyDAO.listAll())
+						System.out.println(company);
 					break;
 
 				// TODO: check the id exists

@@ -13,4 +13,15 @@ public class Company {
 	public Company() {
 	}
 
+	@Override
+	public String toString() {
+
+		StringBuilder stringBuilder = new StringBuilder();
+
+		stringBuilder.append("id: ").append(id).append("\t");
+		stringBuilder.append("name: ").append(name).append("\t");
+
+		return stringBuilder.toString();
+	}
+
 }
