@@ -15,10 +15,9 @@ import persistence.DatabaseConnection;
 public class CLIService {
 
 	// TODO: remove static keyword from everywhere in this file
-	private static Scanner scanner;
+	private Scanner scanner;
 
 	public CLIService() {
-
 		scanner = new Scanner(System.in);
 	}
 
@@ -52,7 +51,7 @@ public class CLIService {
 
 			if (!isStringNonZeroPositiveInt(arr[1])) {
 				System.out.println("Page number must be an non-zero positive integer!");
-				return; // TODO: bad return
+				return; // TODO: bad return, and other similar code too
 			}
 
 			ComputerPage page;
@@ -92,7 +91,7 @@ public class CLIService {
 	 *            a (Singleton) computerDAO object
 	 * @throws CDBException
 	 */
-	public void create(ComputerDAO computerDAO) throws CDBException {
+	public void create() throws CDBException {
 
 		// Name field
 
@@ -125,7 +124,7 @@ public class CLIService {
 		String companyIDString = scanner.nextLine();
 		Integer companyID = companyIDString.equals("") ? null : Integer.valueOf(companyIDString);
 
-		computerDAO.add(computerName, introducedDate, discontinuedDate, companyID);
+		ComputerDAO.getInstance().add(computerName, introducedDate, discontinuedDate, companyID);
 
 	}
 
@@ -133,11 +132,9 @@ public class CLIService {
 	 * update command logic: prompts the user and adds a corresponding entry to
 	 * the database
 	 * 
-	 * @param computerDAO
-	 *            a (Singleton) computerDAO object
 	 * @throws CDBException
 	 */
-	public void update(ComputerDAO computerDAO) throws CDBException {
+	public void update() throws CDBException {
 
 		// ID field
 
@@ -156,6 +153,7 @@ public class CLIService {
 
 		// Displaying current info
 
+		ComputerDAO computerDAO = ComputerDAO.getInstance();
 		System.out.println("Here is the current data on record:");
 		System.out.println(computerDAO.find(computerID));
 		System.out.println("Now, please enter the new data. Leave fields blank if you wish to remove them.");
@@ -197,7 +195,7 @@ public class CLIService {
 	 *            the name of the date that will be displayed to the user
 	 * @return the corresponding Date object
 	 */
-	private static Date askForDate(String string) {
+	private Date askForDate(String string) {
 
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		formatter.setLenient(false); // allows stricter format check

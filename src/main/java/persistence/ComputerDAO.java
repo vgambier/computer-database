@@ -60,7 +60,7 @@ public class ComputerDAO {
 		try {
 			ResultSet resultSet = statement.executeQuery();
 
-			// TODO: move to mapper package
+			// TODO: move to mapper package (and all other similar code as well)
 			if (resultSet.first()) {
 				computer = new Computer(id, resultSet.getString("name"), resultSet.getDate("introduced"),
 						resultSet.getDate("discontinued"), resultSet.getInt("company_id"));

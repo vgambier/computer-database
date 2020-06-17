@@ -6,7 +6,6 @@ import model.Company;
 import model.Computer;
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
-import persistence.DatabaseConnection;
 import service.CDBException;
 import service.CLIService;
 
@@ -19,11 +18,10 @@ public class Main {
 			"update: update the data of a given computer", "delete <id>: delete a given computer",
 			"quit: exit the program");
 
-	// TODO: remove this attribute
 	private static Scanner scanner = new Scanner(System.in);
-	private static DatabaseConnection dbConnection = DatabaseConnection.getInstance();
 	// Note: Does not actually create a connection to the database
 	// TODO: ALWAYS DISCONNECT FROM THE DATABASE
+	// using try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
 
 	public static void main(String[] args) throws NumberFormatException, CDBException {
 
@@ -31,11 +29,6 @@ public class Main {
 
 		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
 		// TODO: password prompt?
-
-		ComputerDAO computerDAO = ComputerDAO.getInstance();
-		computerDAO.setConnection(dbConnection.connect());
-		CompanyDAO companyDAO = CompanyDAO.getInstance();
-		companyDAO.setConnection(dbConnection.connect());
 
 		boolean isQuitting = false; // exit condition
 
@@ -52,8 +45,7 @@ public class Main {
 					break;
 
 				case "computers" :
-
-					for (Computer computer : computerDAO.listAll())
+					for (Computer computer : ComputerDAO.getInstance().listAll())
 						System.out.println(computer);
 					break;
 
@@ -62,7 +54,7 @@ public class Main {
 					break;
 
 				case "companies" :
-					for (Company company : companyDAO.listAll())
+					for (Company company : CompanyDAO.getInstance().listAll())
 						System.out.println(company);
 					break;
 
@@ -71,11 +63,11 @@ public class Main {
 					break;
 
 				case "create" :
-					cliService.create(computerDAO);
+					cliService.create();
 					break;
 
 				case "update" :
-					cliService.update(computerDAO);
+					cliService.update();
 					break;
 
 				case "delete" :

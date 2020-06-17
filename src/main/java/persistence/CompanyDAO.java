@@ -14,9 +14,16 @@ import service.CDBException;
 
 public class CompanyDAO {
 
-	private static CompanyDAO INSTANCE = new CompanyDAO();
+	private static CompanyDAO INSTANCE = null;
 
 	private CompanyDAO() {
+	}
+
+	// Singleton instance getter
+	public static CompanyDAO getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new CompanyDAO();
+		return INSTANCE;
 	}
 
 	private Connection connection;
@@ -88,13 +95,6 @@ public class CompanyDAO {
 	}
 
 	// Getters and setters
-
-	// Singleton instance getter
-	public static CompanyDAO getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new CompanyDAO();
-		return INSTANCE;
-	}
 
 	public void setConnection(Connection connection) {
 		this.connection = connection;
