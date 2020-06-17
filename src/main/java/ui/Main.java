@@ -1,7 +1,6 @@
 package ui;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +13,7 @@ import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import service.CDBException;
 import service.DatabaseConnection;
+import service.PageNumberException;
 
 public class Main {
 
@@ -28,7 +28,7 @@ public class Main {
 	static DatabaseConnection dbConnection = new DatabaseConnection();
 	// Note: Does not actually create a connection
 
-	public static void main(String[] args) throws NumberFormatException, CDBException, SQLException {
+	public static void main(String[] args) throws NumberFormatException, CDBException {
 
 		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
 		// TODO: password prompt?
@@ -59,12 +59,27 @@ public class Main {
 					break;
 
 				case "page" :
+
 					if (arr.length >= 2) {
-						ComputerPage page = new ComputerPage(Integer.valueOf(arr[1]), dbConnection.connect());
+
+						if (!isStringPositiveInt(arr[1])) {
+							System.out.println("Page number must be an non-zero positive integer!");
+							break;
+						}
+
+						ComputerPage page;
+						try {
+							page = new ComputerPage(Integer.valueOf(arr[1]), dbConnection.connect());
+						} catch (PageNumberException e) {
+							System.out.println("Error: page number is too high.");
+							break;
+						}
 						for (Computer computer : page.getList())
 							System.out.println(computer);
+
 					} else
 						System.out.println("Please include the id of the page you're looking for, e.g.: 'page 5'.");
+
 					break;
 
 				case "companies" :
@@ -72,7 +87,7 @@ public class Main {
 						System.out.println(company);
 					break;
 
-				// TODO: check the id exists
+				// TODO: check the ID exists
 				case "computerinfo" :
 					if (arr.length >= 2)
 						System.out.println(computerDAO.find(Integer.valueOf(arr[1])));
@@ -109,6 +124,7 @@ public class Main {
 					}
 
 					// Company ID field
+					// TODO: check this ID exists
 
 					System.out.println("Please enter the id of the company of the computer (optional):");
 					String companyIDString = scanner.nextLine();
@@ -164,6 +180,7 @@ public class Main {
 
 					break;
 
+				// Check that id exists
 				case "delete" :
 					if (arr.length >= 2)
 						computerDAO.delete(Integer.valueOf(arr[1]));
@@ -229,4 +246,27 @@ public class Main {
 		return date;
 
 	}
+
+	/**
+	 * Checks if a string represents a non-zero positive integer
+	 * 
+	 * @param s
+	 *            A string, possibly representing a number
+	 * @return true if and only the string represents a non-zero positive
+	 *         integer
+	 */
+	public static boolean isStringPositiveInt(String s) {
+
+		boolean isValid = false;
+
+		try {
+			Integer.parseInt(s);
+			isValid = true;
+		} catch (NumberFormatException e) {
+			// do nothing
+		}
+
+		return isValid && Integer.valueOf(s) > 0;
+	}
+
 }

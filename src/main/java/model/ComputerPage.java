@@ -8,17 +8,20 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import service.CDBException;
+import service.PageNumberException;
 
 public class ComputerPage {
 
 	private static final int MAX_ITEMS_PER_PAGE = 25;
+
+	private static int nbPages;
 
 	private int pageNumber;
 	private ArrayList<Computer> list = new ArrayList<Computer>();
 	private Connection connection;
 
 	// TODO: factorize this method into 2-3 methods
-	public ComputerPage(int pageNumber, Connection connection) throws CDBException, SQLException {
+	public ComputerPage(int pageNumber, Connection connection) throws CDBException, PageNumberException {
 
 		this.connection = connection;
 
@@ -45,12 +48,12 @@ public class ComputerPage {
 
 		// Checking if the input page number is valid
 
-		int nbPages = nbEntries / MAX_ITEMS_PER_PAGE;
+		nbPages = nbEntries / MAX_ITEMS_PER_PAGE;
 		if (pageNumber > nbPages) {
 			StringBuilder str = new StringBuilder();
 			str.append("Invalid page number. With the current database, there are only ").append(nbPages)
 					.append(" pages.");
-			throw new CDBException(str.toString()); // TODO: soft error message instead
+			throw new PageNumberException(str.toString()); // TODO: soft error message instead
 		}
 
 		this.pageNumber = pageNumber;
@@ -61,19 +64,27 @@ public class ComputerPage {
 																		// (nbEntries % MAX_ITEMS_PER_PAGE) entries
 
 		PreparedStatement statementList;
-		statementList = connection.prepareStatement(sqlList);
-		statementList.setInt(1, MAX_ITEMS_PER_PAGE);
-		statementList.setInt(2, (pageNumber - 1) * MAX_ITEMS_PER_PAGE);
-		ResultSet resultSet = statementList.executeQuery();
+		try {
+			statementList = connection.prepareStatement(sqlList);
+			statementList.setInt(1, MAX_ITEMS_PER_PAGE);
+			statementList.setInt(2, (pageNumber - 1) * MAX_ITEMS_PER_PAGE);
+			ResultSet resultSet = statementList.executeQuery();
 
-		while (resultSet.next())
-			list.add(new Computer(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getDate("introduced"),
-					resultSet.getDate("discontinued"), resultSet.getInt("company_id")));
-
+			while (resultSet.next())
+				list.add(new Computer(resultSet.getInt("id"), resultSet.getString("name"),
+						resultSet.getDate("introduced"), resultSet.getDate("discontinued"),
+						resultSet.getInt("company_id")));
+		} catch (SQLException e) {
+			throw new CDBException("Couldn't query the database to fill the page!");
+		}
 	}
 
 	public ArrayList<Computer> getList() {
 		return list;
+	}
+
+	public static int getNbPages() {
+		return nbPages;
 	}
 
 }
