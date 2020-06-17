@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
+import model.Computer;
 import persistence.ComputerDAO;
 import service.DatabaseConnection;
 import service.QueryHub;
@@ -42,7 +43,8 @@ public class Main {
 					break;
 
 				case "computers" :
-					QueryHub.listComputers(dbConnection);
+					for (Computer computer : computerDAO.listAll())
+						System.out.println(computer);
 					break;
 
 				case "companies" :

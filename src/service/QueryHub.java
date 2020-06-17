@@ -43,27 +43,6 @@ public class QueryHub {
 	}
 
 	/**
-	 * Lists all computers from the database, giving their id and name
-	 * 
-	 * @param dbConnection
-	 *            a generic DatabaseConnection object
-	 */
-	public static void listComputers(DatabaseConnection dbConnection) {
-
-		String sql = "SELECT id, name FROM `computer`";
-		PreparedStatement statement = null;
-		Connection connection = dbConnection.connect();
-
-		try {
-			statement = connection.prepareStatement(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		printResultSet(statement);
-	}
-
-	/**
 	 * Lists all companies from the database, giving their id and name
 	 * 
 	 * @param dbConnection

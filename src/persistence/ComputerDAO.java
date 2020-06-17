@@ -157,8 +157,37 @@ public class ComputerDAO {
 	}
 
 	// TODO
+
+	/**
+	 * Returns all computers from the database, as Java objects with only their
+	 * id and name initialized
+	 * 
+	 * @param dbConnection
+	 *            a generic DatabaseConnection object
+	 */
 	public ArrayList<Computer> listAll() {
-		return null;
+
+		ArrayList<Computer> computers = new ArrayList<Computer>();
+		String sql = "SELECT id, name, introduced, discontinued, company_id FROM `computer`";
+		PreparedStatement statement = null;
+
+		try {
+
+			statement = connection.prepareStatement(sql);
+
+			// Connecting to the database and executing the query
+			ResultSet resultSet = statement.executeQuery();
+
+			while (resultSet.next())
+				computers.add(new Computer(resultSet.getInt("id"), resultSet.getString("name"),
+						resultSet.getDate("introduced"), resultSet.getDate("discontinued"),
+						resultSet.getInt("company_id")));
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return computers;
 	}
 
 }

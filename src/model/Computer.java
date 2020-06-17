@@ -19,6 +19,11 @@ public class Computer {
 		this.companyID = companyID;
 	}
 
+	public Computer(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
 	public Computer() {
 	}
 
