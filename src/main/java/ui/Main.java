@@ -1,6 +1,7 @@
 package ui;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,6 +9,7 @@ import java.util.Scanner;
 
 import model.Company;
 import model.Computer;
+import model.ComputerPage;
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import service.CDBException;
@@ -16,7 +18,8 @@ import service.DatabaseConnection;
 public class Main {
 
 	private static String helpMessage = String.join("\n", "List of commands:", "help: shows this message",
-			"computers: shows the list of all computers", "companies: shows the list of all companies",
+			"computers: shows the list of all computers", "page <nb>: shows the nb-th page the computer list",
+			"companies: shows the list of all companies",
 			"computerinfo <id>: shows all details pertaining to a given computer", "create: create a computer",
 			"update: update the data of a given computer", "delete <id>: delete a given computer",
 			"quit: exit the program");
@@ -25,7 +28,7 @@ public class Main {
 	static DatabaseConnection dbConnection = new DatabaseConnection();
 	// Note: Does not actually create a connection
 
-	public static void main(String[] args) throws NumberFormatException, CDBException {
+	public static void main(String[] args) throws NumberFormatException, CDBException, SQLException {
 
 		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
 		// TODO: password prompt?
@@ -53,6 +56,15 @@ public class Main {
 				case "computers" :
 					for (Computer computer : computerDAO.listAll())
 						System.out.println(computer);
+					break;
+
+				case "page" :
+					if (arr.length >= 2) {
+						ComputerPage page = new ComputerPage(Integer.valueOf(arr[1]), dbConnection.connect());
+						for (Computer computer : page.getList())
+							System.out.println(computer);
+					} else
+						System.out.println("Please include the id of the page you're looking for, e.g.: 'page 5'.");
 					break;
 
 				case "companies" :
