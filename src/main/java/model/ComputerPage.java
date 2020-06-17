@@ -19,7 +19,7 @@ public class ComputerPage implements Page {
 	private ArrayList<Computer> list = new ArrayList<Computer>();
 	private Connection connection;
 
-	public ComputerPage(int pageNumber, Connection connection) throws CDBException, PageNumberException {
+	public ComputerPage(int pageNumber, Connection connection) throws Exception {
 
 		this.connection = connection;
 

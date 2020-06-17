@@ -21,31 +21,7 @@ public class CLIService {
 		scanner = new Scanner(System.in);
 	}
 
-	public void page(String[] arr) throws NumberFormatException, CDBException {
-
-		if (arr.length >= 2) {
-
-			if (!isStringNonZeroPositiveInt(arr[1])) {
-				System.out.println("Page number must be an non-zero positive integer!");
-				return;
-			}
-
-			ComputerPage page;
-			try {
-				page = new ComputerPage(Integer.valueOf(arr[1]), DatabaseConnection.getInstance().connect());
-			} catch (PageNumberException e) {
-				System.out.println("Error: page number is too high.");
-				return;
-			}
-			for (Computer computer : page.getList())
-				System.out.println(computer);
-
-		} else
-			System.out.println("Please include the id of the page you're looking for, e.g.: 'page 5'.");
-
-	}
-
-	public void computerInfo(String[] arr) throws NumberFormatException, CDBException {
+	public void page(String[] arr) throws Exception {
 
 		if (arr.length >= 2) {
 
@@ -69,7 +45,24 @@ public class CLIService {
 
 	}
 
-	public void delete(String[] arr) throws NumberFormatException, CDBException {
+	public void computerInfo(String[] arr) throws Exception {
+
+		if (arr.length >= 2) {
+
+			if (!isComputerIDStringValid(arr[1])) {
+				System.out.println("Computer ID must be a positive integer between 1 and the number of entries");
+				return;
+			} else {
+				int computerID = Integer.valueOf(arr[1]);
+				System.out.println(ComputerDAO.getInstance().find(computerID));
+			}
+
+		} else
+			System.out.println("Please include the id of the computer you're looking for, e.g.: 'computerinfo 13'.");
+
+	}
+
+	public void delete(String[] arr) throws Exception {
 
 		if (arr.length >= 2) {
 			if (!isComputerIDStringValid(arr[1])) {
@@ -89,9 +82,9 @@ public class CLIService {
 	 * 
 	 * @param computerDAO
 	 *            a (Singleton) computerDAO object
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	public void create() throws CDBException {
+	public void create() throws Exception {
 
 		// Name field
 
@@ -132,9 +125,9 @@ public class CLIService {
 	 * update command logic: prompts the user and adds a corresponding entry to
 	 * the database
 	 * 
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	public void update() throws CDBException {
+	public void update() throws Exception {
 
 		// ID field
 
@@ -255,9 +248,9 @@ public class CLIService {
 	 * @param id
 	 *            the id of the computer entry we want to check
 	 * @return true if and only if the id is valid
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	private static boolean isComputerIDValid(int id) throws CDBException {
+	private static boolean isComputerIDValid(int id) throws Exception {
 
 		int nbEntries = ComputerDAO.getInstance().countComputerEntries();
 		return 0 <= id && id <= nbEntries;
@@ -270,9 +263,9 @@ public class CLIService {
 	 * @param id
 	 *            the id of the computer entry we want to check
 	 * @return true if and only if the id is valid
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	private static boolean isComputerIDStringValid(String stringID) throws CDBException {
+	private static boolean isComputerIDStringValid(String stringID) throws Exception {
 
 		boolean isValid = false;
 
@@ -291,9 +284,9 @@ public class CLIService {
 	 * @param id
 	 *            the id of the company entry we want to check
 	 * @return true if and only if the id is valid
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	private static boolean isCompanyIDValid(int id) throws CDBException {
+	private static boolean isCompanyIDValid(int id) throws Exception {
 
 		int nbEntries = CompanyDAO.getInstance().countCompanyEntries();
 		return 0 <= id && id <= nbEntries;
@@ -307,15 +300,15 @@ public class CLIService {
 	 * @param id
 	 *            the id of the computer entry we want to check
 	 * @return true if and only if the id is valid
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	private static boolean isCompanyIDStringValid(String stringID) throws CDBException {
+	private static boolean isCompanyIDStringValid(String stringID) throws Exception {
 
 		boolean isValid = false;
 
 		if (isStringNonZeroPositiveInt(stringID)) {
 			int id = Integer.valueOf(stringID);
-			isValid = isComputerIDValid(id);
+			isValid = isCompanyIDValid(id);
 		}
 
 		return isValid;

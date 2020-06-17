@@ -6,7 +6,6 @@ import model.Company;
 import model.Computer;
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
-import service.CDBException;
 import service.CLIService;
 
 public class Main {
@@ -22,8 +21,9 @@ public class Main {
 	// Note: Does not actually create a connection to the database
 	// TODO: ALWAYS DISCONNECT FROM THE DATABASE
 	// using try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+	//			statement = dbConnection.connect().prepareStatement(sql);
 
-	public static void main(String[] args) throws NumberFormatException, CDBException {
+	public static void main(String[] args) throws Exception {
 
 		CLIService cliService = new CLIService();
 

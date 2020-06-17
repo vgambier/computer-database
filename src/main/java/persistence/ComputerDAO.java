@@ -1,6 +1,5 @@
 package persistence;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +17,6 @@ public class ComputerDAO {
 	private static ComputerDAO INSTANCE = null;
 
 	private ComputerDAO() {
-		connection = DatabaseConnection.getInstance().connect();
 	}
 
 	// Singleton instance getter
@@ -28,8 +26,6 @@ public class ComputerDAO {
 		return INSTANCE;
 	}
 
-	private Connection connection;
-
 	/**
 	 * Finds a computer in the database, and returns a corresponding Java object
 	 * 
@@ -37,37 +33,28 @@ public class ComputerDAO {
 	 *            the id of the computer in the database
 	 * @return a Computer object, with the same attributes as the computer entry
 	 *         in the database
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	public Computer find(int id) throws CDBException {
-
-		if (connection == null)
-			throw new CDBException(
-					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
+	public Computer find(int id) throws Exception {
 
 		Computer computer = new Computer();
 
 		String sql = "SELECT * FROM `computer` WHERE id = ?";
 		PreparedStatement statement = null;
 
-		try {
-			statement = connection.prepareStatement(sql);
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+			statement = dbConnection.connect().prepareStatement(sql);
 			statement.setInt(1, id);
-		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare the SQL statement!");
-		}
 
-		try {
 			ResultSet resultSet = statement.executeQuery();
 
 			// TODO: move to mapper package (and all other similar code as well)
-			if (resultSet.first()) {
+			if (resultSet.first())
 				computer = new Computer(id, resultSet.getString("name"), resultSet.getDate("introduced"),
 						resultSet.getDate("discontinued"), resultSet.getInt("company_id"));
-			}
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't execute the query!");
+			throw new CDBException("Couldn't prepare the SQL statement!");
 		}
 
 		return computer;
@@ -85,22 +72,18 @@ public class ComputerDAO {
 	 *            the date of discontinuation of the new computer - may be null
 	 * @param companyID
 	 *            the ID of the company of the new computer - may be null
-	 * @throws CDBException
+	 * @throws Exception
 	 */
 	public void add(String computerName, Date introducedDate, Date discontinuedDate, Integer companyID)
-			throws CDBException {
-
-		if (connection == null)
-			throw new CDBException(
-					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
+			throws Exception {
 
 		String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 		PreparedStatement statement = null;
 
 		// Converting to dates
 
-		try {
-			statement = connection.prepareStatement(sql);
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+			statement = dbConnection.connect().prepareStatement(sql);
 			statement.setString(1, computerName);
 			statement.setDate(2, introducedDate); // possibly null
 			statement.setDate(3, discontinuedDate); // possibly null
@@ -135,22 +118,18 @@ public class ComputerDAO {
 	 *            the new date of discontinuation of the computer - may be null
 	 * @param newCompanyID
 	 *            the new ID of the company of the computer - may be null
-	 * @throws CDBException
+	 * @throws Exception
 	 */
 	public void update(int id, String newComputerName, Date newIntroducedDate, Date newDiscontinuedDate,
-			Integer newCompanyID) throws CDBException {
-
-		if (connection == null)
-			throw new CDBException(
-					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
+			Integer newCompanyID) throws Exception {
 
 		String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 		PreparedStatement statement = null;
 
 		// Converting to dates
 
-		try {
-			statement = connection.prepareStatement(sql);
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+			statement = dbConnection.connect().prepareStatement(sql);
 			statement.setString(1, newComputerName);
 			statement.setDate(2, newIntroducedDate); // possibly null
 			statement.setDate(3, newDiscontinuedDate); // possibly null
@@ -182,19 +161,15 @@ public class ComputerDAO {
 	 * 
 	 * @param id
 	 *            the id of the relevant computer
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	public void delete(int id) throws CDBException {
-
-		if (connection == null)
-			throw new CDBException(
-					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
+	public void delete(int id) throws Exception {
 
 		String sql = "DELETE FROM `computer` WHERE id = ?";
 		PreparedStatement statement = null;
 
-		try {
-			statement = connection.prepareStatement(sql);
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+			statement = dbConnection.connect().prepareStatement(sql);
 			statement.setInt(1, id);
 			statement.executeUpdate();
 		} catch (SQLException e) {
@@ -208,25 +183,18 @@ public class ComputerDAO {
 	/**
 	 * Returns all computers from the database as Java objects
 	 * 
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	public ArrayList<Computer> listAll() throws CDBException {
-
-		if (connection == null)
-			throw new CDBException(
-					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
+	public ArrayList<Computer> listAll() throws Exception {
 
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		String sql = "SELECT id, name, introduced, discontinued, company_id FROM `computer`";
 		PreparedStatement statement = null;
 
-		try {
-			statement = connection.prepareStatement(sql);
-		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare the SQL statement!");
-		}
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
 
-		try {
+			statement = dbConnection.connect().prepareStatement(sql);
+
 			// Connecting to the database and executing the query
 			ResultSet resultSet = statement.executeQuery();
 
@@ -236,7 +204,7 @@ public class ComputerDAO {
 						resultSet.getInt("company_id")));
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't execute the query!");
+			throw new CDBException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		return computers;
@@ -246,36 +214,24 @@ public class ComputerDAO {
 	 * Count the number of entries in the computer database
 	 * 
 	 * @return the number of entries in the computer database
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	public int countComputerEntries() throws CDBException {
+	public int countComputerEntries() throws Exception {
 
 		String sql = "SELECT COUNT(*) FROM `computer`";
-
 		Statement statement;
-		try {
-			statement = connection.createStatement();
-		} catch (SQLException e) {
-			throw new CDBException("Couldn't create the SQL statement!");
-		}
 
-		int nbEntries = -1; // Initializing
+		int nbEntries = -1; // The only way the "if" fails is if the query fails, but an exception will be thrown anyway
 
-		try {
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+			statement = dbConnection.connect().prepareStatement(sql);
 			ResultSet rs = statement.executeQuery(sql);
 			if (rs.next())
 				nbEntries = rs.getInt(1);
 		} catch (SQLException e) {
-			throw new CDBException("Failed to gather the entry count!");
+			throw new CDBException("Couldn't create the SQL statement!");
 		}
 
 		return nbEntries;
 	}
-
-	// Getters and setters
-
-	public void setConnection(Connection connection) {
-		this.connection = connection;
-	}
-
 }

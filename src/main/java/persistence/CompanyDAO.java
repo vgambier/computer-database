@@ -1,6 +1,5 @@
 package persistence;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,25 +25,19 @@ public class CompanyDAO {
 		return INSTANCE;
 	}
 
-	private Connection connection;
-
 	/**
 	 * Returns all companies from the database as Java objects
 	 * 
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	public ArrayList<Company> listAll() throws CDBException {
-
-		if (connection == null)
-			throw new CDBException(
-					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
+	public ArrayList<Company> listAll() throws Exception {
 
 		ArrayList<Company> companies = new ArrayList<Company>();
 		String sql = "SELECT id, name FROM `company`";
 		PreparedStatement statement = null;
 
-		try {
-			statement = connection.prepareStatement(sql);
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+			statement = dbConnection.connect().prepareStatement(sql);
 		} catch (SQLException e) {
 			throw new CDBException("Couldn't prepare the SQL statement!");
 		}
@@ -68,15 +61,15 @@ public class CompanyDAO {
 	 * Count the number of entries in the company database
 	 * 
 	 * @return the number of entries in the company database
-	 * @throws CDBException
+	 * @throws Exception
 	 */
-	public int countCompanyEntries() throws CDBException {
+	public int countCompanyEntries() throws Exception {
 
 		String sql = "SELECT COUNT(*) FROM `company`";
 
 		Statement statement;
-		try {
-			statement = connection.createStatement();
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+			statement = dbConnection.connect().createStatement();
 		} catch (SQLException e) {
 			throw new CDBException("Couldn't create the SQL statement!");
 		}
@@ -93,11 +86,4 @@ public class CompanyDAO {
 
 		return nbEntries;
 	}
-
-	// Getters and setters
-
-	public void setConnection(Connection connection) {
-		this.connection = connection;
-	}
-
 }
