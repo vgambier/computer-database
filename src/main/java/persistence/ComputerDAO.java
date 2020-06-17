@@ -234,17 +234,6 @@ public class ComputerDAO {
 		return computers;
 	}
 
-	// Singleton instance getter
-	public static ComputerDAO getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new ComputerDAO();
-		return INSTANCE;
-	}
-
-	public void setConnection(Connection connection) {
-		this.connection = connection;
-	}
-
 	/**
 	 * Count the number of entries in the computer database
 	 * 
@@ -274,4 +263,18 @@ public class ComputerDAO {
 
 		return nbEntries;
 	}
+
+	// Getters and setters
+
+	// Singleton instance getter
+	public static ComputerDAO getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new ComputerDAO();
+		return INSTANCE;
+	}
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
 }

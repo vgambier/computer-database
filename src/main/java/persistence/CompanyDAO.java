@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.Company;
@@ -54,6 +55,39 @@ public class CompanyDAO {
 
 		return companies;
 	}
+
+	// TODO: factorize this (too similar to countComputerEntries)
+	/**
+	 * Count the number of entries in the company database
+	 * 
+	 * @return the number of entries in the company database
+	 * @throws CDBException
+	 */
+	public int countCompanyEntries() throws CDBException {
+
+		String sql = "SELECT COUNT(*) FROM `company`";
+
+		Statement statement;
+		try {
+			statement = connection.createStatement();
+		} catch (SQLException e) {
+			throw new CDBException("Couldn't create the SQL statement!");
+		}
+
+		int nbEntries = -1; // Initializing
+
+		try {
+			ResultSet rs = statement.executeQuery(sql);
+			if (rs.next())
+				nbEntries = rs.getInt(1);
+		} catch (SQLException e) {
+			throw new CDBException("Failed to gather the entry count!");
+		}
+
+		return nbEntries;
+	}
+
+	// Getters and setters
 
 	// Singleton instance getter
 	public static CompanyDAO getInstance() {

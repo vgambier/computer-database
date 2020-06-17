@@ -27,6 +27,7 @@ public class Main {
 	private static Scanner scanner = new Scanner(System.in);
 	private static DatabaseConnection dbConnection = new DatabaseConnection();
 	// Note: Does not actually create a connection to the database
+	// TODO: ALWAYS DISCONNECT FROM THE DATABASE
 
 	public static void main(String[] args) throws NumberFormatException, CDBException {
 
@@ -202,12 +203,17 @@ public class Main {
 	private static void update(ComputerDAO computerDAO) throws CDBException {
 
 		// ID field
-		// TODO: check this computer ID exists
 
 		String computerIDString = "";
 		while (computerIDString.equals("")) {
 			System.out.println("Please enter the ID of the computer you wish to update:");
 			computerIDString = scanner.nextLine();
+
+			if (!isComputerIDStringValid(computerIDString)) {
+				System.out.println("Computer ID must be a positive integer between 1 and the number of entries");
+				computerIDString = ""; // Reject input
+			}
+
 		}
 		Integer computerID = Integer.valueOf(computerIDString);
 
