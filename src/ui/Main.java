@@ -31,7 +31,9 @@ public class Main {
 		ComputerDAO computerDAO = new ComputerDAO(dbConnection.connect());
 		CompanyDAO companyDAO = new CompanyDAO(dbConnection.connect());
 
-		while (true) {
+		boolean isQuitting = false; // exit condition
+
+		while (!isQuitting) {
 
 			String userInput = scanner.nextLine(); // Read user input
 			String[] arr = userInput.split(" ", 2); // Splits the user input
@@ -155,14 +157,18 @@ public class Main {
 					break;
 
 				case "quit" :
-					System.out.println("Exiting...");
-					scanner.close();
-					return; // Exit the program
+					isQuitting = true;
+					break;
 
 				default :
 					System.out.println("Please enter a valid command, such as 'help'.");
 			}
 		}
+
+		// Exiting
+
+		System.out.println("Exiting...");
+		scanner.close();
 	}
 
 	/**

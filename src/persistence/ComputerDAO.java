@@ -156,8 +156,6 @@ public class ComputerDAO {
 
 	}
 
-	// TODO
-
 	/**
 	 * Returns all computers from the database as Java objects
 	 */
