@@ -26,6 +26,27 @@ public class ComputerPage {
 		this.connection = connection;
 
 		// Checking the database to count the number of entries
+		int nbEntries = countEntries();
+
+		nbPages = nbEntries / MAX_ITEMS_PER_PAGE;
+
+		// Checking if the input page number is valid
+		checkPageNumber();
+
+		this.pageNumber = pageNumber;
+
+		// Putting computers in the page
+		fillList();
+
+	}
+
+	/**
+	 * Count the number of entries in the computer database
+	 * 
+	 * @return the number of entries in the computer database
+	 * @throws CDBException
+	 */
+	private int countEntries() throws CDBException {
 
 		String sql = "SELECT COUNT(*) FROM `computer`";
 
@@ -46,22 +67,35 @@ public class ComputerPage {
 			throw new CDBException("Failed to gather the entry count!");
 		}
 
-		// Checking if the input page number is valid
+		return nbEntries;
+	}
 
-		nbPages = nbEntries / MAX_ITEMS_PER_PAGE;
+	/**
+	 * Checks if the desired page number is smaller than the total number of
+	 * pages
+	 * 
+	 * @throws PageNumberException
+	 *             if the page number is not valid
+	 */
+	private void checkPageNumber() throws PageNumberException {
 		if (pageNumber > nbPages) {
 			StringBuilder str = new StringBuilder();
 			str.append("Invalid page number. With the current database, there are only ").append(nbPages)
 					.append(" pages.");
-			throw new PageNumberException(str.toString()); // TODO: soft error message instead
+			throw new PageNumberException(str.toString());
 		}
+	}
 
-		this.pageNumber = pageNumber;
-
-		// Putting computers in the page
+	/**
+	 * Fills the list attribute with all Computer objects that should be on the
+	 * current page
+	 * 
+	 * @throws CDBException
+	 */
+	private void fillList() throws CDBException {
 
 		String sqlList = "SELECT * FROM `computer` LIMIT ? OFFSET ?"; // works even for the last page which only has
-																		// (nbEntries % MAX_ITEMS_PER_PAGE) entries
+		// (nbEntries % MAX_ITEMS_PER_PAGE) entries
 
 		PreparedStatement statementList;
 		try {
@@ -78,6 +112,8 @@ public class ComputerPage {
 			throw new CDBException("Couldn't query the database to fill the page!");
 		}
 	}
+
+	// Getters
 
 	public ArrayList<Computer> getList() {
 		return list;
