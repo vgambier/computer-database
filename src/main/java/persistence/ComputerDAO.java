@@ -10,13 +10,16 @@ import java.util.ArrayList;
 import model.Computer;
 import service.CDBException;
 
+/* This class uses the Singleton pattern */
+
 public class ComputerDAO {
 
-	private Connection connection;
+	private static ComputerDAO INSTANCE = new ComputerDAO();
 
-	public ComputerDAO(Connection connection) {
-		this.connection = connection;
+	public ComputerDAO() {
 	}
+
+	private Connection connection;
 
 	/**
 	 * Finds a computer in the database, and returns a corresponding Java object
@@ -28,6 +31,10 @@ public class ComputerDAO {
 	 * @throws CDBException
 	 */
 	public Computer find(int id) throws CDBException {
+
+		if (connection == null)
+			throw new CDBException(
+					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
 
 		Computer computer = new Computer();
 
@@ -72,6 +79,10 @@ public class ComputerDAO {
 	 */
 	public void add(String computerName, Date introducedDate, Date discontinuedDate, Integer companyID)
 			throws CDBException {
+
+		if (connection == null)
+			throw new CDBException(
+					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
 
 		String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 		PreparedStatement statement = null;
@@ -119,6 +130,10 @@ public class ComputerDAO {
 	public void update(int id, String newComputerName, Date newIntroducedDate, Date newDiscontinuedDate,
 			Integer newCompanyID) throws CDBException {
 
+		if (connection == null)
+			throw new CDBException(
+					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
+
 		String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 		PreparedStatement statement = null;
 
@@ -161,6 +176,10 @@ public class ComputerDAO {
 	 */
 	public void delete(int id) throws CDBException {
 
+		if (connection == null)
+			throw new CDBException(
+					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
+
 		String sql = "DELETE FROM `computer` WHERE id = ?";
 		PreparedStatement statement = null;
 
@@ -182,6 +201,10 @@ public class ComputerDAO {
 	 * @throws CDBException
 	 */
 	public ArrayList<Computer> listAll() throws CDBException {
+
+		if (connection == null)
+			throw new CDBException(
+					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
 
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		String sql = "SELECT id, name, introduced, discontinued, company_id FROM `computer`";
@@ -207,6 +230,17 @@ public class ComputerDAO {
 		}
 
 		return computers;
+	}
+
+	// Singleton instance getter
+	public static ComputerDAO getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new ComputerDAO();
+		return INSTANCE;
+	}
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 
 }

@@ -9,13 +9,16 @@ import java.util.ArrayList;
 import model.Company;
 import service.CDBException;
 
+/* This class uses the Singleton pattern */
+
 public class CompanyDAO {
 
-	private Connection connection;
+	private static CompanyDAO INSTANCE = new CompanyDAO();
 
-	public CompanyDAO(Connection connection) {
-		this.connection = connection;
+	private CompanyDAO() {
 	}
+
+	private Connection connection;
 
 	/**
 	 * Returns all companies from the database as Java objects
@@ -23,6 +26,10 @@ public class CompanyDAO {
 	 * @throws CDBException
 	 */
 	public ArrayList<Company> listAll() throws CDBException {
+
+		if (connection == null)
+			throw new CDBException(
+					"The DAO's connection attribute must be initialized via setConnection(Connection) method!");
 
 		ArrayList<Company> companies = new ArrayList<Company>();
 		String sql = "SELECT id, name FROM `company`";
@@ -46,6 +53,17 @@ public class CompanyDAO {
 		}
 
 		return companies;
+	}
+
+	// Singleton instance getter
+	public static CompanyDAO getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new CompanyDAO();
+		return INSTANCE;
+	}
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 
 }

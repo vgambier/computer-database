@@ -28,9 +28,12 @@ public class Main {
 	public static void main(String[] args) throws NumberFormatException, CDBException {
 
 		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
+		// TODO: password prompt?
 
-		ComputerDAO computerDAO = new ComputerDAO(dbConnection.connect());
-		CompanyDAO companyDAO = new CompanyDAO(dbConnection.connect());
+		ComputerDAO computerDAO = new ComputerDAO();
+		computerDAO.setConnection(dbConnection.connect());
+		CompanyDAO companyDAO = CompanyDAO.getInstance();
+		companyDAO.setConnection(dbConnection.connect());
 
 		boolean isQuitting = false; // exit condition
 
@@ -169,6 +172,7 @@ public class Main {
 		// Exiting
 
 		System.out.println("Exiting...");
+		dbConnection.disconnect();
 		scanner.close();
 	}
 
