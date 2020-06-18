@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.Company;
-import service.CDBException;
 
 /* This class uses the Singleton pattern */
 
@@ -47,7 +46,7 @@ public class CompanyDAO {
 				companies.add(new Company(resultSet.getInt("id"), resultSet.getString("name")));
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		return companies;
@@ -73,7 +72,7 @@ public class CompanyDAO {
 			if (rs.next())
 				nbEntries = rs.getInt(1);
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't create the SQL statement!");
+			throw new PersistenceException("Couldn't create the SQL statement!");
 		}
 
 		return nbEntries;

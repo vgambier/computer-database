@@ -8,13 +8,13 @@ import java.util.Scanner;
 
 import model.Computer;
 import model.ComputerPage;
+import model.ModelException;
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import persistence.DatabaseConnection;
 
 public class CLIService {
 
-	// TODO: remove static keyword from everywhere in this file
 	private Scanner scanner;
 
 	public CLIService() {
@@ -33,7 +33,7 @@ public class CLIService {
 			ComputerPage page;
 			try {
 				page = new ComputerPage(Integer.valueOf(arr[1]), DatabaseConnection.getInstance().connect());
-			} catch (PageNumberException e) {
+			} catch (ModelException e) {
 				System.out.println("Error: page number is too high.");
 				return;
 			}

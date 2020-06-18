@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import persistence.ComputerDAO;
-import service.CDBException;
-import service.PageNumberException;
 
 public class ComputerPage implements Page {
 
@@ -43,16 +41,16 @@ public class ComputerPage implements Page {
 	 * 
 	 * @param pageNumber
 	 *            the page number we want to check
-	 * @throws PageNumberException
+	 * @throws ModelException
 	 *             if the page number is not valid
 	 * 
 	 */
-	private void checkPageNumber(int pageNumber) throws PageNumberException {
+	private void checkPageNumber(int pageNumber) throws ModelException {
 		if (pageNumber > nbPages) {
 			StringBuilder str = new StringBuilder();
 			str.append("Invalid page number. With the current database, there are only ").append(nbPages)
 					.append(" pages.");
-			throw new PageNumberException(str.toString());
+			throw new ModelException(str.toString());
 		}
 	}
 
@@ -60,9 +58,9 @@ public class ComputerPage implements Page {
 	 * Fills the list attribute with all Computer objects that should be on the
 	 * current page
 	 * 
-	 * @throws CDBException
+	 * @throws ModelException
 	 */
-	private void fillList() throws CDBException {
+	private void fillList() throws ModelException {
 
 		// TODO: move to ComputerDAO
 		String sqlList = "SELECT * FROM `computer` LIMIT ? OFFSET ?"; // works even for the last page which only has
@@ -80,7 +78,7 @@ public class ComputerPage implements Page {
 						resultSet.getDate("introduced"), resultSet.getDate("discontinued"),
 						resultSet.getInt("company_id")));
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't query the database to fill the page!");
+			throw new ModelException("Couldn't query the database to fill the page!");
 		}
 	}
 

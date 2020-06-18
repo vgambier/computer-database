@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.Computer;
-import service.CDBException;
 
 /* This class uses the Singleton pattern */
 
@@ -54,7 +53,7 @@ public class ComputerDAO {
 						resultSet.getDate("discontinued"), resultSet.getInt("company_id"));
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		return computer;
@@ -96,7 +95,7 @@ public class ComputerDAO {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		System.out.println("Entry added.");
@@ -141,7 +140,7 @@ public class ComputerDAO {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		System.out.println("Entry updated.");
@@ -165,7 +164,7 @@ public class ComputerDAO {
 			statement.setInt(1, id);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		System.out.println("Entry deleted.");
@@ -196,7 +195,7 @@ public class ComputerDAO {
 						resultSet.getInt("company_id")));
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		return computers;
@@ -221,7 +220,7 @@ public class ComputerDAO {
 			if (rs.next())
 				nbEntries = rs.getInt(1);
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		return nbEntries;

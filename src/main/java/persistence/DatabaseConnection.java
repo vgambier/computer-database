@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import service.CDBException;
-
 /* This class uses the Singleton pattern */
 
 public class DatabaseConnection implements AutoCloseable {
@@ -48,7 +46,7 @@ public class DatabaseConnection implements AutoCloseable {
 	/**
 	 * Disconnects from the database
 	 * 
-	 * @throws CDBException
+	 * @throws PersistenceException
 	 */
 	@Override
 	public void close() throws Exception {
@@ -58,7 +56,7 @@ public class DatabaseConnection implements AutoCloseable {
 				connection.close();
 				connection = null;
 			} catch (SQLException e) {
-				throw new CDBException("Couldn't close the connection!");
+				throw new PersistenceException("Couldn't close the connection!");
 			}
 		}
 	}
