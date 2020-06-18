@@ -70,7 +70,7 @@ public class CLIService {
 	public void page(String[] arr) throws Exception {
 
 		if (arr.length >= 2) { // if a second argument has been given
-			if (!isStringNonZeroPositiveInt(arr[1]))
+			if (!isStringInteger(arr[1]))
 				System.out.println("Page number must be an non-zero positive integer!");
 
 			else {
@@ -280,14 +280,13 @@ public class CLIService {
 	}
 
 	/**
-	 * Checks if a string represents a non-zero positive integer
+	 * Checks if a string represents an integer of any value
 	 * 
 	 * @param s
-	 *            A string, possibly representing a number
-	 * @return true if and only the string represents a non-zero positive
-	 *         integer
+	 *            A String, possibly representing a number
+	 * @return true if and only the string represents an integer
 	 */
-	private static boolean isStringNonZeroPositiveInt(String s) {
+	private static boolean isStringInteger(String s) {
 
 		boolean isValid = false;
 
@@ -298,27 +297,12 @@ public class CLIService {
 			// do nothing
 		}
 
-		return isValid && Integer.valueOf(s) > 0;
+		return isValid;
 	}
 
 	/**
-	 * Checks if a computer id is greater than 0 and lesser than the total
-	 * number of pages
-	 * 
-	 * @param id
-	 *            the id of the computer entry we want to check
-	 * @return true if and only if the id is valid
-	 * @throws Exception
-	 */
-	private static boolean isComputerIDValid(int id) throws Exception {
-
-		int nbEntries = ComputerDAO.getInstance().countComputerEntries();
-		return 0 <= id && id <= nbEntries;
-	}
-
-	/**
-	 * Checks if a given String is a valid computer ID, using
-	 * isStringNonZeroPositiveInt() and isComputerIDValid()
+	 * Checks if a given String is a valid computer ID, using isStringInteger()
+	 * and computerDAO.doesEntryExist()
 	 * 
 	 * @param id
 	 *            the id of the computer entry we want to check
@@ -329,30 +313,15 @@ public class CLIService {
 
 		boolean isValid = false;
 
-		if (isStringNonZeroPositiveInt(stringID)) {
+		if (isStringInteger(stringID)) {
 			int id = Integer.valueOf(stringID);
-			isValid = isComputerIDValid(id);
+			isValid = ComputerDAO.getInstance().doesEntryExist(id);
 		}
 
 		return isValid;
 	}
 
-	/**
-	 * Checks if a company id is greater than 0 and lesser than the total number
-	 * of pages
-	 * 
-	 * @param id
-	 *            the id of the company entry we want to check
-	 * @return true if and only if the id is valid
-	 * @throws Exception
-	 */
-	private static boolean isCompanyIDValid(int id) throws Exception {
-
-		int nbEntries = CompanyDAO.getInstance().countCompanyEntries();
-		return 0 <= id && id <= nbEntries;
-	}
-
-	// TODO: don't just check range, check if it exists via SQL
+	// TODO
 	/**
 	 * Checks if a given String is a valid company ID, using
 	 * isStringNonZeroPositiveInt() and isCompanyIDValid()
@@ -364,13 +333,14 @@ public class CLIService {
 	 */
 	private static boolean isCompanyIDStringValid(String stringID) throws Exception {
 
-		boolean isValid = false;
-
-		if (isStringNonZeroPositiveInt(stringID)) {
-			int id = Integer.valueOf(stringID);
-			isValid = isCompanyIDValid(id);
-		}
-
-		return isValid;
+		/*
+		 * boolean isValid = false;
+		 * 
+		 * if (isStringNonZeroPositiveInt(stringID)) { int id =
+		 * Integer.valueOf(stringID); isValid = isCompanyIDValid(id); }
+		 * 
+		 * return isValid;
+		 */
+		return false;
 	}
 }

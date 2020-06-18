@@ -41,14 +41,12 @@ public class ComputerDAO {
 		Computer computer = new Computer();
 
 		String sql = "SELECT id, name, introduced, discontinued, company_id  FROM `computer` WHERE id = ?";
-		PreparedStatement statement = null;
+		PreparedStatement statement;
 
 		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
 			statement = dbConnection.connect().prepareStatement(sql);
 			statement.setInt(1, id);
-
 			ResultSet resultSet = statement.executeQuery();
-
 			computer = ComputerMapper.getInstance().makeComputer(resultSet);
 
 		} catch (SQLException e) {
@@ -75,7 +73,7 @@ public class ComputerDAO {
 			throws Exception {
 
 		String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-		PreparedStatement statement = null;
+		PreparedStatement statement;
 
 		// Converting to dates
 
@@ -118,7 +116,7 @@ public class ComputerDAO {
 			Integer newCompanyID) throws Exception {
 
 		String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
-		PreparedStatement statement = null;
+		PreparedStatement statement;
 
 		// Converting to dates
 
@@ -155,7 +153,7 @@ public class ComputerDAO {
 	public void delete(int id) throws Exception {
 
 		String sql = "DELETE FROM `computer` WHERE id = ?";
-		PreparedStatement statement = null;
+		PreparedStatement statement;
 
 		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
 			statement = dbConnection.connect().prepareStatement(sql);
@@ -178,7 +176,7 @@ public class ComputerDAO {
 
 		List<Computer> computers = new ArrayList<Computer>();
 		String sql = "SELECT id, name, introduced, discontinued, company_id FROM `computer`";
-		PreparedStatement statement = null;
+		PreparedStatement statement;
 
 		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
 
@@ -219,5 +217,26 @@ public class ComputerDAO {
 		}
 
 		return nbEntries;
+	}
+
+	public boolean doesEntryExist(int id) throws Exception {
+
+		boolean doesEntryExist = false;
+
+		String sql = "SELECT COUNT(1) FROM `computer` WHERE id = ?";
+		PreparedStatement statement;
+
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+			statement = dbConnection.connect().prepareStatement(sql);
+			statement.setInt(1, id);
+			ResultSet resultSet = statement.executeQuery(); // returns either 0 or 1 entry
+
+			doesEntryExist = resultSet.next() && resultSet.getInt(1) == 1; // true if the query returned one entry
+
+		} catch (SQLException e) {
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
+		}
+
+		return doesEntryExist;
 	}
 }

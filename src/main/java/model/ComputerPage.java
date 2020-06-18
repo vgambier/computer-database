@@ -35,7 +35,6 @@ public class ComputerPage implements Page {
 
 		// Putting computers in the page
 		fillList();
-
 	}
 
 	/**
