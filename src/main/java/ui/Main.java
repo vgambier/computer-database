@@ -2,20 +2,9 @@ package ui;
 
 import java.util.Scanner;
 
-import model.Company;
-import model.Computer;
-import persistence.CompanyDAO;
-import persistence.ComputerDAO;
 import service.CLIService;
 
 public class Main {
-
-	private static String helpMessage = String.join("\n", "List of commands:", "help: shows this message",
-			"computers: shows the list of all computers", "page <nb>: shows the nb-th page the computer list",
-			"companies: shows the list of all companies",
-			"computerinfo <id>: shows all details pertaining to a given computer", "create: create a computer",
-			"update: update the data of a given computer", "delete <id>: delete a given computer",
-			"quit: exit the program");
 
 	private static Scanner scanner = new Scanner(System.in);
 
@@ -36,12 +25,11 @@ public class Main {
 			switch (command) {
 
 				case "help" :
-					System.out.println(helpMessage);
+					cliService.help();
 					break;
 
 				case "computers" :
-					for (Computer computer : ComputerDAO.getInstance().listAll())
-						System.out.println(computer);
+					cliService.computers();
 					break;
 
 				case "page" :
@@ -49,8 +37,7 @@ public class Main {
 					break;
 
 				case "companies" :
-					for (Company company : CompanyDAO.getInstance().listAll())
-						System.out.println(company);
+					cliService.companies();
 					break;
 
 				case "computerinfo" :

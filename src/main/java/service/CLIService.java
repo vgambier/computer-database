@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
+import model.Company;
 import model.Computer;
 import model.ComputerPage;
 import model.ModelException;
@@ -18,6 +19,12 @@ import persistence.DatabaseConnection;
 public class CLIService {
 
 	private Scanner scanner;
+	private static String helpMessage = String.join("\n", "List of commands:", "help: shows this message",
+			"computers: shows the list of all computers", "page <nb>: shows the nb-th page the computer list",
+			"companies: shows the list of all companies",
+			"computerinfo <id>: shows all details pertaining to a given computer", "create: create a computer",
+			"update: update the data of a given computer", "delete <id>: delete a given computer",
+			"quit: exit the program");
 
 	private static CLIService INSTANCE = null;
 
@@ -30,6 +37,26 @@ public class CLIService {
 			INSTANCE = new CLIService();
 		}
 		return INSTANCE;
+	}
+
+	// User service methods
+
+	/**
+	 * help command logic: displays a help message showing the list of all
+	 * commands
+	 */
+	public void help() {
+		System.out.println(helpMessage);
+	}
+
+	/**
+	 * computers command logic: displays the list of all computers
+	 * 
+	 * @throws Exception
+	 */
+	public void computers() throws Exception {
+		for (Computer computer : ComputerDAO.getInstance().listAll())
+			System.out.println(computer);
 	}
 
 	/**
@@ -70,6 +97,16 @@ public class CLIService {
 	}
 
 	/**
+	 * companies command logic: displays the list of all computers
+	 * 
+	 * @throws Exception
+	 */
+	public void companies() throws Exception {
+		for (Company company : CompanyDAO.getInstance().listAll())
+			System.out.println(company);
+	}
+
+	/**
 	 * computerinfo command logic: shows the user the desired entry, without
 	 * further prompting them
 	 * 
@@ -91,27 +128,6 @@ public class CLIService {
 
 		} else
 			System.out.println("Please include the id of the computer you're looking for, e.g.: 'computerinfo 13'.");
-
-	}
-
-	/**
-	 * delete command logic: deletes the corresponding entry to the database
-	 * without further prompting the user
-	 * 
-	 * @param arr
-	 *            the user input
-	 * @throws Exception
-	 */
-	public void delete(String[] arr) throws Exception {
-
-		if (arr.length >= 2) {
-			if (!isComputerIDStringValid(arr[1]))
-				System.out.println("Computer ID must be a positive integer between 1 and the number of entries");
-			else {
-				ComputerDAO.getInstance().delete(Integer.valueOf(arr[1]));
-			}
-		} else
-			System.out.println("Please include the id of the computer you want to delete, e.g.: 'delete 54'.");
 
 	}
 
@@ -213,6 +229,26 @@ public class CLIService {
 
 		computerDAO.update(computerID, newComputerName, newIntroducedDate, newDiscontinuedDate, newCompanyID);
 
+	}
+
+	/**
+	 * delete command logic: deletes the corresponding entry to the database
+	 * without further prompting the user
+	 * 
+	 * @param arr
+	 *            the user input
+	 * @throws Exception
+	 */
+	public void delete(String[] arr) throws Exception {
+
+		if (arr.length >= 2) {
+			if (!isComputerIDStringValid(arr[1]))
+				System.out.println("Computer ID must be a positive integer between 1 and the number of entries");
+			else {
+				ComputerDAO.getInstance().delete(Integer.valueOf(arr[1]));
+			}
+		} else
+			System.out.println("Please include the id of the computer you want to delete, e.g.: 'delete 54'.");
 	}
 
 	/**
@@ -350,5 +386,4 @@ public class CLIService {
 
 		return isValid;
 	}
-
 }
