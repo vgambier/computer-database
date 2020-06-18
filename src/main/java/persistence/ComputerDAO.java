@@ -219,6 +219,15 @@ public class ComputerDAO {
 		return nbEntries;
 	}
 
+	/**
+	 * Checks if there is an entry of the given id number in the computer
+	 * database
+	 * 
+	 * @param id
+	 *            the id of the entry to be checked
+	 * @return true if and only if there is an entry
+	 * @throws Exception
+	 */
 	public boolean doesEntryExist(int id) throws Exception {
 
 		boolean doesEntryExist = false;

@@ -320,26 +320,24 @@ public class CLIService {
 		return isValid;
 	}
 
-	// TODO
 	/**
-	 * Checks if a given String is a valid company ID, using
-	 * isStringNonZeroPositiveInt() and isCompanyIDValid()
+	 * Checks if a given String is a valid company ID, using isStringInteger()
+	 * and computerDAO.doesEntryExist()
 	 * 
 	 * @param id
-	 *            the id of the computer entry we want to check
+	 *            the id of the company entry we want to check
 	 * @return true if and only if the id is valid
 	 * @throws Exception
+	 * 
+	 *             private static boolean isCompanyIDStringValid(String
+	 *             stringID) throws Exception {
+	 * 
+	 *             boolean isValid = false;
+	 * 
+	 *             if (isStringInteger(stringID)) { int id =
+	 *             Integer.valueOf(stringID); isValid =
+	 *             CompanyDAO.getInstance().doesEntryExist(id); }
+	 * 
+	 *             return isValid; }
 	 */
-	private static boolean isCompanyIDStringValid(String stringID) throws Exception {
-
-		/*
-		 * boolean isValid = false;
-		 * 
-		 * if (isStringNonZeroPositiveInt(stringID)) { int id =
-		 * Integer.valueOf(stringID); isValid = isCompanyIDValid(id); }
-		 * 
-		 * return isValid;
-		 */
-		return false;
-	}
 }
