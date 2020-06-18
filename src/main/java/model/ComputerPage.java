@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import mapper.ComputerMapper;
 import persistence.ComputerDAO;
 
 public class ComputerPage implements Page {
@@ -74,10 +75,8 @@ public class ComputerPage implements Page {
 			statementList.setInt(2, (pageNumber - 1) * MAX_ITEMS_PER_PAGE);
 			ResultSet resultSet = statementList.executeQuery();
 
-			while (resultSet.next())
-				list.add(new Computer(resultSet.getInt("id"), resultSet.getString("name"),
-						resultSet.getDate("introduced"), resultSet.getDate("discontinued"),
-						resultSet.getInt("company_id")));
+			list = ComputerMapper.getInstance().makeComputerList(resultSet);
+
 		} catch (SQLException e) {
 			throw new ModelException("Couldn't query the database to fill the page!", e);
 		}

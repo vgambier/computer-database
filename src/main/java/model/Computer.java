@@ -1,16 +1,16 @@
 package model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Computer {
 
 	private int id;
 	private String name;
-	private Date introduced;
-	private Date discontinued;
+	private LocalDate introduced;
+	private LocalDate discontinued;
 	private int companyID; // TODO: should this become Company company?
 
-	public Computer(int id, String name, Date introduced, Date discontinued, int companyID) {
+	public Computer(int id, String name, LocalDate introduced, LocalDate discontinued, int companyID) {
 
 		this.id = id;
 		this.name = name;

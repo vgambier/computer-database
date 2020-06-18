@@ -2,7 +2,7 @@ package persistence;
 
 public class PersistenceException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	public PersistenceException() {
 	}
@@ -19,7 +19,8 @@ public class PersistenceException extends Exception {
 		super(message, cause);
 	}
 
-	public PersistenceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public PersistenceException(String message, Throwable cause, boolean enableSuppression,
+			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 

@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import mapper.ComputerMapper;
 import model.Computer;
 
 /* This class uses the Singleton pattern */
@@ -48,10 +49,7 @@ public class ComputerDAO {
 
 			ResultSet resultSet = statement.executeQuery();
 
-			// TODO: move to mapper package (and all other similar code as well)
-			if (resultSet.first())
-				computer = new Computer(id, resultSet.getString("name"), resultSet.getDate("introduced"),
-						resultSet.getDate("discontinued"), resultSet.getInt("company_id"));
+			computer = ComputerMapper.getInstance().makeComputer(resultSet);
 
 		} catch (SQLException e) {
 			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
@@ -190,10 +188,7 @@ public class ComputerDAO {
 			// Connecting to the database and executing the query
 			ResultSet resultSet = statement.executeQuery();
 
-			while (resultSet.next())
-				computers.add(new Computer(resultSet.getInt("id"), resultSet.getString("name"),
-						resultSet.getDate("introduced"), resultSet.getDate("discontinued"),
-						resultSet.getInt("company_id")));
+			computers = ComputerMapper.getInstance().makeComputerList(resultSet);
 
 		} catch (SQLException e) {
 			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
