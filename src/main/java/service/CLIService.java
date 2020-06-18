@@ -70,14 +70,13 @@ public class CLIService {
 	public void page(String[] arr) throws Exception {
 
 		if (arr.length >= 2) { // if a second argument has been given
-
 			if (!isStringNonZeroPositiveInt(arr[1]))
 				System.out.println("Page number must be an non-zero positive integer!");
 
 			else {
-
 				ComputerPage page = null;
 				boolean isPageNumberOk = false;
+
 				try {
 					page = new ComputerPage(Integer.valueOf(arr[1]), DatabaseConnection.getInstance().connect());
 					isPageNumberOk = true; // previous line didn't throw an exception, so it must be ok
@@ -93,7 +92,6 @@ public class CLIService {
 
 		} else
 			System.out.println("Please include the id of the page you're looking for, e.g.: 'page 5'.");
-
 	}
 
 	/**
@@ -128,7 +126,6 @@ public class CLIService {
 
 		} else
 			System.out.println("Please include the id of the computer you're looking for, e.g.: 'computerinfo 13'.");
-
 	}
 
 	/**
@@ -140,7 +137,6 @@ public class CLIService {
 	public void create() throws Exception {
 
 		// Name field
-
 		String computerName = "";
 		while (computerName.equals("")) {
 			System.out.println("Please enter the name of the new computer (mandatory):");
@@ -148,14 +144,12 @@ public class CLIService {
 		}
 
 		// Introduced field
-
 		Date introducedDate = askForDate("introduction");
 
 		// Discontinued field
-
 		Date discontinuedDate = askForDate("discontinuation");
 
-		// If both dates have been given, we must check that the discontinuation comes later
+		// If and only if both dates have been given, we must check that the discontinuation comes later
 		if (introducedDate != null) {
 			while (discontinuedDate != null && discontinuedDate.before(introducedDate)) {
 				System.out.println("The date of discontinuation must be after the date of introduction.");
@@ -183,7 +177,6 @@ public class CLIService {
 	public void update() throws Exception {
 
 		// ID field
-
 		String computerIDString = "";
 		while (computerIDString.equals("")) {
 			System.out.println("Please enter the ID of the computer you wish to update:");
@@ -198,14 +191,12 @@ public class CLIService {
 		Integer computerID = Integer.valueOf(computerIDString);
 
 		// Displaying current info
-
 		ComputerDAO computerDAO = ComputerDAO.getInstance();
 		System.out.println("Here is the current data on record:");
 		System.out.println(computerDAO.find(computerID));
 		System.out.println("Now, please enter the new data. Leave fields blank if you wish to remove them.");
 
 		// Name field
-
 		String newComputerName = "";
 		while (newComputerName.equals("")) {
 			System.out.println("Please enter the name of the computer:");
@@ -213,11 +204,9 @@ public class CLIService {
 		}
 
 		// Introduced field
-
 		Date newIntroducedDate = askForDate("introduction");
 
 		// Discontinued field
-
 		Date newDiscontinuedDate = askForDate("discontinuation");
 
 		// Company ID field
@@ -271,18 +260,16 @@ public class CLIService {
 		while (isDateValid == false) {
 
 			try {
-
 				System.out.println("Please enter the date of " + string + " of the computer (YYYY-MM-DD) (optional):");
-
 				String userInput = scanner.nextLine();
 
 				if (userInput.equals(""))
-					break;
-
-				formatter.parse(userInput); // throws a ParseException if the
-											// input is not properly formatted
-				isDateValid = true;
-				date = java.sql.Date.valueOf(userInput);
+					isDateValid = true;
+				else {
+					formatter.parse(userInput); // throws a ParseException if the input is not properly formatted
+					isDateValid = true;
+					date = java.sql.Date.valueOf(userInput);
+				}
 
 			} catch (ParseException e) {
 				System.out.println("Wrong format!");
