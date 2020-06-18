@@ -117,7 +117,7 @@ public class CLIService {
 		if (arr.length >= 2) {
 
 			if (!isComputerIDStringValid(arr[1]))
-				System.out.println("Computer ID must be a positive integer between 1 and the number of entries");
+				System.out.println("Computer ID must be a positive integer and correspond to an existing entry.");
 			else {
 				int computerID = Integer.valueOf(arr[1]);
 				System.out.println(ComputerDAO.getInstance().find(computerID));
@@ -182,7 +182,7 @@ public class CLIService {
 			computerIDString = scanner.nextLine();
 
 			if (!isComputerIDStringValid(computerIDString)) {
-				System.out.println("Computer ID must be a positive integer between 1 and the number of entries");
+				System.out.println("Computer ID must be a positive integer and correspond to an existing entry.");
 				computerIDString = ""; // Reject input
 			}
 
@@ -231,7 +231,7 @@ public class CLIService {
 
 		if (arr.length >= 2) {
 			if (!isComputerIDStringValid(arr[1]))
-				System.out.println("Computer ID must be a positive integer between 1 and the number of entries");
+				System.out.println("Computer ID must be a positive integer and correspond to an existing entry.");
 			else {
 				ComputerDAO.getInstance().delete(Integer.valueOf(arr[1]));
 			}
