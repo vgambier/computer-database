@@ -56,7 +56,7 @@ public class DatabaseConnection implements AutoCloseable {
 				connection.close();
 				connection = null;
 			} catch (SQLException e) {
-				throw new PersistenceException("Couldn't close the connection!");
+				throw new PersistenceException("Couldn't close the connection!", e);
 			}
 		}
 	}

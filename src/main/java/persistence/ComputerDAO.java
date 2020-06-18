@@ -38,7 +38,7 @@ public class ComputerDAO {
 
 		Computer computer = new Computer();
 
-		String sql = "SELECT * FROM `computer` WHERE id = ?";
+		String sql = "SELECT id, name, introduced, discontinued, company_id  FROM `computer` WHERE id = ?";
 		PreparedStatement statement = null;
 
 		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
@@ -53,7 +53,7 @@ public class ComputerDAO {
 						resultSet.getDate("discontinued"), resultSet.getInt("company_id"));
 
 		} catch (SQLException e) {
-			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
 		}
 
 		return computer;
@@ -95,7 +95,7 @@ public class ComputerDAO {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
 		}
 
 		System.out.println("Entry added.");
@@ -140,7 +140,7 @@ public class ComputerDAO {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
 		}
 
 		System.out.println("Entry updated.");
@@ -164,7 +164,7 @@ public class ComputerDAO {
 			statement.setInt(1, id);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
 		}
 
 		System.out.println("Entry deleted.");
@@ -195,7 +195,7 @@ public class ComputerDAO {
 						resultSet.getInt("company_id")));
 
 		} catch (SQLException e) {
-			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
 		}
 
 		return computers;
@@ -220,7 +220,7 @@ public class ComputerDAO {
 			if (rs.next())
 				nbEntries = rs.getInt(1);
 		} catch (SQLException e) {
-			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
 		}
 
 		return nbEntries;

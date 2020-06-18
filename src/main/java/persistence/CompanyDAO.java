@@ -46,7 +46,7 @@ public class CompanyDAO {
 				companies.add(new Company(resultSet.getInt("id"), resultSet.getString("name")));
 
 		} catch (SQLException e) {
-			throw new PersistenceException("Couldn't prepare and execute the SQL statement.");
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
 		}
 
 		return companies;
@@ -72,7 +72,7 @@ public class CompanyDAO {
 			if (rs.next())
 				nbEntries = rs.getInt(1);
 		} catch (SQLException e) {
-			throw new PersistenceException("Couldn't create the SQL statement!");
+			throw new PersistenceException("Couldn't create the SQL statement!", e);
 		}
 
 		return nbEntries;

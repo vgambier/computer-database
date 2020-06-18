@@ -63,7 +63,7 @@ public class ComputerPage implements Page {
 	private void fillList() throws ModelException {
 
 		// TODO: move to ComputerDAO
-		String sqlList = "SELECT * FROM `computer` LIMIT ? OFFSET ?"; // works even for the last page which only has
+		String sqlList = "SELECT id, name, introduced, discontinued, company_id FROM `computer` LIMIT ? OFFSET ?"; // works even for the last page which only has
 		// (nbEntries % MAX_ITEMS_PER_PAGE) entries
 
 		PreparedStatement statementList;
@@ -78,7 +78,7 @@ public class ComputerPage implements Page {
 						resultSet.getDate("introduced"), resultSet.getDate("discontinued"),
 						resultSet.getInt("company_id")));
 		} catch (SQLException e) {
-			throw new ModelException("Couldn't query the database to fill the page!");
+			throw new ModelException("Couldn't query the database to fill the page!", e);
 		}
 	}
 
