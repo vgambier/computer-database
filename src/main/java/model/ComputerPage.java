@@ -21,7 +21,7 @@ public class ComputerPage implements Page {
 	public ComputerPage(int pageNumber) throws Exception {
 
 		// Checking the database to count the number of entries
-		int nbEntries = ComputerDAO.getInstance().countComputerEntries();
+		int nbEntries = ComputerDAO.getInstance().countEntries();
 
 		nbPages = nbEntries / MAX_ITEMS_PER_PAGE;
 
