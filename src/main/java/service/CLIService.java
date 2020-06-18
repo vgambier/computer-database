@@ -13,46 +13,78 @@ import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import persistence.DatabaseConnection;
 
+/* This class uses the Singleton pattern */
+
 public class CLIService {
 
 	private Scanner scanner;
 
-	public CLIService() {
+	private static CLIService INSTANCE = null;
+
+	private CLIService() {
 		scanner = new Scanner(System.in);
 	}
 
+	public static CLIService getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new CLIService();
+		}
+		return INSTANCE;
+	}
+
+	/**
+	 * page command logic: shows the user the desired computer page, without
+	 * further prompting them
+	 * 
+	 * @param arr
+	 *            the user input
+	 * @throws Exception
+	 */
 	public void page(String[] arr) throws Exception {
 
-		if (arr.length >= 2) {
+		if (arr.length >= 2) { // if a second argument has been given
 
-			if (!isStringNonZeroPositiveInt(arr[1])) {
+			if (!isStringNonZeroPositiveInt(arr[1]))
 				System.out.println("Page number must be an non-zero positive integer!");
-				return; // TODO: bad return, and other similar code too
-			}
 
-			ComputerPage page;
-			try {
-				page = new ComputerPage(Integer.valueOf(arr[1]), DatabaseConnection.getInstance().connect());
-			} catch (ModelException e) {
-				System.out.println("Error: page number is too high.");
-				return;
+			else {
+
+				ComputerPage page = null;
+				boolean isPageNumberOk = false;
+				try {
+					page = new ComputerPage(Integer.valueOf(arr[1]), DatabaseConnection.getInstance().connect());
+					isPageNumberOk = true; // previous line didn't throw an exception, so it must be ok
+				} catch (ModelException e) {
+					System.out.println("Error: page number is too high.");
+				}
+
+				if (isPageNumberOk) {
+					for (Computer computer : page.getList())
+						System.out.println(computer);
+				}
 			}
-			for (Computer computer : page.getList())
-				System.out.println(computer);
 
 		} else
 			System.out.println("Please include the id of the page you're looking for, e.g.: 'page 5'.");
 
 	}
 
+	/**
+	 * computerinfo command logic: shows the user the desired entry, without
+	 * further prompting them
+	 * 
+	 * @param arr
+	 *            the user input
+	 * 
+	 * @throws Exception
+	 */
 	public void computerInfo(String[] arr) throws Exception {
 
 		if (arr.length >= 2) {
 
-			if (!isComputerIDStringValid(arr[1])) {
+			if (!isComputerIDStringValid(arr[1]))
 				System.out.println("Computer ID must be a positive integer between 1 and the number of entries");
-				return;
-			} else {
+			else {
 				int computerID = Integer.valueOf(arr[1]);
 				System.out.println(ComputerDAO.getInstance().find(computerID));
 			}
@@ -62,13 +94,20 @@ public class CLIService {
 
 	}
 
+	/**
+	 * delete command logic: deletes the corresponding entry to the database
+	 * without further prompting the user
+	 * 
+	 * @param arr
+	 *            the user input
+	 * @throws Exception
+	 */
 	public void delete(String[] arr) throws Exception {
 
 		if (arr.length >= 2) {
-			if (!isComputerIDStringValid(arr[1])) {
+			if (!isComputerIDStringValid(arr[1]))
 				System.out.println("Computer ID must be a positive integer between 1 and the number of entries");
-				return;
-			} else {
+			else {
 				ComputerDAO.getInstance().delete(Integer.valueOf(arr[1]));
 			}
 		} else
@@ -80,8 +119,6 @@ public class CLIService {
 	 * create command logic: prompts the user and adds a corresponding entry to
 	 * the database
 	 * 
-	 * @param computerDAO
-	 *            a (Singleton) computerDAO object
 	 * @throws Exception
 	 */
 	public void create() throws Exception {
@@ -122,8 +159,8 @@ public class CLIService {
 	}
 
 	/**
-	 * update command logic: prompts the user and adds a corresponding entry to
-	 * the database
+	 * update command logic: prompts the user and updates the corresponding
+	 * entry to the database
 	 * 
 	 * @throws Exception
 	 */

@@ -18,17 +18,12 @@ public class Main {
 			"quit: exit the program");
 
 	private static Scanner scanner = new Scanner(System.in);
-	// Note: Does not actually create a connection to the database
-	// TODO: ALWAYS DISCONNECT FROM THE DATABASE
-	// using try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-	//			statement = dbConnection.connect().prepareStatement(sql);
 
 	public static void main(String[] args) throws Exception {
 
-		CLIService cliService = new CLIService();
+		CLIService cliService = CLIService.getInstance();
 
 		System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
-		// TODO: password prompt?
 
 		boolean isQuitting = false; // exit condition
 
