@@ -1,5 +1,5 @@
 package model;
 
-public class CompanyPage implements Page {
+public class CompanyPage extends Page<Company> {
 	//TODO: write this class
 }

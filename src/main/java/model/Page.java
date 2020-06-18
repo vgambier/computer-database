@@ -1,5 +1,5 @@
 package model;
 
-public interface Page {
-	// TODO: write this interface
+public abstract class Page<T> {
+	// TODO: write this abstract class
 }

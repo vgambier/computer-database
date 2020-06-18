@@ -8,23 +8,14 @@ public class Computer {
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
-	private int companyID; // TODO: should this become Company company?
+	private int companyID;
 
 	public Computer(int id, String name, LocalDate introduced, LocalDate discontinued, int companyID) {
-
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		this.companyID = companyID;
-	}
-
-	public Computer(int id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
-	public Computer() {
 	}
 
 	@Override

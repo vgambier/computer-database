@@ -9,7 +9,7 @@ import java.util.List;
 
 import model.Computer;
 
-public class ComputerMapper {
+public class ComputerMapper extends Mapper<Computer> {
 
 	private static ComputerMapper INSTANCE = null;
 
@@ -23,18 +23,10 @@ public class ComputerMapper {
 		return INSTANCE;
 	}
 
-	/**
-	 * @param rs
-	 *            a ResultSet object, that should come from a query on the
-	 *            computer table. Only the first item of the query will be
-	 *            considered.
-	 * @return a Computer object that modelizes the computer entry from the
-	 *         database
-	 * @throws MapperException
-	 *             - if the input ResultSet had 0 entries
-	 * @throws SQLException
-	 */
-	public Computer makeComputer(ResultSet rs) throws SQLException, MapperException {
+	// TODO: should toModel() and toModelList() be a single method?
+
+	@Override
+	public Computer toModel(ResultSet rs) throws SQLException, MapperException {
 
 		Computer computer;
 
@@ -49,15 +41,8 @@ public class ComputerMapper {
 		return computer;
 	}
 
-	/**
-	 * @param rs
-	 *            a ResultSet object, that should come from a query on the
-	 *            computer table.
-	 * @return a List<Computer> object that modelizes the computer entries from
-	 *         the database. Possibly empty if the ResultSet had 0 entries.
-	 * @throws SQLException
-	 */
-	public List<Computer> makeComputerList(ResultSet rs) throws SQLException {
+	@Override
+	public List<Computer> toModelList(ResultSet rs) throws SQLException {
 
 		List<Computer> computers = new ArrayList<Computer>();
 

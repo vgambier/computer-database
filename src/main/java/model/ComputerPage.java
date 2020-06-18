@@ -10,7 +10,7 @@ import mapper.ComputerMapper;
 import persistence.ComputerDAO;
 import persistence.DatabaseConnection;
 
-public class ComputerPage implements Page {
+public class ComputerPage extends Page<Computer> {
 
 	private static final int MAX_ITEMS_PER_PAGE = 25;
 	private static int nbPages;
@@ -71,7 +71,7 @@ public class ComputerPage implements Page {
 			statementList.setInt(2, (pageNumber - 1) * MAX_ITEMS_PER_PAGE);
 			ResultSet resultSet = statementList.executeQuery();
 
-			list = ComputerMapper.getInstance().makeComputerList(resultSet);
+			list = ComputerMapper.getInstance().toModelList(resultSet);
 
 		} catch (SQLException e) {
 			throw new ModelException("Couldn't query the database to fill the page!", e);

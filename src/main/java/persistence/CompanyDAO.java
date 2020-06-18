@@ -6,11 +6,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import mapper.CompanyMapper;
 import model.Company;
 
 /* This class uses the Singleton pattern */
 
-public class CompanyDAO extends DAO {
+public class CompanyDAO extends DAO<Company> {
 
 	private static CompanyDAO INSTANCE = null;
 
@@ -51,4 +52,10 @@ public class CompanyDAO extends DAO {
 
 		return companies;
 	}
+
+	@Override
+	public CompanyMapper getTypeMapper() {
+		return CompanyMapper.getInstance();
+	}
+
 }

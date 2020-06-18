@@ -4,15 +4,13 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import mapper.ComputerMapper;
 import model.Computer;
 
 /* This class uses the Singleton pattern */
 
-public class ComputerDAO extends DAO {
+public class ComputerDAO extends DAO<Computer> {
 
 	private static ComputerDAO INSTANCE = null;
 
@@ -38,7 +36,7 @@ public class ComputerDAO extends DAO {
 	 */
 	public Computer find(int id) throws Exception {
 
-		Computer computer = new Computer();
+		Computer computer;
 
 		String sql = "SELECT id, name, introduced, discontinued, company_id  FROM `computer` WHERE id = ?";
 		PreparedStatement statement;
@@ -47,7 +45,7 @@ public class ComputerDAO extends DAO {
 			statement = dbConnection.connect().prepareStatement(sql);
 			statement.setInt(1, id);
 			ResultSet resultSet = statement.executeQuery();
-			computer = ComputerMapper.getInstance().makeComputer(resultSet);
+			computer = ComputerMapper.getInstance().toModel(resultSet);
 
 		} catch (SQLException e) {
 			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
@@ -167,34 +165,6 @@ public class ComputerDAO extends DAO {
 
 	}
 
-	// TODO: move this to DAO once the Mapper abstract class is implemented
-	/**
-	 * Returns all computers from the database as Java objects
-	 * 
-	 * @throws Exception
-	 */
-	public List<Computer> listAll() throws Exception {
-
-		List<Computer> computers = new ArrayList<Computer>();
-		String sql = "SELECT id, name, introduced, discontinued, company_id FROM `computer`";
-		PreparedStatement statement;
-
-		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-
-			statement = dbConnection.connect().prepareStatement(sql);
-
-			// Connecting to the database and executing the query
-			ResultSet resultSet = statement.executeQuery();
-
-			computers = ComputerMapper.getInstance().makeComputerList(resultSet);
-
-		} catch (SQLException e) {
-			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-		}
-
-		return computers;
-	}
-
 	/**
 	 * Checks if there is an entry of the given id number in the computer
 	 * database
@@ -224,4 +194,10 @@ public class ComputerDAO extends DAO {
 
 		return doesEntryExist;
 	}
+
+	@Override
+	public ComputerMapper getTypeMapper() {
+		return ComputerMapper.getInstance();
+	}
+
 }

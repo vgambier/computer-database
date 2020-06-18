@@ -10,9 +10,6 @@ public class Company {
 		this.name = name;
 	}
 
-	public Company() {
-	}
-
 	@Override
 	public String toString() {
 
