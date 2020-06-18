@@ -1,6 +1,5 @@
 package model;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +8,7 @@ import java.util.List;
 
 import mapper.ComputerMapper;
 import persistence.ComputerDAO;
+import persistence.DatabaseConnection;
 
 public class ComputerPage implements Page {
 
@@ -17,11 +17,8 @@ public class ComputerPage implements Page {
 
 	private int pageNumber;
 	private List<Computer> list = new ArrayList<Computer>();
-	private Connection connection;
 
-	public ComputerPage(int pageNumber, Connection connection) throws Exception {
-
-		this.connection = connection;
+	public ComputerPage(int pageNumber) throws Exception {
 
 		// Checking the database to count the number of entries
 		int nbEntries = ComputerDAO.getInstance().countComputerEntries();
@@ -30,7 +27,6 @@ public class ComputerPage implements Page {
 
 		// Checking if the input page number is valid
 		checkPageNumber(pageNumber);
-
 		this.pageNumber = pageNumber;
 
 		// Putting computers in the page
@@ -59,17 +55,18 @@ public class ComputerPage implements Page {
 	 * Fills the list attribute with all Computer objects that should be on the
 	 * current page
 	 * 
-	 * @throws ModelException
+	 * @throws Exception
 	 */
-	private void fillList() throws ModelException {
+	private void fillList() throws Exception {
 
 		// TODO: move to ComputerDAO
-		String sqlList = "SELECT id, name, introduced, discontinued, company_id FROM `computer` LIMIT ? OFFSET ?"; // works even for the last page which only has
-		// (nbEntries % MAX_ITEMS_PER_PAGE) entries
+		String sqlList = "SELECT id, name, introduced, discontinued, company_id FROM `computer` LIMIT ? OFFSET ?";
+		// This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE) entries
 
 		PreparedStatement statementList;
-		try {
-			statementList = connection.prepareStatement(sqlList);
+
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+			statementList = dbConnection.connect().prepareStatement(sqlList);
 			statementList.setInt(1, MAX_ITEMS_PER_PAGE);
 			statementList.setInt(2, (pageNumber - 1) * MAX_ITEMS_PER_PAGE);
 			ResultSet resultSet = statementList.executeQuery();

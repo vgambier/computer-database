@@ -12,7 +12,6 @@ import model.ComputerPage;
 import model.ModelException;
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
-import persistence.DatabaseConnection;
 
 /* This class uses the Singleton pattern */
 
@@ -78,7 +77,7 @@ public class CLIService {
 				boolean isPageNumberOk = false;
 
 				try {
-					page = new ComputerPage(Integer.valueOf(arr[1]), DatabaseConnection.getInstance().connect());
+					page = new ComputerPage(Integer.valueOf(arr[1]));
 					isPageNumberOk = true; // previous line didn't throw an exception, so it must be ok
 				} catch (ModelException e) {
 					System.out.println("Error: page number is too high.");
