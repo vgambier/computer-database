@@ -37,12 +37,9 @@ public class CompanyDAO {
 		PreparedStatement statement = null;
 
 		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-			statement = dbConnection.connect().prepareStatement(sql);
-		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare the SQL statement!");
-		}
 
-		try {
+			statement = dbConnection.connect().prepareStatement(sql);
+
 			// Connecting to the database and executing the query
 			ResultSet resultSet = statement.executeQuery();
 
@@ -50,7 +47,7 @@ public class CompanyDAO {
 				companies.add(new Company(resultSet.getInt("id"), resultSet.getString("name")));
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't execute the query!");
+			throw new CDBException("Couldn't prepare the SQL statement!");
 		}
 
 		return companies;

@@ -37,7 +37,7 @@ public class DatabaseConnection implements AutoCloseable {
 		try {
 			connection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
 		} catch (SQLException e) {
-			System.out.println("Cannot connect to the database");
+			System.out.println("Cannot connect to the database!");
 			throw new IllegalStateException("Exception: cannot connect to the database.", e);
 		}
 

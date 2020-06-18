@@ -170,7 +170,7 @@ public class CLIService {
 		// Company ID field
 		// TODO: check this company ID exists
 
-		System.out.println("Please enter the id of the company of the computer:");
+		System.out.println("Please enter the id of the company of the computer (optional):");
 		String newCompanyIDString = scanner.nextLine();
 		Integer newCompanyID = newCompanyIDString.equals("") ? null : Integer.valueOf(newCompanyIDString);
 

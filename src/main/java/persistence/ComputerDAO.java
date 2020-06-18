@@ -92,14 +92,11 @@ public class ComputerDAO {
 				statement.setNull(4, java.sql.Types.INTEGER);
 			else
 				statement.setInt(4, companyID);
+
+			statement.executeUpdate();
+
 		} catch (SQLException e) {
 			throw new CDBException("Couldn't prepare the SQL statement!");
-		}
-
-		try {
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			throw new CDBException("Couldn't execute the query!");
 		}
 
 		System.out.println("Entry added.");
@@ -141,15 +138,10 @@ public class ComputerDAO {
 
 			statement.setInt(5, id);
 
-		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare the SQL statement!");
-		}
-
-		try {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't execute the query!");
+			throw new CDBException("Couldn't excute the SQL query!");
 		}
 
 		System.out.println("Entry updated.");
