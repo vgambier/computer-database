@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import model.Computer;
 
@@ -176,9 +177,9 @@ public class ComputerDAO {
 	 * 
 	 * @throws Exception
 	 */
-	public ArrayList<Computer> listAll() throws Exception {
+	public List<Computer> listAll() throws Exception {
 
-		ArrayList<Computer> computers = new ArrayList<Computer>();
+		List<Computer> computers = new ArrayList<Computer>();
 		String sql = "SELECT id, name, introduced, discontinued, company_id FROM `computer`";
 		PreparedStatement statement = null;
 

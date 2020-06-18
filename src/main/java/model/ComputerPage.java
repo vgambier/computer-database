@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import persistence.ComputerDAO;
 
@@ -14,7 +15,7 @@ public class ComputerPage implements Page {
 	private static int nbPages;
 
 	private int pageNumber;
-	private ArrayList<Computer> list = new ArrayList<Computer>();
+	private List<Computer> list = new ArrayList<Computer>();
 	private Connection connection;
 
 	public ComputerPage(int pageNumber, Connection connection) throws Exception {
@@ -84,7 +85,7 @@ public class ComputerPage implements Page {
 
 	// Getters
 
-	public ArrayList<Computer> getList() {
+	public List<Computer> getList() {
 		return list;
 	}
 

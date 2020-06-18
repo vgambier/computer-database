@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import model.Company;
 
@@ -29,9 +30,9 @@ public class CompanyDAO {
 	 * 
 	 * @throws Exception
 	 */
-	public ArrayList<Company> listAll() throws Exception {
+	public List<Company> listAll() throws Exception {
 
-		ArrayList<Company> companies = new ArrayList<Company>();
+		List<Company> companies = new ArrayList<Company>();
 		String sql = "SELECT id, name FROM `company`";
 		PreparedStatement statement = null;
 
