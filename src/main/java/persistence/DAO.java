@@ -87,4 +87,42 @@ public abstract class DAO<T> {
 
 		return computers;
 	}
+
+	/**
+	 * Checks if there is an entry of the given id number in the table
+	 * 
+	 * @param id
+	 *            the id of the entry to be checked
+	 * @return true if and only if there is an entry
+	 * @throws Exception
+	 */
+	public boolean doesEntryExist(int id) throws Exception {
+
+		boolean doesEntryExist = false;
+
+		// TODO: can we fix this somehow?
+		String sql;
+		if (this instanceof ComputerDAO)
+			sql = "SELECT COUNT(1) FROM `computer` WHERE id = ?";
+		else if (this instanceof CompanyDAO)
+			sql = "SELECT COUNT(1) FROM `company` WHERE id = ?";
+		else
+			throw new PersistenceException("DAO only has 2 children classes: ComputerDAO and CompanyDAO");
+
+		PreparedStatement statement;
+
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+			statement = dbConnection.connect().prepareStatement(sql);
+			statement.setInt(1, id);
+			ResultSet resultSet = statement.executeQuery(); // returns either 0 or 1 entry
+
+			doesEntryExist = resultSet.next() && resultSet.getInt(1) == 1; // true if the query returned one entry
+
+		} catch (SQLException e) {
+			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
+		}
+
+		return doesEntryExist;
+	}
+
 }

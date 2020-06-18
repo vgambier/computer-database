@@ -156,11 +156,18 @@ public class CLIService {
 			}
 		}
 
-		// Company ID field
-		// TODO: check this company ID exists
+		// Company ID field - must be either empty or a valid ID
+		String companyIDString = "invalid"; // initializing with invalid value
+		boolean isCompanyIDValid = false;
+		while (!isCompanyIDValid) {
+			System.out.println("Please enter the id of the company of the computer (optional):");
+			companyIDString = scanner.nextLine();
 
-		System.out.println("Please enter the id of the company of the computer (optional):");
-		String companyIDString = scanner.nextLine();
+			if (!companyIDString.equals("") && !isCompanyIDStringValid(companyIDString))
+				System.out.println("Company ID must be a positive integer and correspond to an existing entry.");
+			else
+				isCompanyIDValid = true;
+		}
 		Integer companyID = companyIDString.equals("") ? null : Integer.valueOf(companyIDString);
 
 		ComputerDAO.getInstance().add(computerName, introducedDate, discontinuedDate, companyID);
@@ -208,11 +215,18 @@ public class CLIService {
 		// Discontinued field
 		Date newDiscontinuedDate = askForDate("discontinuation");
 
-		// Company ID field
-		// TODO: check this company ID exists
+		// Company ID field - must be either empty or a valid ID
+		String newCompanyIDString = "invalid"; // initializing with invalid value
+		boolean isCompanyIDValid = false;
+		while (!isCompanyIDValid) {
+			System.out.println("Please enter the id of the company of the computer (optional):");
+			newCompanyIDString = scanner.nextLine();
 
-		System.out.println("Please enter the id of the company of the computer (optional):");
-		String newCompanyIDString = scanner.nextLine();
+			if (!newCompanyIDString.equals("") && !isCompanyIDStringValid(newCompanyIDString))
+				System.out.println("Company ID must be a positive integer and correspond to an existing entry.");
+			else
+				isCompanyIDValid = true;
+		}
 		Integer newCompanyID = newCompanyIDString.equals("") ? null : Integer.valueOf(newCompanyIDString);
 
 		computerDAO.update(computerID, newComputerName, newIntroducedDate, newDiscontinuedDate, newCompanyID);
@@ -315,6 +329,27 @@ public class CLIService {
 		if (isStringInteger(stringID)) {
 			int id = Integer.valueOf(stringID);
 			isValid = ComputerDAO.getInstance().doesEntryExist(id);
+		}
+
+		return isValid;
+	}
+
+	/**
+	 * Checks if a given String is a valid company ID, using isStringInteger()
+	 * and companyDAO.doesEntryExist()
+	 * 
+	 * @param id
+	 *            the id of the company entry we want to check
+	 * @return true if and only if the id is valid
+	 * @throws Exception
+	 */
+	private static boolean isCompanyIDStringValid(String stringID) throws Exception {
+
+		boolean isValid = false;
+
+		if (isStringInteger(stringID)) {
+			int id = Integer.valueOf(stringID);
+			isValid = CompanyDAO.getInstance().doesEntryExist(id);
 		}
 
 		return isValid;

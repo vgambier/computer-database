@@ -165,36 +165,6 @@ public class ComputerDAO extends DAO<Computer> {
 
 	}
 
-	/**
-	 * Checks if there is an entry of the given id number in the computer
-	 * database
-	 * 
-	 * @param id
-	 *            the id of the entry to be checked
-	 * @return true if and only if there is an entry
-	 * @throws Exception
-	 */
-	public boolean doesEntryExist(int id) throws Exception {
-
-		boolean doesEntryExist = false;
-
-		String sql = "SELECT COUNT(1) FROM `computer` WHERE id = ?";
-		PreparedStatement statement;
-
-		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-			statement = dbConnection.connect().prepareStatement(sql);
-			statement.setInt(1, id);
-			ResultSet resultSet = statement.executeQuery(); // returns either 0 or 1 entry
-
-			doesEntryExist = resultSet.next() && resultSet.getInt(1) == 1; // true if the query returned one entry
-
-		} catch (SQLException e) {
-			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-		}
-
-		return doesEntryExist;
-	}
-
 	@Override
 	public ComputerMapper getTypeMapper() {
 		return ComputerMapper.getInstance();
