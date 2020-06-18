@@ -47,7 +47,7 @@ public class CompanyDAO {
 				companies.add(new Company(resultSet.getInt("id"), resultSet.getString("name")));
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare the SQL statement!");
+			throw new CDBException("Couldn't prepare and execute the SQL statement!");
 		}
 
 		return companies;
@@ -63,22 +63,17 @@ public class CompanyDAO {
 	public int countCompanyEntries() throws Exception {
 
 		String sql = "SELECT COUNT(*) FROM `company`";
-
 		Statement statement;
+
+		int nbEntries = -1; // The only way the "if" fails is if the query fails, but an exception will be thrown anyway
+
 		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
 			statement = dbConnection.connect().createStatement();
-		} catch (SQLException e) {
-			throw new CDBException("Couldn't create the SQL statement!");
-		}
-
-		int nbEntries = -1; // Initializing
-
-		try {
 			ResultSet rs = statement.executeQuery(sql);
 			if (rs.next())
 				nbEntries = rs.getInt(1);
 		} catch (SQLException e) {
-			throw new CDBException("Failed to gather the entry count!");
+			throw new CDBException("Couldn't create the SQL statement!");
 		}
 
 		return nbEntries;
