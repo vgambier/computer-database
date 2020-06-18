@@ -24,6 +24,8 @@ public class Main {
 
 			switch (command) {
 
+				// TODO: change cases from Strings to enum
+
 				case "help" :
 					cliService.help();
 					break;

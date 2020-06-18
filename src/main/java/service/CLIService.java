@@ -24,6 +24,7 @@ public class CLIService {
 			"computerinfo <id>: shows all details pertaining to a given computer", "create: create a computer",
 			"update: update the data of a given computer", "delete <id>: delete a given computer",
 			"quit: exit the program");
+	// TODO: change messages from hardcoded Strings to attributes
 
 	private static CLIService INSTANCE = null;
 
@@ -79,7 +80,7 @@ public class CLIService {
 				try {
 					page = new ComputerPage(Integer.valueOf(arr[1]));
 					isPageNumberOk = true; // previous line didn't throw an exception, so it must be ok
-				} catch (ModelException e) {
+				} catch (@SuppressWarnings("unused") ModelException e) {
 					System.out.println("Error: page number is too high.");
 				}
 
@@ -284,7 +285,7 @@ public class CLIService {
 					date = java.sql.Date.valueOf(userInput);
 				}
 
-			} catch (ParseException e) {
+			} catch (@SuppressWarnings("unused") ParseException e) {
 				System.out.println("Wrong format!");
 			}
 		}
@@ -306,7 +307,7 @@ public class CLIService {
 		try {
 			Integer.parseInt(s);
 			isValid = true;
-		} catch (NumberFormatException e) {
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
 			// do nothing
 		}
 

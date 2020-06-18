@@ -1,5 +1,7 @@
 package persistence;
 
+import static persistence.DAO.tableName;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,9 +24,9 @@ public class CompanyDAO extends DAO<Company> {
 	public static CompanyDAO getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new CompanyDAO();
+		tableName = "company";
 		return INSTANCE;
 	}
-
 	/**
 	 * Returns all companies from the database as Java objects
 	 * 

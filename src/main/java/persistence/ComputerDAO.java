@@ -22,6 +22,7 @@ public class ComputerDAO extends DAO<Computer> {
 	public static ComputerDAO getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new ComputerDAO();
+		tableName = "computer";
 		return INSTANCE;
 	}
 

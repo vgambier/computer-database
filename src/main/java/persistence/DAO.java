@@ -11,6 +11,8 @@ import mapper.Mapper;
 
 public abstract class DAO<T> {
 
+	protected static String tableName;
+
 	/**
 	 * Returns a Mapper<T> object where T is the the same T as the one in the
 	 * current DAO<T> type. For example, if this method is called by an instance
@@ -29,17 +31,11 @@ public abstract class DAO<T> {
 	 */
 	public int countEntries() throws Exception {
 
-		// TODO: can we fix this somehow?
-		String sql;
-		if (this instanceof ComputerDAO)
-			sql = "SELECT COUNT(*) FROM `computer`";
-		else if (this instanceof CompanyDAO)
-			sql = "SELECT COUNT(*) FROM `company`";
-		else
-			throw new PersistenceException("DAO only has 2 children classes: ComputerDAO and CompanyDAO");
+		if (tableName == null)
+			throw new PersistenceException("Name may not be null");
+		String sql = "SELECT COUNT(*) FROM " + tableName; // SQL injection is impossible: the user has no control over tableName
 
 		Statement statement;
-
 		int nbEntries = -1; // The only way the "if" fails is if the query fails, but an exception will be thrown anyway
 
 		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
@@ -63,17 +59,11 @@ public abstract class DAO<T> {
 
 		List<T> computers = new ArrayList<T>();
 
-		// TODO: can we fix this somehow?
-		String sql;
-		if (this instanceof ComputerDAO)
-			sql = "SELECT id, name, introduced, discontinued, company_id FROM `computer`";
-		else if (this instanceof CompanyDAO)
-			sql = "SELECT id, name FROM `company`";
-		else
-			throw new PersistenceException("DAO only has 2 children classes: ComputerDAO and CompanyDAO");
+		if (tableName == null)
+			throw new PersistenceException("Name may not be null");
+		String sql = "SELECT * FROM " + tableName; // SQL injection is impossible: the user has no control over tableName
 
 		PreparedStatement statement;
-
 		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
 
 			statement = dbConnection.connect().prepareStatement(sql);
@@ -100,14 +90,9 @@ public abstract class DAO<T> {
 
 		boolean doesEntryExist = false;
 
-		// TODO: can we fix this somehow?
-		String sql;
-		if (this instanceof ComputerDAO)
-			sql = "SELECT COUNT(1) FROM `computer` WHERE id = ?";
-		else if (this instanceof CompanyDAO)
-			sql = "SELECT COUNT(1) FROM `company` WHERE id = ?";
-		else
-			throw new PersistenceException("DAO only has 2 children classes: ComputerDAO and CompanyDAO");
+		if (tableName == null)
+			throw new PersistenceException("Name may not be null");
+		String sql = "SELECT COUNT(1) FROM " + tableName + " WHERE id = ?"; // SQL injection is impossible: the user has no control over tableName
 
 		PreparedStatement statement;
 
@@ -121,8 +106,6 @@ public abstract class DAO<T> {
 		} catch (SQLException e) {
 			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
 		}
-
 		return doesEntryExist;
 	}
-
 }
