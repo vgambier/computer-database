@@ -54,7 +54,7 @@ public class ComputerDAO {
 						resultSet.getDate("discontinued"), resultSet.getInt("company_id"));
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare the SQL statement!");
+			throw new CDBException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		return computer;
@@ -96,7 +96,7 @@ public class ComputerDAO {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare the SQL statement!");
+			throw new CDBException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		System.out.println("Entry added.");
@@ -141,7 +141,7 @@ public class ComputerDAO {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't excute the SQL query!");
+			throw new CDBException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		System.out.println("Entry updated.");
@@ -165,7 +165,7 @@ public class ComputerDAO {
 			statement.setInt(1, id);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare the SQL statement!");
+			throw new CDBException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		System.out.println("Entry deleted.");
@@ -221,7 +221,7 @@ public class ComputerDAO {
 			if (rs.next())
 				nbEntries = rs.getInt(1);
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't create the SQL statement!");
+			throw new CDBException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		return nbEntries;

@@ -47,7 +47,7 @@ public class CompanyDAO {
 				companies.add(new Company(resultSet.getInt("id"), resultSet.getString("name")));
 
 		} catch (SQLException e) {
-			throw new CDBException("Couldn't prepare and execute the SQL statement!");
+			throw new CDBException("Couldn't prepare and execute the SQL statement.");
 		}
 
 		return companies;
