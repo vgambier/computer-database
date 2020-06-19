@@ -85,7 +85,7 @@ public class CLIService {
 				}
 
 				if (isPageNumberOk) {
-					for (Computer computer : page.getList())
+					for (Computer computer : page.getComputers())
 						System.out.println(computer);
 				}
 			}

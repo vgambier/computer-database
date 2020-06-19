@@ -1,14 +1,9 @@
 package model;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import mapper.ComputerMapper;
 import persistence.ComputerDAO;
-import persistence.DatabaseConnection;
 
 public class ComputerPage extends Page<Computer> {
 
@@ -16,7 +11,7 @@ public class ComputerPage extends Page<Computer> {
 	private static int nbPages;
 
 	private int pageNumber;
-	private List<Computer> list = new ArrayList<Computer>();
+	private List<Computer> computers = new ArrayList<Computer>();
 
 	public ComputerPage(int pageNumber) throws Exception {
 
@@ -30,7 +25,7 @@ public class ComputerPage extends Page<Computer> {
 		this.pageNumber = pageNumber;
 
 		// Putting computers in the page
-		fillList();
+		computers = ComputerDAO.getInstance().listSome(MAX_ITEMS_PER_PAGE, (pageNumber - 1) * MAX_ITEMS_PER_PAGE);
 	}
 
 	/**
@@ -51,37 +46,10 @@ public class ComputerPage extends Page<Computer> {
 		}
 	}
 
-	/**
-	 * Fills the list attribute with all Computer objects that should be on the
-	 * current page
-	 * 
-	 * @throws Exception
-	 */
-	private void fillList() throws Exception {
-
-		// TODO: move to ComputerDAO
-		String sqlList = "SELECT id, name, introduced, discontinued, company_id FROM `computer` LIMIT ? OFFSET ?";
-		// This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE) entries
-
-		PreparedStatement statementList;
-
-		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-			statementList = dbConnection.connect().prepareStatement(sqlList);
-			statementList.setInt(1, MAX_ITEMS_PER_PAGE);
-			statementList.setInt(2, (pageNumber - 1) * MAX_ITEMS_PER_PAGE);
-			ResultSet resultSet = statementList.executeQuery();
-
-			list = ComputerMapper.getInstance().toModelList(resultSet);
-
-		} catch (SQLException e) {
-			throw new ModelException("Couldn't query the database to fill the page!", e);
-		}
-	}
-
 	// Getters
 
-	public List<Computer> getList() {
-		return list;
+	public List<Computer> getComputers() {
+		return computers;
 	}
 
 	public static int getNbPages() {

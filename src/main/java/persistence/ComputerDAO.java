@@ -4,9 +4,12 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import mapper.ComputerMapper;
 import model.Computer;
+import model.ModelException;
 
 /* This class uses the Singleton pattern */
 
@@ -166,9 +169,42 @@ public class ComputerDAO extends DAO<Computer> {
 
 	}
 
+	/**
+	 * Fills the list attribute with all Computer objects from the given range.
+	 * This method is meant to be used to fill ComputerPage objects
+	 * 
+	 * @param limit
+	 *            the value of the SQL LIMIT parameter
+	 * @param offset
+	 *            the value of the SQL OFFSET parameter
+	 * @throws Exception
+	 */
+	public List<Computer> listSome(int limit, int offset) throws Exception {
+
+		List<Computer> computers = new ArrayList<Computer>();
+
+		String sqlList = "SELECT id, name, introduced, discontinued, company_id FROM `computer` LIMIT ? OFFSET ?";
+		// This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE) entries
+
+		PreparedStatement statementList;
+
+		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+			statementList = dbConnection.connect().prepareStatement(sqlList);
+			statementList.setInt(1, limit);
+			statementList.setInt(2, offset);
+			ResultSet resultSet = statementList.executeQuery();
+
+			computers = ComputerMapper.getInstance().toModelList(resultSet);
+
+		} catch (SQLException e) {
+			throw new ModelException("Couldn't query the database to fill the page!", e);
+		}
+
+		return computers;
+	}
+
 	@Override
 	public ComputerMapper getTypeMapper() {
 		return ComputerMapper.getInstance();
 	}
-
 }

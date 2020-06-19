@@ -1,7 +1,5 @@
 package persistence;
 
-import static persistence.DAO.tableName;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
