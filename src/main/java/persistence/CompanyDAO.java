@@ -37,6 +37,7 @@ public class CompanyDAO extends DAO<Company> {
 		String sql = "SELECT id, name FROM `company`";
 		PreparedStatement statement = null;
 
+		// TODO: this and everywhere else with a try(): turn statement and resultSet into temporary resources 
 		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
 
 			statement = dbConnection.connect().prepareStatement(sql);
