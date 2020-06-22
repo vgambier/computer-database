@@ -11,32 +11,33 @@ import model.Company;
 
 public class CompanyMapper extends Mapper<Company> {
 
-	private static CompanyMapper INSTANCE = null;
+    private static CompanyMapper instance = null;
 
-	private CompanyMapper() {
-	}
+    private CompanyMapper() {
+    }
 
-	public static CompanyMapper getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new CompanyMapper();
-		}
-		return INSTANCE;
-	}
+    public static CompanyMapper getInstance() {
+        if (instance == null) {
+            instance = new CompanyMapper();
+        }
+        return instance;
+    }
 
-	@Override
-	public Company toModel(ResultSet rs) throws SQLException, MapperException {
-		// TODO: Auto-generated method stub - currently not needed
-		return null;
-	}
+    @Override
+    public Company toModel(ResultSet rs) throws SQLException, MapperException {
+        // TODO: Auto-generated method stub - currently not needed
+        return null;
+    }
 
-	@Override
-	public List<Company> toModelList(ResultSet rs) throws SQLException {
+    @Override
+    public List<Company> toModelList(ResultSet rs) throws SQLException {
 
-		List<Company> companies = new ArrayList<Company>();
+        List<Company> companies = new ArrayList<Company>();
 
-		while (rs.next())
-			companies.add(new Company(rs.getInt("id"), rs.getString("name")));
+        while (rs.next()) {
+            companies.add(new Company(rs.getInt("id"), rs.getString("name")));
+        }
 
-		return companies;
-	}
+        return companies;
+    }
 }

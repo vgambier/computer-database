@@ -56,6 +56,10 @@
     <property name="max" value="2500"/>
   </module>
 
+  <module name="SuppressionFilter">
+    <property name="file" value="config/checkstyle/suppressions.xml"/>
+  </module>
+
   <!-- Checks for whitespace                               -->
   <!-- See http://checkstyle.sf.net/config_whitespace.html -->
   <module name="FileTabCharacter"/>
@@ -78,10 +82,17 @@
 
   <module name="TreeWalker">
 
+    <!-- Ignore filter-->
+    <module name="SuppressionCommentFilter">
+      <property name="offCommentFormat" value="CHECKSTYLE_OFF: JAVADOC"/>
+      <property name="onCommentFormat" value="CHECKSTYLE_ON: JAVADOC"/>
+      <property name="checkFormat" value="JavadocMethod"/>
+    </module>
+
     <!-- Checks for Javadoc comments.                     -->
     <!-- See http://checkstyle.sf.net/config_javadoc.html -->
     <module name="JavadocMethod">
-      <property name="allowMissingPropertyJavadoc" value="true" />
+      <!--deprecated <property name="allowMissingPropertyJavadoc" value="true" /> -->
       <property name="allowedAnnotations" value="Override" />
       <property name="allowedAnnotations" value="RequestMapping,PostConstruct" />
     </module>
@@ -92,7 +103,7 @@
     -->
 
     <!-- To have SuppressionsCommentFilter available -->
-    <module name="FileContentsHolder"/>
+    <!-- deprecated <module name="FileContentsHolder"/> -->
 
     <!-- Checks for Naming Conventions.                  -->
     <!-- See http://checkstyle.sf.net/config_naming.html -->
@@ -189,15 +200,5 @@
 
 
   </module>
-  <!-- Ignore filter-->
-  <module name="SuppressionCommentFilter">
-    <property name="offCommentFormat" value="CHECKSTYLE_OFF: JAVADOC"/>
-    <property name="onCommentFormat" value="CHECKSTYLE_ON: JAVADOC"/>
-    <property name="checkFormat" value="JavadocMethod"/>
-  </module>
-  <module name="SuppressionFilter">
-    <property name="file" value="suppressions.xml"/>
-  </module>
-
 
 </module>
