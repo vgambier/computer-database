@@ -3,6 +3,7 @@ package persistence;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 /* This class uses the Singleton pattern */
 
@@ -27,6 +28,8 @@ public class DatabaseConnection implements AutoCloseable {
     private static final String USERNAME = "admincdb";
     private static final String PASSWORD = "qwerty1234";
 
+    private static Logger log = Logger.getLogger(DatabaseConnection.class.getName());
+
     /**
      * Connects to the database.
      *
@@ -35,12 +38,12 @@ public class DatabaseConnection implements AutoCloseable {
     public Connection connect() {
 
         try {
-            connection = DriverManager.getConnection(DATABASE_URL, USERNAME,
-                    PASSWORD);
+            connection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
+            log.info("Connecting to the database:\nURL: " + DATABASE_URL + "\nUsername: "
+                    + USERNAME);
         } catch (SQLException e) {
             System.out.println("Cannot connect to the database!");
-            throw new IllegalStateException(
-                    "Exception: cannot connect to the database.", e);
+            throw new IllegalStateException("Exception: cannot connect to the database.", e);
         }
 
         return connection;
@@ -59,9 +62,9 @@ public class DatabaseConnection implements AutoCloseable {
             try {
                 connection.close();
                 connection = null;
+                log.info("Disconnected from the database.");
             } catch (SQLException e) {
-                throw new PersistenceException("Couldn't close the connection!",
-                        e);
+                throw new PersistenceException("Couldn't close the connection!", e);
             }
         }
     }
