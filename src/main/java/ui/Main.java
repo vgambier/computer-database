@@ -30,11 +30,11 @@ public class Main {
 					cliService.help();
 					break;
 
-				case "computers" :
+				case "computers" : // TODO: deprecate this command
 					cliService.computers();
 					break;
 
-				case "page" :
+				case "page" : // TODO: improve this command
 					cliService.page(arr);
 					break;
 

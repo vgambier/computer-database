@@ -25,7 +25,7 @@ public class CLIService {
 			"update: update the data of a given computer", "delete <id>: delete a given computer",
 			"quit: exit the program");
 	// TODO: change messages from hardcoded Strings to attributes
-
+	// TODO: factorize sanity checks, move to new package
 	private static CLIService INSTANCE = null;
 
 	private CLIService() {

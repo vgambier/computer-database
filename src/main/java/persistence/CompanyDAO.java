@@ -25,6 +25,7 @@ public class CompanyDAO extends DAO<Company> {
 		tableName = "company";
 		return INSTANCE;
 	}
+
 	/**
 	 * Returns all companies from the database as Java objects
 	 * 

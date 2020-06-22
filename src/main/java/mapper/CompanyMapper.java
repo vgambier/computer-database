@@ -25,7 +25,7 @@ public class CompanyMapper extends Mapper<Company> {
 
 	@Override
 	public Company toModel(ResultSet rs) throws SQLException, MapperException {
-		// TODO Auto-generated method stub - currently not needed
+		// TODO: Auto-generated method stub - currently not needed
 		return null;
 	}
 

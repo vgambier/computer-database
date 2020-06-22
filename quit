@@ -1,0 +1,82 @@
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mindex cb1b122..c2ec791 100644[m
+[1m--- a/.gitignore[m
+[1m+++ b/.gitignore[m
+[36m@@ -2,3 +2,4 @@[m
+ /lib/[m
+ .classpath[m
+ .project[m
+[32m+[m[32m/target/[m
+[1mdiff --git a/src/main/java/mapper/CompanyMapper.java b/src/main/java/mapper/CompanyMapper.java[m
+[1mindex 899cd32..45251d3 100644[m
+[1m--- a/src/main/java/mapper/CompanyMapper.java[m
+[1m+++ b/src/main/java/mapper/CompanyMapper.java[m
+[36m@@ -25,7 +25,7 @@[m [mpublic class CompanyMapper extends Mapper<Company> {[m
+ [m
+ 	@Override[m
+ 	public Company toModel(ResultSet rs) throws SQLException, MapperException {[m
+[31m-		// TODO Auto-generated method stub - currently not needed[m
+[32m+[m		[32m// TODO: Auto-generated method stub - currently not needed[m
+ 		return null;[m
+ 	}[m
+ [m
+[1mdiff --git a/src/main/java/persistence/CompanyDAO.java b/src/main/java/persistence/CompanyDAO.java[m
+[1mindex 01754db..4358335 100644[m
+[1m--- a/src/main/java/persistence/CompanyDAO.java[m
+[1m+++ b/src/main/java/persistence/CompanyDAO.java[m
+[36m@@ -25,6 +25,7 @@[m [mpublic class CompanyDAO extends DAO<Company> {[m
+ 		tableName = "company";[m
+ 		return INSTANCE;[m
+ 	}[m
+[32m+[m
+ 	/**[m
+ 	 * Returns all companies from the database as Java objects[m
+ 	 * [m
+[1mdiff --git a/src/main/java/service/CLIService.java b/src/main/java/service/CLIService.java[m
+[1mindex 781bc7c..8961bec 100644[m
+[1m--- a/src/main/java/service/CLIService.java[m
+[1m+++ b/src/main/java/service/CLIService.java[m
+[36m@@ -25,7 +25,7 @@[m [mpublic class CLIService {[m
+ 			"update: update the data of a given computer", "delete <id>: delete a given computer",[m
+ 			"quit: exit the program");[m
+ 	// TODO: change messages from hardcoded Strings to attributes[m
+[31m-[m
+[32m+[m	[32m// TODO: factorize sanity checks, move to new package[m
+ 	private static CLIService INSTANCE = null;[m
+ [m
+ 	private CLIService() {[m
+[1mdiff --git a/src/main/java/ui/Main.java b/src/main/java/ui/Main.java[m
+[1mindex 1d48283..ea8ec88 100644[m
+[1m--- a/src/main/java/ui/Main.java[m
+[1m+++ b/src/main/java/ui/Main.java[m
+[36m@@ -30,11 +30,11 @@[m [mpublic class Main {[m
+ 					cliService.help();[m
+ 					break;[m
+ [m
+[31m-				case "computers" :[m
+[32m+[m				[32mcase "computers" : // TODO: deprecate this command[m
+ 					cliService.computers();[m
+ 					break;[m
+ [m
+[31m-				case "page" :[m
+[32m+[m				[32mcase "page" : // TODO: improve this command[m
+ 					cliService.page(arr);[m
+ 					break;[m
+ [m
+[1mdiff --git a/src/test/java/ui/Test.java b/src/test/java/ui/Test.java[m
+[1mindex 27e0883..6ca459c 100644[m
+[1m--- a/src/test/java/ui/Test.java[m
+[1m+++ b/src/test/java/ui/Test.java[m
+[36m@@ -4,6 +4,12 @@[m [mpublic class Test {[m
+ [m
+ 	public Test() {[m
+ 		// TODO: Write unit tests[m
+[32m+[m
+ 	}[m
+ [m
+[32m+[m	[32m/*[m
+[32m+[m	[32m * private static int yesterday = 1; private boolean numLock = true; static[m
+[32m+[m	[32m * boolean capLock = false; public static void main(String[] args) {[m
+[32m+[m	[32m * System.out.println(numLock + "" + capLock); }[m
+[32m+[m	[32m */[m
+ }[m
