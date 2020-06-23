@@ -31,32 +31,31 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     /**
-     * Finds a computer in the database, and returns a corresponding Java
-     * object.
+     * Finds a computer in the database, and returns a corresponding Java object.
      *
      * @param id
      *            the id of the computer in the database
-     * @return a Computer object, with the same attributes as the computer entry
-     *         in the database
+     * @return a Computer object, with the same attributes as the computer entry in the database
      * @throws Exception
      */
     public Computer find(int id) throws Exception {
 
-        Computer computer;
+        Computer computer = null;
 
         String sql = "SELECT id, name, introduced, discontinued, company_id  FROM `computer` WHERE id = ?";
         PreparedStatement statement;
 
-        try (DatabaseConnection dbConnection = DatabaseConnection
-                .getInstance()) {
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
             statement = dbConnection.connect().prepareStatement(sql);
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            computer = ComputerMapper.getInstance().toModel(resultSet);
+
+            if (resultSet.first()) {
+                computer = ComputerMapper.getInstance().toModel(resultSet);
+            }
 
         } catch (SQLException e) {
-            throw new PersistenceException(
-                    "Couldn't prepare and execute the SQL statement.", e);
+            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         }
 
         return computer;
@@ -75,16 +74,15 @@ public class ComputerDAO extends DAO<Computer> {
      *            the ID of the company of the new computer - may be null
      * @throws Exception
      */
-    public void add(String computerName, Date introducedDate,
-            Date discontinuedDate, Integer companyID) throws Exception {
+    public void add(String computerName, Date introducedDate, Date discontinuedDate,
+            Integer companyID) throws Exception {
 
         String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
         PreparedStatement statement;
 
         // Converting to dates
 
-        try (DatabaseConnection dbConnection = DatabaseConnection
-                .getInstance()) {
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
             statement = dbConnection.connect().prepareStatement(sql);
             statement.setString(1, computerName);
             statement.setDate(2, introducedDate); // possibly null
@@ -99,8 +97,7 @@ public class ComputerDAO extends DAO<Computer> {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new PersistenceException(
-                    "Couldn't prepare and execute the SQL statement.", e);
+            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         }
 
         System.out.println("Entry added.");
@@ -129,8 +126,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         // Converting to dates
 
-        try (DatabaseConnection dbConnection = DatabaseConnection
-                .getInstance()) {
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
             statement = dbConnection.connect().prepareStatement(sql);
             statement.setString(1, newComputerName);
             statement.setDate(2, newIntroducedDate); // possibly null
@@ -147,8 +143,7 @@ public class ComputerDAO extends DAO<Computer> {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new PersistenceException(
-                    "Couldn't prepare and execute the SQL statement.", e);
+            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         }
 
         System.out.println("Entry updated.");
@@ -167,14 +162,12 @@ public class ComputerDAO extends DAO<Computer> {
         String sql = "DELETE FROM `computer` WHERE id = ?";
         PreparedStatement statement;
 
-        try (DatabaseConnection dbConnection = DatabaseConnection
-                .getInstance()) {
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
             statement = dbConnection.connect().prepareStatement(sql);
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new PersistenceException(
-                    "Couldn't prepare and execute the SQL statement.", e);
+            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         }
 
         System.out.println("Entry deleted.");
@@ -182,8 +175,8 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     /**
-     * Lists all Computer objects from the given range. This method is meant to
-     * be used to fill ComputerPage objects
+     * Lists all Computer objects from the given range. This method is meant to be used to fill
+     * ComputerPage objects
      *
      * @param limit
      *            the value of the SQL LIMIT parameter
@@ -202,18 +195,18 @@ public class ComputerDAO extends DAO<Computer> {
 
         PreparedStatement statementList;
 
-        try (DatabaseConnection dbConnection = DatabaseConnection
-                .getInstance()) {
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
             statementList = dbConnection.connect().prepareStatement(sqlList);
             statementList.setInt(1, limit);
             statementList.setInt(2, offset);
             ResultSet resultSet = statementList.executeQuery();
 
-            computers = ComputerMapper.getInstance().toModelList(resultSet);
+            while (resultSet.next()) {
+                computers.add(ComputerMapper.getInstance().toModel(resultSet));
+            }
 
         } catch (SQLException e) {
-            throw new ModelException(
-                    "Couldn't query the database to fill the page!", e);
+            throw new ModelException("Couldn't query the database to fill the page!", e);
         }
 
         return computers;

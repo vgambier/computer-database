@@ -14,17 +14,17 @@ public abstract class DAO<T> {
     protected static String tableName;
 
     /**
-     * Returns a Mapper<T> object where T is the the same T as the one in the
-     * current DAO<T> type. For example, if this method is called by an instance
-     * of ComputerDAO, it should return an instance of ComputerMapper
+     * Returns a Mapper<T> object where T is the the same T as the one in the current DAO<T> type.
+     * For example, if this method is called by an instance of ComputerDAO, it should return an
+     * instance of ComputerMapper
      *
      * @return a Mapper<T> object
      */
     public abstract Mapper<T> getTypeMapper();
 
     /**
-     * Count the number of entries in the database. Works for both the computer
-     * database and the company database.
+     * Count the number of entries in the database. Works for both the computer database and the
+     * company database.
      *
      * @return the number of entries in the database
      * @throws Exception
@@ -41,16 +41,14 @@ public abstract class DAO<T> {
         int nbEntries = -1; // The only way the "if" fails is if the query
                             // fails, but an exception will be thrown anyway
 
-        try (DatabaseConnection dbConnection = DatabaseConnection
-                .getInstance()) {
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
             statement = dbConnection.connect().prepareStatement(sql);
             ResultSet rs = statement.executeQuery(sql);
             if (rs.next()) {
                 nbEntries = rs.getInt(1);
             }
         } catch (SQLException e) {
-            throw new PersistenceException(
-                    "Couldn't prepare and execute the SQL statement.", e);
+            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         }
 
         return nbEntries;
@@ -73,17 +71,17 @@ public abstract class DAO<T> {
         String sql = "SELECT * FROM " + tableName;
 
         PreparedStatement statement;
-        try (DatabaseConnection dbConnection = DatabaseConnection
-                .getInstance()) {
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
 
             statement = dbConnection.connect().prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
-            computers = getTypeMapper().toModelList(resultSet);
+            while (resultSet.next()) {
+                computers.add(getTypeMapper().toModel(resultSet));
+            }
 
         } catch (SQLException e) {
-            throw new PersistenceException(
-                    "Couldn't prepare and execute the SQL statement.", e);
+            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         }
 
         return computers;
@@ -109,8 +107,7 @@ public abstract class DAO<T> {
 
         PreparedStatement statement;
 
-        try (DatabaseConnection dbConnection = DatabaseConnection
-                .getInstance()) {
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
             statement = dbConnection.connect().prepareStatement(sql);
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery(); // returns either 0
@@ -120,8 +117,7 @@ public abstract class DAO<T> {
             doesEntryExist = resultSet.next() && resultSet.getInt(1) == 1;
 
         } catch (SQLException e) {
-            throw new PersistenceException(
-                    "Couldn't prepare and execute the SQL statement.", e);
+            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         }
         return doesEntryExist;
     }
