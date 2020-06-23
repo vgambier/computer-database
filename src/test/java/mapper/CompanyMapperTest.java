@@ -1,9 +1,27 @@
 package mapper;
 
-public class CompanyMapperTest {
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
-    public CompanyMapperTest() {
-        // TODO Auto-generated constructor stub
+import org.junit.Test;
+
+class CompanyMapperTest {
+
+    @Test
+    void testGetInstance() {
+        CompanyMapper companyMapper = null;
+        companyMapper = CompanyMapper.getInstance();
+        assertNotNull(companyMapper);
+    }
+
+    @Test
+    void testToModelResultSet() {
+        fail("Not yet implemented");
+    }
+
+    @Test
+    void testToModelListResultSet() {
+        fail("Not yet implemented");
     }
 
 }
