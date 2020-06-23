@@ -51,7 +51,8 @@ public class ComputerDAO extends DAO<Computer> {
 
             try (ResultSet resultSet = statement.executeQuery()) {
 
-                if (resultSet.first()) {
+                if (resultSet.isBeforeFirst()) {
+                    resultSet.next();
                     computer = ComputerMapper.getInstance().toModel(resultSet);
                 }
 

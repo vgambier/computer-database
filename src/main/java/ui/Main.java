@@ -12,8 +12,7 @@ public class Main {
 
         CLIService cliService = CLIService.getInstance();
 
-        System.out
-                .println("Welcome to CDB. Type 'help' for a list of commands.");
+        System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
 
         boolean isQuitting = false; // exit condition
 
@@ -25,8 +24,6 @@ public class Main {
             String command = arr[0]; // First word of the user input
 
             switch (command) {
-
-                // TODO: change cases from Strings to enum
 
                 case "help" :
                     cliService.help();
@@ -65,8 +62,7 @@ public class Main {
                     break;
 
                 default :
-                    System.out.println(
-                            "Please enter a valid command, such as 'help'.");
+                    System.out.println("Please enter a valid command, such as 'help'.");
             }
         }
 
