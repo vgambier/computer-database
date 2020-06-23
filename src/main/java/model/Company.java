@@ -16,7 +16,7 @@ public class Company {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("id: ").append(id).append("\t");
-        stringBuilder.append("name: ").append(name).append("\t");
+        stringBuilder.append("name: ").append(name);
 
         return stringBuilder.toString();
     }
