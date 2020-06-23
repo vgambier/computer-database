@@ -38,26 +38,19 @@ public class CompanyDAO extends DAO<Company> {
 
         List<Company> companies = new ArrayList<Company>();
         String sql = "SELECT id, name FROM `company`";
-        PreparedStatement statement = null;
 
-        // TODO: this and everywhere else with a try(): turn statement and
-        // resultSet into temporary resources
-        try (DatabaseConnection dbConnection = DatabaseConnection
-                .getInstance()) {
-
-            statement = dbConnection.connect().prepareStatement(sql);
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+                PreparedStatement statement = dbConnection.connect().prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()) {
 
             // Connecting to the database and executing the query
-            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                companies.add(new Company(resultSet.getInt("id"),
-                        resultSet.getString("name")));
+                companies.add(new Company(resultSet.getInt("id"), resultSet.getString("name")));
             }
 
         } catch (SQLException e) {
-            throw new PersistenceException(
-                    "Couldn't prepare and execute the SQL statement.", e);
+            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         }
 
         return companies;

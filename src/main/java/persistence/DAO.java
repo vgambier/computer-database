@@ -37,13 +37,13 @@ public abstract class DAO<T> {
         }
         String sql = "SELECT COUNT(*) FROM " + tableName;
 
-        Statement statement;
         int nbEntries = -1; // The only way the "if" fails is if the query
                             // fails, but an exception will be thrown anyway
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-            statement = dbConnection.connect().prepareStatement(sql);
-            ResultSet rs = statement.executeQuery(sql);
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+                Statement statement = dbConnection.connect().prepareStatement(sql);
+                ResultSet rs = statement.executeQuery(sql)) {
+
             if (rs.next()) {
                 nbEntries = rs.getInt(1);
             }
@@ -70,11 +70,9 @@ public abstract class DAO<T> {
         }
         String sql = "SELECT * FROM " + tableName;
 
-        PreparedStatement statement;
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-
-            statement = dbConnection.connect().prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+                PreparedStatement statement = dbConnection.connect().prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
                 computers.add(getTypeMapper().toModel(resultSet));
@@ -105,19 +103,20 @@ public abstract class DAO<T> {
         }
         String sql = "SELECT COUNT(1) FROM " + tableName + " WHERE id = ?";
 
-        PreparedStatement statement;
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+                PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-            statement = dbConnection.connect().prepareStatement(sql);
             statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery(); // returns either 0
-                                                            // or 1 entry
-
-            // true if the query returned one entry
-            doesEntryExist = resultSet.next() && resultSet.getInt(1) == 1;
+            try (ResultSet resultSet = statement.executeQuery()) {
+                // true if the query returned one entry, since the result set returned either 0 or 1
+                // entry
+                doesEntryExist = resultSet.next() && resultSet.getInt(1) == 1;
+            } catch (SQLException e) {
+                throw new PersistenceException("Couldn't execute the SQL statement.", e);
+            }
 
         } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
+            throw new PersistenceException("Couldn't prepare the SQL statement.", e);
         }
         return doesEntryExist;
     }

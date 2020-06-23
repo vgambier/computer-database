@@ -30,8 +30,7 @@ public class ComputerPage extends Page<Computer> {
     }
 
     /**
-     * Checks if the given page number is smaller than the total number of
-     * pages.
+     * Checks if the given page number is smaller than the total number of pages.
      *
      * @param pageNumber
      *            the page number we want to check
@@ -41,8 +40,7 @@ public class ComputerPage extends Page<Computer> {
     private void checkPageNumber(int pageNumber) throws ModelException {
         if (pageNumber > nbPages) {
             StringBuilder str = new StringBuilder();
-            str.append(
-                    "Invalid page number. With the current database, there are only ")
+            str.append("Invalid page number. With the current database, there are only ")
                     .append(nbPages).append(" pages.");
             throw new ModelException(str.toString());
         }

@@ -43,19 +43,24 @@ public class ComputerDAO extends DAO<Computer> {
         Computer computer = null;
 
         String sql = "SELECT id, name, introduced, discontinued, company_id  FROM `computer` WHERE id = ?";
-        PreparedStatement statement;
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-            statement = dbConnection.connect().prepareStatement(sql);
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+                PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
+
             statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.first()) {
-                computer = ComputerMapper.getInstance().toModel(resultSet);
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                if (resultSet.first()) {
+                    computer = ComputerMapper.getInstance().toModel(resultSet);
+                }
+
+            } catch (SQLException e) {
+                throw new PersistenceException("Couldn't execute the SQL statement.", e);
             }
 
         } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
+            throw new PersistenceException("Couldn't prepare the SQL statement.", e);
         }
 
         return computer;
@@ -78,12 +83,12 @@ public class ComputerDAO extends DAO<Computer> {
             Integer companyID) throws Exception {
 
         String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-        PreparedStatement statement;
 
         // Converting to dates
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-            statement = dbConnection.connect().prepareStatement(sql);
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+                PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
+
             statement.setString(1, computerName);
             statement.setDate(2, introducedDate); // possibly null
             statement.setDate(3, discontinuedDate); // possibly null
@@ -122,12 +127,12 @@ public class ComputerDAO extends DAO<Computer> {
             Date newDiscontinuedDate, Integer newCompanyID) throws Exception {
 
         String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
-        PreparedStatement statement;
 
         // Converting to dates
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-            statement = dbConnection.connect().prepareStatement(sql);
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+                PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
+
             statement.setString(1, newComputerName);
             statement.setDate(2, newIntroducedDate); // possibly null
             statement.setDate(3, newDiscontinuedDate); // possibly null
@@ -160,10 +165,9 @@ public class ComputerDAO extends DAO<Computer> {
     public void delete(int id) throws Exception {
 
         String sql = "DELETE FROM `computer` WHERE id = ?";
-        PreparedStatement statement;
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-            statement = dbConnection.connect().prepareStatement(sql);
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+                PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -193,20 +197,25 @@ public class ComputerDAO extends DAO<Computer> {
         // This query works even for the last page which only has (nbEntries %
         // MAX_ITEMS_PER_PAGE) entries
 
-        PreparedStatement statementList;
+        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+                PreparedStatement statementList = dbConnection.connect()
+                        .prepareStatement(sqlList);) {
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
-            statementList = dbConnection.connect().prepareStatement(sqlList);
             statementList.setInt(1, limit);
             statementList.setInt(2, offset);
-            ResultSet resultSet = statementList.executeQuery();
 
-            while (resultSet.next()) {
-                computers.add(ComputerMapper.getInstance().toModel(resultSet));
+            try (ResultSet resultSet = statementList.executeQuery()) {
+
+                while (resultSet.next()) {
+                    computers.add(ComputerMapper.getInstance().toModel(resultSet));
+                }
+
+            } catch (SQLException e) {
+                throw new ModelException("Couldn't execute the SQL statement.", e);
             }
 
         } catch (SQLException e) {
-            throw new ModelException("Couldn't query the database to fill the page!", e);
+            throw new ModelException("Couldn't prepare the SQL statement.", e);
         }
 
         return computers;
