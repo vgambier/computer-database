@@ -44,8 +44,8 @@ public class ComputerDAO extends DAO<Computer> {
 
         String sql = "SELECT id, name, introduced, discontinued, company_id  FROM `computer` WHERE id = ?";
 
-        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
+        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
+                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
 
             statement.setInt(1, id);
 
@@ -87,8 +87,8 @@ public class ComputerDAO extends DAO<Computer> {
 
         // Converting to dates
 
-        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
+        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
+                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
 
             statement.setString(1, computerName);
             statement.setDate(2, introducedDate); // possibly null
@@ -131,8 +131,8 @@ public class ComputerDAO extends DAO<Computer> {
 
         // Converting to dates
 
-        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
+        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
+                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
 
             statement.setString(1, newComputerName);
             statement.setDate(2, newIntroducedDate); // possibly null
@@ -167,8 +167,8 @@ public class ComputerDAO extends DAO<Computer> {
 
         String sql = "DELETE FROM `computer` WHERE id = ?";
 
-        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
+        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
+                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -198,8 +198,8 @@ public class ComputerDAO extends DAO<Computer> {
         // This query works even for the last page which only has (nbEntries %
         // MAX_ITEMS_PER_PAGE) entries
 
-        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
-                PreparedStatement statementList = dbConnection.connect()
+        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
+                PreparedStatement statementList = dbConnector.connect()
                         .prepareStatement(sqlList);) {
 
             statementList.setInt(1, limit);

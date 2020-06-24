@@ -42,8 +42,8 @@ public abstract class DAO<T> {
         int nbEntries = -1; // The only way the "if" fails is if the query
                             // fails, but an exception will be thrown anyway
 
-        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
-                Statement statement = dbConnection.connect().prepareStatement(sql);
+        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
+                Statement statement = dbConnector.connect().prepareStatement(sql);
                 ResultSet rs = statement.executeQuery(sql)) {
 
             if (rs.next()) {
@@ -72,8 +72,8 @@ public abstract class DAO<T> {
         }
         String sql = "SELECT * FROM " + tableName;
 
-        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnection.connect().prepareStatement(sql);
+        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
+                PreparedStatement statement = dbConnector.connect().prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -109,8 +109,8 @@ public abstract class DAO<T> {
         }
         String sql = "SELECT COUNT(1) FROM " + tableName + " WHERE id = ?";
 
-        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
+        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
+                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
 
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
