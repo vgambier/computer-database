@@ -19,8 +19,6 @@ import persistence.DatabaseConnector;
 
 public class ComputerPageTest extends DBTestCase {
 
-    // TODO: Implement DBUnit to avoid querying the live database.
-
     public ComputerPageTest(String name) throws IOException {
 
         super(name);
