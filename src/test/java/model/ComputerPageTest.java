@@ -25,8 +25,7 @@ public class ComputerPageTest extends DBTestCase {
 
         super(name);
 
-        InputStream inputStream = DatabaseConnector.class
-                .getResourceAsStream("/db-setup/.properties");
+        InputStream inputStream = DatabaseConnector.class.getResourceAsStream("/.properties");
         Properties properties = new Properties();
         properties.load(inputStream);
         inputStream.close();

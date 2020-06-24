@@ -17,8 +17,7 @@ public class DatabaseConnector implements AutoCloseable {
 
     private DatabaseConnector() throws IOException {
 
-        InputStream inputStream = DatabaseConnector.class
-                .getResourceAsStream("/db-setup/.properties");
+        InputStream inputStream = DatabaseConnector.class.getResourceAsStream("/.properties");
         Properties properties = new Properties();
         properties.load(inputStream);
         inputStream.close();
