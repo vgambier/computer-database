@@ -22,9 +22,13 @@ public class CompanyMapper extends Mapper<Company> {
     }
 
     @Override
-    public Company toModel(ResultSet rs) throws SQLException, MapperException {
-        // TODO: Auto-generated method stub - currently not needed
-        return null;
-    }
+    public Company toModel(ResultSet rs) throws MapperException {
 
+        try {
+            return new Company(rs.getInt("id"), rs.getString("name"));
+        } catch (SQLException e) {
+            throw new MapperException("ResultSet object did not have a first entry!", e);
+        }
+
+    }
 }

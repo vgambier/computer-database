@@ -69,7 +69,7 @@ public class DatabaseConnector implements AutoCloseable {
      * @throws PersistenceException
      */
     @Override
-    public void close() throws Exception {
+    public void close() throws PersistenceException {
 
         if (connection != null) {
             try {

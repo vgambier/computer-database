@@ -22,7 +22,7 @@ public class ComputerMapper extends Mapper<Computer> {
     }
 
     @Override
-    public Computer toModel(ResultSet rs) throws SQLException, MapperException {
+    public Computer toModel(ResultSet rs) throws MapperException {
 
         Computer computer;
         try {

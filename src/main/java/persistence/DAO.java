@@ -1,5 +1,6 @@
 package persistence;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mapper.Mapper;
+import mapper.MapperException;
 
 public abstract class DAO<T> {
 
@@ -57,12 +59,12 @@ public abstract class DAO<T> {
     /**
      * Returns all entries from the database as Java objects.
      *
-     * @throws Exception
      * @return the list of Java objects
+     * @throws PersistenceException
      */
-    public List<T> listAll() throws Exception {
+    public List<T> listAll() throws PersistenceException {
 
-        List<T> computers = new ArrayList<T>();
+        List<T> models = new ArrayList<T>();
 
         // SQL injection is impossible: the user has no control over tableName
         if (tableName == null) {
@@ -75,14 +77,18 @@ public abstract class DAO<T> {
                 ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                computers.add(getTypeMapper().toModel(resultSet));
+                models.add(getTypeMapper().toModel(resultSet));
             }
 
         } catch (SQLException e) {
             throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
+        } catch (IOException e) {
+            throw new PersistenceException("Couldn't find the database login .properties file.", e);
+        } catch (MapperException e) {
+            throw new PersistenceException("Couldn't map the database entries to model!", e);
         }
 
-        return computers;
+        return models;
     }
 
     /**

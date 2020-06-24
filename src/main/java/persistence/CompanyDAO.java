@@ -1,11 +1,5 @@
 package persistence;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import mapper.CompanyMapper;
 import model.Company;
 
@@ -25,35 +19,6 @@ public class CompanyDAO extends DAO<Company> {
         }
         tableName = "company";
         return instance;
-    }
-
-    /**
-     * Returns all companies from the database as Java objects.
-     *
-     * @throws Exception
-     * @return the list of Company objects
-     */
-    @Override
-    public List<Company> listAll() throws Exception {
-
-        List<Company> companies = new ArrayList<Company>();
-        String sql = "SELECT id, name FROM `company`";
-
-        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnection.connect().prepareStatement(sql);
-                ResultSet resultSet = statement.executeQuery()) {
-
-            // Connecting to the database and executing the query
-
-            while (resultSet.next()) {
-                companies.add(new Company(resultSet.getInt("id"), resultSet.getString("name")));
-            }
-
-        } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-        }
-
-        return companies;
     }
 
     @Override
