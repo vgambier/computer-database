@@ -19,13 +19,11 @@ public class CLIService {
 
     private Scanner scanner;
     private static String helpMessage = String.join("\n", "List of commands:",
-            "help: shows this message",
-            "computers: shows the list of all computers",
+            "help: shows this message", "computers: shows the list of all computers",
             "page <nb>: shows the nb-th page the computer list",
             "companies: shows the list of all companies",
             "computerinfo <id>: shows all details pertaining to a given computer",
-            "create: create a computer",
-            "update: update the data of a given computer",
+            "create: create a computer", "update: update the data of a given computer",
             "delete <id>: delete a given computer", "quit: exit the program");
     // TODO: change messages from hardcoded Strings to attributes
     // TODO: factorize sanity checks, move to new package
@@ -45,8 +43,7 @@ public class CLIService {
     // User service methods
 
     /**
-     * help command logic: displays a help message showing the list of all
-     * commands.
+     * help command logic: displays a help message showing the list of all commands.
      */
     public void help() {
         System.out.println(helpMessage);
@@ -64,8 +61,7 @@ public class CLIService {
     }
 
     /**
-     * page command logic: shows the user the desired computer page, without
-     * further prompting them.
+     * page command logic: shows the user the desired computer page, without further prompting them.
      *
      * @param arr
      *            the user input
@@ -75,8 +71,7 @@ public class CLIService {
 
         if (arr.length >= 2) { // if a second argument has been given
             if (!isStringInteger(arr[1])) {
-                System.out.println(
-                        "Page number must be an non-zero positive integer!");
+                System.out.println("Page number must be an non-zero positive integer!");
             } else {
                 ComputerPage page = null;
                 boolean isPageNumberOk = false;
@@ -114,8 +109,7 @@ public class CLIService {
     }
 
     /**
-     * computerinfo command logic: shows the user the desired entry, without
-     * further prompting them.
+     * computerinfo command logic: shows the user the desired entry, without further prompting them.
      *
      * @param arr
      *            the user input
@@ -141,8 +135,7 @@ public class CLIService {
     }
 
     /**
-     * create command logic: prompts the user and adds a corresponding entry to
-     * the database.
+     * create command logic: prompts the user and adds a corresponding entry to the database.
      *
      * @throws Exception
      */
@@ -151,8 +144,7 @@ public class CLIService {
         // Name field
         String computerName = "";
         while (computerName.equals("")) {
-            System.out.println(
-                    "Please enter the name of the new computer (mandatory):");
+            System.out.println("Please enter the name of the new computer (mandatory):");
             computerName = scanner.nextLine();
         }
 
@@ -165,8 +157,7 @@ public class CLIService {
         // If and only if both dates have been given, we must check that the
         // discontinuation comes later
         if (introducedDate != null) {
-            while (discontinuedDate != null
-                    && discontinuedDate.before(introducedDate)) {
+            while (discontinuedDate != null && discontinuedDate.before(introducedDate)) {
                 System.out.println(
                         "The date of discontinuation must be after the date of introduction.");
                 discontinuedDate = askForDate("discontinuation");
@@ -177,30 +168,24 @@ public class CLIService {
         String companyIDString = "invalid"; // initializing with invalid value
         boolean isCompanyIDValid = false;
         while (!isCompanyIDValid) {
-            System.out.println(
-                    "Please enter the id of the company of the computer (optional):");
+            System.out.println("Please enter the id of the company of the computer (optional):");
             companyIDString = scanner.nextLine();
 
-            if (!companyIDString.equals("")
-                    && !isCompanyIDStringValid(companyIDString)) {
+            if (!companyIDString.equals("") && !isCompanyIDStringValid(companyIDString)) {
                 System.out.println(
                         "Company ID must be a positive integer and correspond to an existing entry.");
             } else {
                 isCompanyIDValid = true;
             }
         }
-        Integer companyID = companyIDString.equals("")
-                ? null
-                : Integer.valueOf(companyIDString);
+        Integer companyID = companyIDString.equals("") ? null : Integer.valueOf(companyIDString);
 
-        ComputerDAO.getInstance().add(computerName, introducedDate,
-                discontinuedDate, companyID);
+        ComputerDAO.getInstance().add(computerName, introducedDate, discontinuedDate, companyID);
 
     }
 
     /**
-     * update command logic: prompts the user and updates the corresponding
-     * entry to the database.
+     * update command logic: prompts the user and updates the corresponding entry to the database.
      *
      * @throws Exception
      */
@@ -209,8 +194,7 @@ public class CLIService {
         // ID field
         String computerIDString = "";
         while (computerIDString.equals("")) {
-            System.out.println(
-                    "Please enter the ID of the computer you wish to update:");
+            System.out.println("Please enter the ID of the computer you wish to update:");
             computerIDString = scanner.nextLine();
 
             if (!isComputerIDStringValid(computerIDString)) {
@@ -242,17 +226,25 @@ public class CLIService {
         // Discontinued field
         Date newDiscontinuedDate = askForDate("discontinuation");
 
+        // If and only if both dates have been given, we must check that the
+        // discontinuation comes later
+        if (newIntroducedDate != null) {
+            while (newDiscontinuedDate != null && newDiscontinuedDate.before(newIntroducedDate)) {
+                System.out.println(
+                        "The date of discontinuation must be after the date of introduction.");
+                newDiscontinuedDate = askForDate("discontinuation");
+            }
+        }
+
         // Company ID field - must be either empty or a valid ID
         String newCompanyIDString = "invalid"; // initializing with invalid
                                                // value
         boolean isCompanyIDValid = false;
         while (!isCompanyIDValid) {
-            System.out.println(
-                    "Please enter the id of the company of the computer (optional):");
+            System.out.println("Please enter the id of the company of the computer (optional):");
             newCompanyIDString = scanner.nextLine();
 
-            if (!newCompanyIDString.equals("")
-                    && !isCompanyIDStringValid(newCompanyIDString)) {
+            if (!newCompanyIDString.equals("") && !isCompanyIDStringValid(newCompanyIDString)) {
                 System.out.println(
                         "Company ID must be a positive integer and correspond to an existing entry.");
             } else {
@@ -263,14 +255,14 @@ public class CLIService {
                 ? null
                 : Integer.valueOf(newCompanyIDString);
 
-        computerDAO.update(computerID, newComputerName, newIntroducedDate,
-                newDiscontinuedDate, newCompanyID);
+        computerDAO.update(computerID, newComputerName, newIntroducedDate, newDiscontinuedDate,
+                newCompanyID);
 
     }
 
     /**
-     * delete command logic: deletes the corresponding entry to the database
-     * without further prompting the user.
+     * delete command logic: deletes the corresponding entry to the database without further
+     * prompting the user.
      *
      * @param arr
      *            the user input
@@ -292,10 +284,9 @@ public class CLIService {
     }
 
     /**
-     * Asks the user for a date and parses it to verify it is a correct format
-     * (until the input is either empty or correct) and returns it as a Date
-     * object. If the input is empty at any point, the method returns null,
-     * which is intended behavior.
+     * Asks the user for a date and parses it to verify it is a correct format (until the input is
+     * either empty or correct) and returns it as a Date object. If the input is empty at any point,
+     * the method returns null, which is intended behavior.
      *
      * @param string
      *            the name of the date that will be displayed to the user
@@ -355,16 +346,15 @@ public class CLIService {
     }
 
     /**
-     * Checks if a given String is a valid computer ID, using isStringInteger()
-     * and computerDAO.doesEntryExist().
+     * Checks if a given String is a valid computer ID, using isStringInteger() and
+     * computerDAO.doesEntryExist().
      *
      * @param stringID
      *            the id of the computer entry we want to check, as a String
      * @return true if and only if the id is valid
      * @throws Exception
      */
-    private static boolean isComputerIDStringValid(String stringID)
-            throws Exception {
+    private static boolean isComputerIDStringValid(String stringID) throws Exception {
 
         boolean isValid = false;
 
@@ -377,16 +367,15 @@ public class CLIService {
     }
 
     /**
-     * Checks if a given String is a valid company ID, using isStringInteger()
-     * and companyDAO.doesEntryExist().
+     * Checks if a given String is a valid company ID, using isStringInteger() and
+     * companyDAO.doesEntryExist().
      *
      * @param stringID
      *            the id of the company entry we want to check, as a String
      * @return true if and only if the id is valid
      * @throws Exception
      */
-    private static boolean isCompanyIDStringValid(String stringID)
-            throws Exception {
+    private static boolean isCompanyIDStringValid(String stringID) throws Exception {
 
         boolean isValid = false;
 
