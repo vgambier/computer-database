@@ -4,7 +4,7 @@ import org.junit.Test;
 
 public class ComputerPageTest {
 
-    // TODO: Warning, this queries the live database. Should use DBUnit
+    // TODO: Implement DBUnit to avoid querying the live database.
 
     @Test(expected = ModelException.class)
     public void invalidNegativeIDConstructor() throws Exception {
