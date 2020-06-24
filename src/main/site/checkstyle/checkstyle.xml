@@ -38,7 +38,7 @@
 
 	<module name="SuppressionFilter">
 		<property name="file"
-			value="config/checkstyle/suppressions.xml" />
+			value="src/main/site/checkstyle/suppressions.xml" />
 	</module>
 
 	<!-- Checks for whitespace -->
