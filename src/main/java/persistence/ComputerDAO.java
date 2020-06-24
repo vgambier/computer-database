@@ -44,7 +44,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         String sql = "SELECT id, name, introduced, discontinued, company_id  FROM `computer` WHERE id = ?";
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
                 PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
 
             statement.setInt(1, id);
@@ -87,7 +87,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         // Converting to dates
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
                 PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
 
             statement.setString(1, computerName);
@@ -131,7 +131,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         // Converting to dates
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
                 PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
 
             statement.setString(1, newComputerName);
@@ -167,7 +167,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         String sql = "DELETE FROM `computer` WHERE id = ?";
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
                 PreparedStatement statement = dbConnection.connect().prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -198,7 +198,7 @@ public class ComputerDAO extends DAO<Computer> {
         // This query works even for the last page which only has (nbEntries %
         // MAX_ITEMS_PER_PAGE) entries
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
                 PreparedStatement statementList = dbConnection.connect()
                         .prepareStatement(sqlList);) {
 

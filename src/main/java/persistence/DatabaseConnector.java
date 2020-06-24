@@ -1,32 +1,35 @@
 package persistence;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 /* This class uses the Singleton pattern */
 
-public class DatabaseConnection implements AutoCloseable {
+public class DatabaseConnector implements AutoCloseable {
 
-    private static DatabaseConnection instance = null;
+    private static DatabaseConnector instance = null;
 
-    private DatabaseConnection() throws IOException {
+    private DatabaseConnector() throws IOException {
 
-        FileInputStream fis = new FileInputStream("config/db/.properties");
-        Properties p = new Properties();
-        p.load(fis);
-        databaseURL = (String) p.get("DATABASE_URL");
-        username = (String) p.get("USERNAME");
-        password = (String) p.get("PASSWORD");
+        InputStream inputStream = DatabaseConnector.class
+                .getResourceAsStream("/db-setup/.properties");
+        Properties properties = new Properties();
+        properties.load(inputStream);
+        inputStream.close();
+        databaseURL = properties.getProperty("DATABASE_URL");
+        username = properties.getProperty("USERNAME");
+        password = properties.getProperty("PASSWORD");
     }
 
-    public static DatabaseConnection getInstance() throws IOException {
+    public static DatabaseConnector getInstance() throws IOException {
         if (instance == null) {
-            instance = new DatabaseConnection();
+            instance = new DatabaseConnector();
         }
         return instance;
     }
@@ -36,7 +39,7 @@ public class DatabaseConnection implements AutoCloseable {
     private static String username;
     private static String password;
 
-    private static Logger log = Logger.getLogger(DatabaseConnection.class.getName());
+    private static Logger log = Logger.getLogger(DatabaseConnector.class.getName());
 
     /**
      * Connects to the database.

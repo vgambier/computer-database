@@ -39,7 +39,7 @@ public class CompanyDAO extends DAO<Company> {
         List<Company> companies = new ArrayList<Company>();
         String sql = "SELECT id, name FROM `company`";
 
-        try (DatabaseConnection dbConnection = DatabaseConnection.getInstance();
+        try (DatabaseConnector dbConnection = DatabaseConnector.getInstance();
                 PreparedStatement statement = dbConnection.connect().prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery()) {
 
