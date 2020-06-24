@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 /* This class uses the Singleton pattern */
@@ -46,6 +47,8 @@ public class DatabaseConnector implements AutoCloseable {
      * @return the Connection object if the connection was successful
      */
     public Connection connect() {
+
+        BasicConfigurator.configure();
 
         try {
             connection = DriverManager.getConnection(databaseURL, username, password);
