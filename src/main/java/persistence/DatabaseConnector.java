@@ -52,7 +52,7 @@ public class DatabaseConnector implements AutoCloseable {
         BasicConfigurator.configure(); // configuring the Logger
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             throw new PersistenceException(
                     "Class could not be found when attempting to register the JDBC driver", e);

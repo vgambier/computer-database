@@ -13,8 +13,6 @@ import mapper.MapperException;
 
 public abstract class DAO<T> {
 
-    protected static String tableName;
-
     /**
      * Returns a Mapper<T> object where T is the the same T as the one in the current DAO<T> type.
      * For example, if this method is called by an instance of ComputerDAO, it should return an
@@ -34,10 +32,7 @@ public abstract class DAO<T> {
     public int countEntries() throws PersistenceException {
 
         // SQL injection is impossible: the user has no control over tableName
-        if (tableName == null) {
-            throw new PersistenceException("Name may not be null");
-        }
-        String sql = "SELECT COUNT(*) FROM " + tableName;
+        String sql = "SELECT COUNT(*) FROM " + getTableName();
 
         int nbEntries = -1; // The only way the "if" fails is if the query
                             // fails, but an exception will be thrown anyway
@@ -68,11 +63,7 @@ public abstract class DAO<T> {
 
         List<T> models = new ArrayList<T>();
 
-        // SQL injection is impossible: the user has no control over tableName
-        if (tableName == null) {
-            throw new PersistenceException("Name may not be null");
-        }
-        String sql = "SELECT * FROM " + tableName;
+        String sql = getListAllSQLStatement();
 
         try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
                 PreparedStatement statement = dbConnector.connect().prepareStatement(sql);
@@ -93,6 +84,8 @@ public abstract class DAO<T> {
         return models;
     }
 
+    protected abstract String getListAllSQLStatement();
+
     /**
      * Checks if there is an entry of the given id number in the table.
      *
@@ -106,10 +99,7 @@ public abstract class DAO<T> {
         boolean doesEntryExist = false;
 
         // SQL injection is impossible: the user has no control over tableName
-        if (tableName == null) {
-            throw new PersistenceException("Name may not be null");
-        }
-        String sql = "SELECT COUNT(1) FROM " + tableName + " WHERE id = ?";
+        String sql = "SELECT COUNT(1) FROM " + getTableName() + " WHERE id = ?";
 
         try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
                 PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
@@ -128,4 +118,6 @@ public abstract class DAO<T> {
         }
         return doesEntryExist;
     }
+
+    protected abstract String getTableName();
 }

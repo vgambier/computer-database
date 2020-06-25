@@ -1,5 +1,6 @@
 package persistence;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mapper.ComputerMapper;
+import mapper.MapperException;
 import model.Computer;
 import model.ModelException;
 
@@ -26,7 +28,6 @@ public class ComputerDAO extends DAO<Computer> {
         if (instance == null) {
             instance = new ComputerDAO();
         }
-        tableName = "computer";
         return instance;
     }
 
@@ -36,13 +37,18 @@ public class ComputerDAO extends DAO<Computer> {
      * @param id
      *            the id of the computer in the database
      * @return a Computer object, with the same attributes as the computer entry in the database
-     * @throws Exception
+     * @throws PersistenceException
+     * @throws IOException
+     * @throws MapperException
      */
-    public Computer find(int id) throws Exception {
+    public Computer find(int id) throws PersistenceException, IOException, MapperException {
 
         Computer computer = null;
 
-        String sql = "SELECT id, name, introduced, discontinued, company_id  FROM `computer` WHERE id = ?";
+        String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
+                + "introduced, discontinued, company.name AS company_name "
+                + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
+                + "WHERE computer.id = ? ORDER BY computer_id";
 
         try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
                 PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
@@ -189,18 +195,24 @@ public class ComputerDAO extends DAO<Computer> {
      *            the value of the SQL OFFSET parameter
      * @throws Exception
      * @return the corresponding list of Computer objects
+     * @throws IOException
+     * @throws ModelException
+     * @throws MapperException
      */
-    public List<Computer> listSome(int limit, int offset) throws Exception {
+    public List<Computer> listSome(int limit, int offset)
+            throws PersistenceException, IOException, ModelException, MapperException {
 
         List<Computer> computers = new ArrayList<Computer>();
 
-        String sqlList = "SELECT id, name, introduced, discontinued, company_id FROM `computer` LIMIT ? OFFSET ?";
-        // This query works even for the last page which only has (nbEntries %
-        // MAX_ITEMS_PER_PAGE) entries
+        String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
+                + "introduced, discontinued, company.name AS company_name "
+                + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
+                + "LIMIT ? OFFSET ?";
+        // This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE)
+        // entries
 
         try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statementList = dbConnector.connect()
-                        .prepareStatement(sqlList);) {
+                PreparedStatement statementList = dbConnector.connect().prepareStatement(sql);) {
 
             statementList.setInt(1, limit);
             statementList.setInt(2, offset);
@@ -225,5 +237,18 @@ public class ComputerDAO extends DAO<Computer> {
     @Override
     public ComputerMapper getTypeMapper() {
         return ComputerMapper.getInstance();
+    }
+
+    @Override
+    protected String getListAllSQLStatement() {
+
+        return "SELECT computer.id AS computer_id, computer.name AS computer_name, "
+                + "introduced, discontinued, company.name AS company_name "
+                + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id";
+    }
+
+    @Override
+    protected String getTableName() {
+        return "computer";
     }
 }

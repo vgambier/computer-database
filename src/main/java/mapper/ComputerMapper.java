@@ -26,14 +26,18 @@ public class ComputerMapper extends Mapper<Computer> {
 
         Computer computer;
         try {
-            computer = new Computer(rs.getInt("id"), rs.getString("name"),
+            computer = new Computer(rs.getInt("computer_id"), rs.getString("computer_name"),
+
                     rs.getDate("introduced") == null
                             ? null
                             : rs.getDate("introduced").toLocalDate(),
+
                     rs.getDate("discontinued") == null
                             ? null
                             : rs.getDate("discontinued").toLocalDate(),
-                    rs.getInt("company_id"));
+
+                    rs.getString("company_name"));
+
         } catch (SQLException e) {
             throw new MapperException("ResultSet object did not have a first entry!", e);
         }

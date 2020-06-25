@@ -32,15 +32,15 @@ public class CompanyMapperTest {
     @Test
     public void testToModelResultSet() throws SQLException, MapperException {
         // ResultSet with a full entry
-        Mockito.when(resultSet.getInt("id")).thenReturn(12);
-        Mockito.when(resultSet.getString("name")).thenReturn("testName");
+        Mockito.when(resultSet.getInt("computer_id")).thenReturn(12);
+        Mockito.when(resultSet.getString("computer_name")).thenReturn("testName");
         Mockito.when(resultSet.getDate("introduced")).thenReturn(Date.valueOf("2020-01-01"));
         Mockito.when(resultSet.getDate("discontinued")).thenReturn(Date.valueOf("2021-01-01"));
-        Mockito.when(resultSet.getInt("company_id")).thenReturn(34);
+        Mockito.when(resultSet.getString("company_name")).thenReturn("Samsung");
 
         Computer computer = ComputerMapper.getInstance().toModel(resultSet);
         Computer computer2 = new Computer(12, "testName", LocalDate.of(2020, 01, 01),
-                LocalDate.of(2021, 01, 01), 34);
+                LocalDate.of(2021, 01, 01), "Samsung");
 
         Assert.assertEquals(computer, computer2);
     }

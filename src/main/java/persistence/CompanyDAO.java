@@ -17,13 +17,22 @@ public class CompanyDAO extends DAO<Company> {
         if (instance == null) {
             instance = new CompanyDAO();
         }
-        tableName = "company";
         return instance;
     }
 
     @Override
     public CompanyMapper getTypeMapper() {
         return CompanyMapper.getInstance();
+    }
+
+    @Override
+    protected String getListAllSQLStatement() {
+        return "SELECT id, name FROM company";
+    }
+
+    @Override
+    protected String getTableName() {
+        return "company";
     }
 
 }

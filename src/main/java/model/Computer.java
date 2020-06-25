@@ -2,35 +2,25 @@ package model;
 
 import java.time.LocalDate;
 
+/**
+ * @author victor
+ *
+ */
 public class Computer {
 
     private int id;
     private String name;
     private LocalDate introduced;
     private LocalDate discontinued;
-    private int companyID;
+    private String company;
 
     public Computer(int id, String name, LocalDate introduced, LocalDate discontinued,
-            int companyID) {
+            String company) {
         this.id = id;
         this.name = name;
         this.introduced = introduced;
         this.discontinued = discontinued;
-        this.companyID = companyID;
-    }
-
-    @Override
-    public String toString() {
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("id: ").append(id).append("\t");
-        stringBuilder.append("name: ").append(name).append("\t");
-        stringBuilder.append("introduced: ").append(introduced).append("\t");
-        stringBuilder.append("discontinued: ").append(discontinued).append("\t");
-        stringBuilder.append("companyID: ").append(companyID);
-
-        return stringBuilder.toString();
+        this.company = company;
     }
 
     public int getId() {
@@ -49,15 +39,29 @@ public class Computer {
         return discontinued;
     }
 
-    public int getCompanyID() {
-        return companyID;
+    public String getCompany() {
+        return company;
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("id: ").append(id).append("\t");
+        stringBuilder.append("name: ").append(name).append("\t");
+        stringBuilder.append("introduced: ").append(introduced).append("\t");
+        stringBuilder.append("discontinued: ").append(discontinued).append("\t");
+        stringBuilder.append("company: ").append(company);
+
+        return stringBuilder.toString();
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + companyID;
+        result = prime * result + ((company == null) ? 0 : company.hashCode());
         result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
         result = prime * result + id;
         result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
@@ -77,7 +81,11 @@ public class Computer {
             return false;
         }
         Computer other = (Computer) obj;
-        if (companyID != other.companyID) {
+        if (company == null) {
+            if (other.company != null) {
+                return false;
+            }
+        } else if (!company.equals(other.company)) {
             return false;
         }
         if (discontinued == null) {

@@ -24,9 +24,11 @@ public class ComputerPage extends Page<Computer> {
         checkPageNumber(pageNumber);
         this.pageNumber = pageNumber;
 
+        System.out.println("before");
         // Putting computers in the page
         computers = ComputerDAO.getInstance().listSome(MAX_ITEMS_PER_PAGE,
                 (pageNumber - 1) * MAX_ITEMS_PER_PAGE);
+        System.out.println("after");
     }
 
     /**
@@ -38,6 +40,7 @@ public class ComputerPage extends Page<Computer> {
      *             if the page number is not valid
      */
     private void checkPageNumber(int pageNumber) throws ModelException {
+
         if (pageNumber > nbPages) {
             StringBuilder str = new StringBuilder();
             str.append("Invalid page number. With the current database, there are only ")
