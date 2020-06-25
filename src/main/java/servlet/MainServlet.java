@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import persistence.ComputerDAO;
-import persistence.PersistenceException;
 
+@WebServlet(name = "MainServlet", urlPatterns = "/dashboard")
 public class MainServlet extends HttpServlet {
 
     private static final long serialVersionUID = 4L;
@@ -29,13 +30,12 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         log.info("Getting computers");
-
-        try {
-            request.getSession().setAttribute("computers", computerDAO.listAll());
-        } catch (PersistenceException e) {
-            throw new ServletException("Couldn't set session attributes", e);
-        }
-
-        request.getRequestDispatcher("/WEB-INF/dashboard.html").forward(request, response);
+        /**
+         * try { request.setAttribute("computers", computerDAO.listAll()); } catch
+         * (PersistenceException e) { throw new ServletException("Couldn't set session attributes",
+         * e); }
+         */
+        request.setAttribute("helloWorldString", "Hello World!");
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }
