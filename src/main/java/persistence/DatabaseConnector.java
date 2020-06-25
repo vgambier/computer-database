@@ -45,10 +45,18 @@ public class DatabaseConnector implements AutoCloseable {
      * Connects to the database.
      *
      * @return the Connection object if the connection was successful
+     * @throws PersistenceException
      */
-    public Connection connect() {
+    public Connection connect() throws PersistenceException {
 
-        BasicConfigurator.configure();
+        BasicConfigurator.configure(); // configuring the Logger
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new PersistenceException(
+                    "Class could not be found when attempting to register the JDBC driver", e);
+        }
 
         try {
             connection = DriverManager.getConnection(databaseURL, username, password);
@@ -56,7 +64,7 @@ public class DatabaseConnector implements AutoCloseable {
                     "Connecting to the database:\nURL: " + databaseURL + "\nUsername: " + username);
         } catch (SQLException e) {
             System.out.println("Cannot connect to the database!");
-            throw new IllegalStateException("Exception: cannot connect to the database.", e);
+            throw new PersistenceException("Exception: cannot connect to the database.", e);
         }
 
         return connection;

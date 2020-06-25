@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import persistence.ComputerDAO;
+import persistence.PersistenceException;
 
 @WebServlet(name = "MainServlet", urlPatterns = "/dashboard")
 public class MainServlet extends HttpServlet {
 
     private static final long serialVersionUID = 4L;
 
-    ComputerDAO computerDAO;
+    private static ComputerDAO computerDAO = ComputerDAO.getInstance();
     private static Logger log = Logger.getLogger(MainServlet.class.getName());
 
     @Override
@@ -29,13 +30,16 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        log.info("Getting computers");
-        /**
-         * try { request.setAttribute("computers", computerDAO.listAll()); } catch
-         * (PersistenceException e) { throw new ServletException("Couldn't set session attributes",
-         * e); }
-         */
-        request.setAttribute("helloWorldString", "Hello World!");
+
+        log.info("Settings attributes for MainServlet.");
+
+        try {
+            request.setAttribute("computers", computerDAO.listAll());
+            request.setAttribute("computerCount", computerDAO.countEntries());
+        } catch (PersistenceException e) {
+            throw new ServletException("Couldn't set session attributes", e);
+        }
+
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 }

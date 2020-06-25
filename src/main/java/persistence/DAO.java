@@ -29,9 +29,9 @@ public abstract class DAO<T> {
      * company database.
      *
      * @return the number of entries in the database
-     * @throws Exception
+     * @throws PersistenceException
      */
-    public int countEntries() throws Exception {
+    public int countEntries() throws PersistenceException {
 
         // SQL injection is impossible: the user has no control over tableName
         if (tableName == null) {
@@ -51,6 +51,8 @@ public abstract class DAO<T> {
             }
         } catch (SQLException e) {
             throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
+        } catch (IOException e) {
+            throw new PersistenceException("Couldn't load the database connector", e);
         }
 
         return nbEntries;
