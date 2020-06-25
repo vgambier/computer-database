@@ -15,7 +15,7 @@ import persistence.ComputerDAO;
 
 /* This class uses the Singleton pattern */
 
-public class CLIService {
+public class Service {
 
     private Scanner scanner;
     private static String helpMessage = String.join("\n", "List of commands:",
@@ -27,15 +27,15 @@ public class CLIService {
             "delete <id>: delete a given computer", "quit: exit the program");
     // TODO: change messages from hardcoded Strings to attributes
     // TODO: factorize sanity checks, move to new package
-    private static CLIService instance = null;
+    private static Service instance = null;
 
-    private CLIService() {
+    private Service() {
         scanner = new Scanner(System.in);
     }
 
-    public static CLIService getInstance() {
+    public static Service getInstance() {
         if (instance == null) {
-            instance = new CLIService();
+            instance = new Service();
         }
         return instance;
     }

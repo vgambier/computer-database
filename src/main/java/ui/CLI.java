@@ -2,15 +2,15 @@ package ui;
 
 import java.util.Scanner;
 
-import service.CLIService;
+import service.Service;
 
-public class Main {
+public class CLI {
 
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
 
-        CLIService cliService = CLIService.getInstance();
+        Service cliService = Service.getInstance();
 
         System.out.println("Welcome to CDB. Type 'help' for a list of commands.");
 
