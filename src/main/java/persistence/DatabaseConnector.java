@@ -39,7 +39,7 @@ public class DatabaseConnector implements AutoCloseable {
     private static String username;
     private static String password;
 
-    private static Logger log = Logger.getLogger(DatabaseConnector.class.getName());
+    private static final Logger LOG = Logger.getLogger(DatabaseConnector.class.getName());
 
     /**
      * Connects to the database.
@@ -51,16 +51,17 @@ public class DatabaseConnector implements AutoCloseable {
 
         BasicConfigurator.configure(); // configuring the Logger
 
+        // Registering JDBC driver
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             throw new PersistenceException(
-                    "Class could not be found when attempting to register the JDBC driver", e);
+                    "Class couldn't be found when attempting to register the JDBC driver.", e);
         }
 
         try {
             connection = DriverManager.getConnection(databaseURL, username, password);
-            log.info(
+            LOG.info(
                     "Connecting to the database:\nURL: " + databaseURL + "\nUsername: " + username);
         } catch (SQLException e) {
             System.out.println("Cannot connect to the database!");
@@ -68,7 +69,6 @@ public class DatabaseConnector implements AutoCloseable {
         }
 
         return connection;
-
     }
 
     /**
@@ -79,11 +79,12 @@ public class DatabaseConnector implements AutoCloseable {
     @Override
     public void close() throws PersistenceException {
 
+        // Closing the connection
         if (connection != null) {
             try {
                 connection.close();
                 connection = null;
-                log.info("Disconnected from the database.");
+                LOG.info("Disconnected from the database.");
             } catch (SQLException e) {
                 throw new PersistenceException("Couldn't close the connection!", e);
             }

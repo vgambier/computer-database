@@ -82,7 +82,7 @@
 							<td><a href="editComputer.html" onclick="">${item.getName()}</a></td>
 							<td>${item.getIntroduced()}</td>
 							<td>${item.getDiscontinued()}</td>
-							<td>${item.getCompanyID()}</td>
+							<td>${item.getCompany()}</td>
 
 						</tr>
 

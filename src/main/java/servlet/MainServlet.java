@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import persistence.ComputerDAO;
@@ -20,7 +21,7 @@ public class MainServlet extends HttpServlet {
     private static final long serialVersionUID = 4L;
 
     private static ComputerDAO computerDAO = ComputerDAO.getInstance();
-    private static Logger log = Logger.getLogger(MainServlet.class.getName());
+    private static final Logger LOG = Logger.getLogger(MainServlet.class.getName());
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -31,7 +32,8 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        log.info("Settings attributes for MainServlet.");
+        BasicConfigurator.configure(); // configuring the Logger
+        LOG.info("Settings attributes for MainServlet.");
 
         try {
             request.setAttribute("computers", computerDAO.listAll());
