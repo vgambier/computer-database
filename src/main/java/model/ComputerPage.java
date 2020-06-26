@@ -1,9 +1,12 @@
 package model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import mapper.MapperException;
 import persistence.ComputerDAO;
+import persistence.PersistenceException;
 
 public class ComputerPage extends Page<Computer> {
 
@@ -13,7 +16,8 @@ public class ComputerPage extends Page<Computer> {
     private int pageNumber;
     private List<Computer> computers = new ArrayList<Computer>();
 
-    public ComputerPage(int pageNumber) throws Exception {
+    public ComputerPage(int pageNumber)
+            throws ModelException, IOException, MapperException, PersistenceException {
 
         // Checking the database to count the number of entries
         int nbEntries = ComputerDAO.getInstance().countEntries();

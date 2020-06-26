@@ -18,10 +18,12 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
+			<a class="navbar-brand" href="dashboard.jsp"> Application -
 				Computer Database </a>
 		</div>
 	</header>
+	
+	<c:set var="currentPageTrue" value="1"/>
 
 	<section id="main">
 		<div class="container">
@@ -37,7 +39,7 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer.html">Add
+					<a class="btn btn-success" id="addComputer" href="addComputer.jsp">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
@@ -74,16 +76,15 @@
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 
-					<c:forEach items="${computers}" var="item">
+					<c:forEach items="${computerPage.computers}" var="item">
 
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer.html" onclick="">${item.getName()}</a></td>
+							<td><a href="editComputer.jsp" onclick="">${item.getName()}</a></td>
 							<td>${item.getIntroduced()}</td>
 							<td>${item.getDiscontinued()}</td>
 							<td>${item.getCompany()}</td>
-
 						</tr>
 
 					</c:forEach>
@@ -92,18 +93,20 @@
 			</table>
 		</div>
 	</section>
-
+	
+	
 	<footer class="navbar-fixed-bottom">
+	
 		<div class="container text-center">
 			<ul class="pagination">
 				<li><a href="#" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
+				<li><a href="?currentPage=1">1</a></li>
+				<li><a href="?currentPage=2">2</a></li>
+				<li><a href="?currentPage=3">3</a></li>
+				<li><a href="?currentPage=4">4</a></li>
+				<li><a href="?currentPage=5">5</a></li>
 				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>

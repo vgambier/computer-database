@@ -12,16 +12,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-import persistence.ComputerDAO;
+import mapper.MapperException;
+import model.ComputerPage;
+import model.ModelException;
 import persistence.PersistenceException;
+import service.Service;
 
 @WebServlet(name = "MainServlet", urlPatterns = "/dashboard")
-public class MainServlet extends HttpServlet {
+public class DashboardServlet extends HttpServlet {
 
     private static final long serialVersionUID = 4L;
 
-    private static ComputerDAO computerDAO = ComputerDAO.getInstance();
-    private static final Logger LOG = Logger.getLogger(MainServlet.class.getName());
+    private static Service service = Service.getInstance();
+    private static final Logger LOG = Logger.getLogger(DashboardServlet.class.getName());
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -35,13 +38,22 @@ public class MainServlet extends HttpServlet {
         BasicConfigurator.configure(); // configuring the Logger
         LOG.info("Settings attributes for MainServlet.");
 
+        String currentPageString = request.getParameter("currentPage");
+        int currentPage = currentPageString == null ? 1 : Integer.valueOf(currentPageString);
+
         try {
-            request.setAttribute("computers", computerDAO.listAll());
-            request.setAttribute("computerCount", computerDAO.countEntries());
+            request.setAttribute("computerPage", new ComputerPage(currentPage));
+            request.setAttribute("computerCount", service.countComputerEntries());
         } catch (PersistenceException e) {
+            throw new ServletException("Couldn't set session attributes", e);
+        } catch (ModelException e) {
+            throw new ServletException("Couldn't set session attributes", e);
+        } catch (IOException e) {
+            throw new ServletException("Couldn't set session attributes", e);
+        } catch (MapperException e) {
             throw new ServletException("Couldn't set session attributes", e);
         }
 
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 }

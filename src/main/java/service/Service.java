@@ -60,4 +60,8 @@ public class Service {
         return CompanyDAO.getInstance().doesEntryExist(id);
     }
 
+    public int countComputerEntries() throws PersistenceException {
+        return ComputerDAO.getInstance().countEntries();
+    }
+
 }
