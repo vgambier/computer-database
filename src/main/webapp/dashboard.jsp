@@ -22,12 +22,12 @@
 				Computer Database </a>
 		</div>
 	</header>
-	
-	<c:set var="currentPageTrue" value="1"/>
+
+	<c:set var="currentPageTrue" value="1" />
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${computerCount} Computers found</h1>
+			<h1 id="homeTitle">${computerCount}Computersfound</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -93,22 +93,25 @@
 			</table>
 		</div>
 	</section>
-	
-	
+
+
 	<footer class="navbar-fixed-bottom">
-	
+
 		<div class="container text-center">
 			<ul class="pagination">
+			
 				<li><a href="#" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
-				<li><a href="?currentPage=1">1</a></li>
-				<li><a href="?currentPage=2">2</a></li>
-				<li><a href="?currentPage=3">3</a></li>
-				<li><a href="?currentPage=4">4</a></li>
-				<li><a href="?currentPage=5">5</a></li>
+
+				<c:forEach begin="1" end="${nbPages}" var="i">
+					<li class="page-item"><a class="page-link"
+						href="?currentPage=${i}">${i}</a></li>
+				</c:forEach>
+
 				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
+				
 			</ul>
 		</div>
 		<div class="btn-group btn-group-sm pull-right" role="group">

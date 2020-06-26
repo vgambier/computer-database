@@ -43,6 +43,7 @@ public class DashboardServlet extends HttpServlet {
 
         try {
             request.setAttribute("computerPage", new ComputerPage(currentPage));
+            request.setAttribute("nbPages", ComputerPage.getNbPages());
             request.setAttribute("computerCount", service.countComputerEntries());
         } catch (PersistenceException e) {
             throw new ServletException("Couldn't set session attributes", e);
