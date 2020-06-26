@@ -23,8 +23,6 @@
 		</div>
 	</header>
 
-	<c:set var="currentPageTrue" value="1" />
-
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">${computerCount}Computersfound</h1>
@@ -99,9 +97,9 @@
 
 		<div class="container text-center">
 			<ul class="pagination">
-			
-				<li><a href="#" aria-label="Previous"> <span
-						aria-hidden="true">&laquo;</span>
+
+				<li><a href="?currentPage=${currentPage-1}"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
 
 				<c:forEach begin="1" end="${nbPages}" var="i">
@@ -109,9 +107,10 @@
 						href="?currentPage=${i}">${i}</a></li>
 				</c:forEach>
 
-				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<li><a href="?currentPage=${currentPage+1}" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
 				</a></li>
-				
+
 			</ul>
 		</div>
 		<div class="btn-group btn-group-sm pull-right" role="group">

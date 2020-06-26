@@ -40,6 +40,7 @@ public class DashboardServlet extends HttpServlet {
 
         String currentPageString = request.getParameter("currentPage");
         int currentPage = currentPageString == null ? 1 : Integer.valueOf(currentPageString);
+        request.setAttribute("currentPage", currentPage);
 
         try {
             request.setAttribute("computerPage", new ComputerPage(currentPage));
