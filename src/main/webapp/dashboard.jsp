@@ -98,18 +98,22 @@
 		<div class="container text-center">
 			<ul class="pagination">
 
-				<li><a href="?currentPage=${currentPage-1}"
-					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
+				<c:if test="${currentPage != 1}">
+					<li><a href="?currentPage=${currentPage-1}"
+						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+					</a></li>
+				</c:if>
 
 				<c:forEach begin="1" end="${nbPages}" var="i">
 					<li class="page-item"><a class="page-link"
 						href="?currentPage=${i}">${i}</a></li>
 				</c:forEach>
 
-				<li><a href="?currentPage=${currentPage+1}" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-				</a></li>
+				<c:if test="${currentPage != nbPages}">
+					<li><a href="?currentPage=${currentPage+1}" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+					</a></li>
+				</c:if>
 
 			</ul>
 		</div>
