@@ -21,4 +21,12 @@ public class Company {
         return stringBuilder.toString();
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }

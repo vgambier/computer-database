@@ -18,7 +18,7 @@ import model.ModelException;
 import persistence.PersistenceException;
 import service.Service;
 
-@WebServlet(name = "MainServlet", urlPatterns = "/dashboard")
+@WebServlet(name = "DashboardServlet", urlPatterns = "/dashboard")
 public class DashboardServlet extends HttpServlet {
 
     private static final long serialVersionUID = 4L;
@@ -41,10 +41,10 @@ public class DashboardServlet extends HttpServlet {
         String currentPageString = request.getParameter("currentPage");
         int currentPage = currentPageString == null ? 1 : Integer.valueOf(currentPageString);
         request.setAttribute("currentPage", currentPage);
+        // TODO: validate page number, in case the URL is manually edited
 
         try {
             request.setAttribute("computerPage", new ComputerPage(currentPage));
-            request.setAttribute("nbPages", ComputerPage.getNbPages());
             request.setAttribute("computerCount", service.countComputerEntries());
         } catch (PersistenceException e) {
             throw new ServletException("Couldn't set session attributes", e);
@@ -55,6 +55,8 @@ public class DashboardServlet extends HttpServlet {
         } catch (MapperException e) {
             throw new ServletException("Couldn't set session attributes", e);
         }
+
+        request.setAttribute("nbPages", ComputerPage.getNbPages());
 
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
