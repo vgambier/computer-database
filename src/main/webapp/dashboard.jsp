@@ -119,11 +119,21 @@
 
 			</ul>
 		</div>
-		<div class="btn-group btn-group-sm pull-right" role="group">
-			<button type="button" class="btn btn-default">10</button>
-			<button type="button" class="btn btn-default">50</button>
-			<button type="button" class="btn btn-default">100</button>
-		</div>
+		<form action="dashboard" method="POST">
+						<div class="btn-group btn-group-sm pull-right" role="group">
+					<input type="submit" class="btn btn-default" name="action"
+						value="100" />
+				</div>
+
+				<div class="btn-group btn-group-sm pull-right" role="group">
+					<input type="submit" class="btn btn-default" name="action"
+						value="50" />
+				</div>
+				<div class="btn-group btn-group-sm pull-right" role="group">
+					<input type="submit" class="btn btn-default" name="action"
+						value="10" />
+				</div>
+		</form>
 
 	</footer>
 	<script src="../js/jquery.min.js"></script>

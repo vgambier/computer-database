@@ -60,4 +60,18 @@ public class DashboardServlet extends HttpServlet {
 
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Used for changing the number of entries per page
+
+        int newNbEntriesPerPage = Integer.valueOf(request.getParameter("action"));
+        System.out.println(newNbEntriesPerPage);
+        ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
+
+        doGet(request, response);
+
+    }
 }

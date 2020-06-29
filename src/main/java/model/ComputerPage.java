@@ -10,10 +10,9 @@ import persistence.PersistenceException;
 
 public class ComputerPage extends Page<Computer> {
 
-    private static final int MAX_ITEMS_PER_PAGE = 25;
+    private static int maxItemsPerPage = 50;
     private static int nbPages;
 
-    private int pageNumber;
     private List<Computer> computers = new ArrayList<Computer>();
 
     public ComputerPage(int pageNumber)
@@ -22,15 +21,14 @@ public class ComputerPage extends Page<Computer> {
         // Checking the database to count the number of entries
         int nbEntries = ComputerDAO.getInstance().countEntries();
 
-        nbPages = nbEntries / MAX_ITEMS_PER_PAGE + 1;
+        nbPages = nbEntries / maxItemsPerPage + 1;
 
         // Checking if the input page number is valid
         checkPageNumber(pageNumber);
-        this.pageNumber = pageNumber;
 
         // Putting computers in the page
-        computers = ComputerDAO.getInstance().listSome(MAX_ITEMS_PER_PAGE,
-                (pageNumber - 1) * MAX_ITEMS_PER_PAGE);
+        computers = ComputerDAO.getInstance().listSome(maxItemsPerPage,
+                (pageNumber - 1) * maxItemsPerPage);
     }
 
     /**
@@ -59,6 +57,14 @@ public class ComputerPage extends Page<Computer> {
 
     public static int getNbPages() {
         return nbPages;
+    }
+
+    public static int getMaxItemsPerPage() {
+        return maxItemsPerPage;
+    }
+
+    public static void setMaxItemsPerPage(int maxItemsPerPage) {
+        ComputerPage.maxItemsPerPage = maxItemsPerPage;
     }
 
 }
