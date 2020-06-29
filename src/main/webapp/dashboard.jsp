@@ -100,7 +100,7 @@
 		<div class="container text-center">
 			<ul class="pagination">
 
-				<c:if test="${currentPage != 1} ">
+				<c:if test="${currentPage != 1}">
 					<li><a href="?currentPage=${currentPage-1}"
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
@@ -120,19 +120,19 @@
 			</ul>
 		</div>
 		<form action="dashboard" method="POST">
-						<div class="btn-group btn-group-sm pull-right" role="group">
-					<input type="submit" class="btn btn-default" name="action"
-						value="100" />
-				</div>
+			<div class="btn-group btn-group-sm pull-right" role="group">
+				<input type="submit" class="btn btn-default" name="action"
+					value="100" />
+			</div>
 
-				<div class="btn-group btn-group-sm pull-right" role="group">
-					<input type="submit" class="btn btn-default" name="action"
-						value="50" />
-				</div>
-				<div class="btn-group btn-group-sm pull-right" role="group">
-					<input type="submit" class="btn btn-default" name="action"
-						value="10" />
-				</div>
+			<div class="btn-group btn-group-sm pull-right" role="group">
+				<input type="submit" class="btn btn-default" name="action"
+					value="50" />
+			</div>
+			<div class="btn-group btn-group-sm pull-right" role="group">
+				<input type="submit" class="btn btn-default" name="action"
+					value="10" />
+			</div>
 		</form>
 
 	</footer>

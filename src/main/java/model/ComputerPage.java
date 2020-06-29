@@ -21,7 +21,10 @@ public class ComputerPage extends Page<Computer> {
         // Checking the database to count the number of entries
         int nbEntries = ComputerDAO.getInstance().countEntries();
 
-        nbPages = nbEntries / maxItemsPerPage + 1;
+        nbPages = nbEntries / maxItemsPerPage;
+        if (nbEntries % maxItemsPerPage != 0) {
+            nbPages++;
+        }
 
         // Checking if the input page number is valid
         checkPageNumber(pageNumber);
