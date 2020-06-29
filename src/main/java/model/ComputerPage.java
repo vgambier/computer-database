@@ -22,17 +22,15 @@ public class ComputerPage extends Page<Computer> {
         // Checking the database to count the number of entries
         int nbEntries = ComputerDAO.getInstance().countEntries();
 
-        nbPages = nbEntries / MAX_ITEMS_PER_PAGE;
+        nbPages = nbEntries / MAX_ITEMS_PER_PAGE + 1;
 
         // Checking if the input page number is valid
         checkPageNumber(pageNumber);
         this.pageNumber = pageNumber;
 
-        System.out.println("before");
         // Putting computers in the page
         computers = ComputerDAO.getInstance().listSome(MAX_ITEMS_PER_PAGE,
                 (pageNumber - 1) * MAX_ITEMS_PER_PAGE);
-        System.out.println("after");
     }
 
     /**
