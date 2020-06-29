@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.sql.Date;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -37,13 +38,6 @@ public class CreateServlet extends HttpServlet {
 
         try {
             request.setAttribute("companies", service.listAllCompanies());
-            // TODO: remove
-
-            for (int i = 0; i < 100; i++) {
-                System.out.println("@@@@@@@@@@@@@");
-            }
-            System.out.println(service.listAllCompanies().get(0));
-
         } catch (PersistenceException e) {
             throw new ServletException("Couldn't set session attributes", e);
         }
@@ -52,10 +46,24 @@ public class CreateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
-        super.doPost(req, resp);
-    }
 
+        // TODO: validation
+        String computerName = request.getParameter("computerName");
+        Date introduced = java.sql.Date.valueOf(request.getParameter("introduced"));
+        Date discontinued = java.sql.Date.valueOf(request.getParameter("discontinued"));
+        Integer companyID = Integer.valueOf(request.getParameter("companyID"));
+
+        try {
+            service.addComputer(computerName, introduced, discontinued, companyID);
+        } catch (PersistenceException e) {
+            throw new ServletException("Could not add the new computer!", e);
+        } catch (IOException e) {
+            throw new ServletException("Could not add the new computer!", e);
+        }
+
+        doGet(request, response);
+
+    }
 }

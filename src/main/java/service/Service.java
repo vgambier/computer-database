@@ -1,5 +1,6 @@
 package service;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class Service {
     }
 
     public void addComputer(String computerName, Date introducedDate, Date discontinuedDate,
-            Integer companyID) throws Exception {
+            Integer companyID) throws PersistenceException, IOException {
         ComputerDAO.getInstance().add(computerName, introducedDate, discontinuedDate, companyID);
     }
 

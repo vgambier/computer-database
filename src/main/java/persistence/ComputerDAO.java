@@ -84,10 +84,12 @@ public class ComputerDAO extends DAO<Computer> {
      *            the date of discontinuation of the new computer - may be null
      * @param companyID
      *            the ID of the company of the new computer - may be null
+     * @throws IOException
+     * @throws PersistenceException
      * @throws Exception
      */
     public void add(String computerName, Date introducedDate, Date discontinuedDate,
-            Integer companyID) throws Exception {
+            Integer companyID) throws PersistenceException, IOException {
 
         String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 
