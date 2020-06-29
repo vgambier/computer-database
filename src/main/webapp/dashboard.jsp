@@ -106,7 +106,7 @@
 					</a></li>
 				</c:if>
 
-				<c:forEach begin="1" end="${nbPages}" var="i">
+				<c:forEach begin="${Math.max(1, currentPage-3)}" end="${Math.min(nbPages, Integer.parseInt(currentPage+3) )}" var="i">
 					<li class="page-item"><a class="page-link"
 						href="?currentPage=${i}">${i}</a></li>
 				</c:forEach>
