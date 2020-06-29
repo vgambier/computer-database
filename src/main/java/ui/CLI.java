@@ -10,9 +10,6 @@ import persistence.PersistenceException;
 import service.Service;
 import validator.Validator;
 
-// TODO: change messages from hardcoded Strings to attributes
-// TODO: factorize sanity checks, move to new package
-
 public class CLI {
 
     private static String helpMessage = String.join("\n", "List of commands:",
@@ -43,11 +40,11 @@ public class CLI {
                     help();
                     break;
 
-                case "computers" : // TODO: deprecate this command
+                case "computers" : // could be deprecated
                     computers();
                     break;
 
-                case "page" : // TODO: improve this command
+                case "page" :
                     page(arr);
                     break;
 

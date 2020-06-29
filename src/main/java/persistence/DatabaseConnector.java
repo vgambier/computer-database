@@ -39,6 +39,7 @@ public class DatabaseConnector implements AutoCloseable {
     private static String username;
     private static String password;
 
+    // TODO: add more logging
     private static final Logger LOG = Logger.getLogger(DatabaseConnector.class.getName());
 
     /**

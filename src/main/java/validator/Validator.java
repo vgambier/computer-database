@@ -47,10 +47,7 @@ public class Validator {
         if (!isStringInteger(pageID) || Integer.parseInt(pageID) < 1) {
             System.out.println("Page number must be an non-zero positive integer!");
             isPageNumberOk = false;
-        }
-
-        else {
-
+        } else {
             try {
                 new ComputerPage(Integer.valueOf(pageID));
                 isPageNumberOk = true; // previous line didn't throw an
@@ -95,7 +92,6 @@ public class Validator {
      * @return true if and only if there is a company with this id in the database
      * @throws IOException
      * @throws PersistenceException
-     * @throws Exception
      */
     public boolean isCompanyIDStringValid(String stringID)
             throws PersistenceException, IOException {
@@ -111,7 +107,7 @@ public class Validator {
     }
 
     /**
-     * Checks if a given String is a valid YYYY-MM-DD date
+     * Checks if a given String is a valid YYYY-MM-DD date.
      *
      * @param date
      *            the date to check

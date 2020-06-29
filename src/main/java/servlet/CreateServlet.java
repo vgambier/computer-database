@@ -87,7 +87,6 @@ public class CreateServlet extends HttpServlet {
 
         Integer companyID = null;
         String companyIDString = request.getParameter("companyID");
-
         try {
             if (companyIDString.equals("0")) { // If the user chose the "--" default option
                 companyID = null; // Needed for the Computer constructor to function as intended
@@ -99,7 +98,6 @@ public class CreateServlet extends HttpServlet {
                 // Here, "empty" means the "--" choice of id 0
                 isEntryValid = false;
             }
-
         } catch (NumberFormatException e) {
             throw new ServletException("Couldn't check company ID validity!", e);
         } catch (PersistenceException e) {
