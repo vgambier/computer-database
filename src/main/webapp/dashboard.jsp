@@ -18,14 +18,16 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href="dashboard"> Application - Computer
+				Database </a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${computerCount}Computersfound</h1>
+			<h1 id="homeTitle">
+				<c:out value="${computerCount} computers found" />
+			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -74,15 +76,15 @@
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 
-					<c:forEach items="${computerPage.computers}" var="item">
+					<c:forEach items="${computerPage.computers}" var="computer">
 
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer" onclick="">${item.getName()}</a></td>
-							<td>${item.getIntroduced()}</td>
-							<td>${item.getDiscontinued()}</td>
-							<td>${item.getCompany()}</td>
+							<td><a href="editComputer" onclick="">${computer.getName()}</a></td>
+							<td><c:out value="${computer.getIntroduced()}" /></td>
+							<td><c:out value="${computer.getDiscontinued()}" /></td>
+							<td><c:out value="${computer.getCompany()}" /></td>
 						</tr>
 
 					</c:forEach>
