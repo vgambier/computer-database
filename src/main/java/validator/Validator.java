@@ -93,9 +93,12 @@ public class Validator {
      * @param stringID
      *            the id of the company entry we want to check, as a String
      * @return true if and only if there is a company with this id in the database
+     * @throws IOException
+     * @throws PersistenceException
      * @throws Exception
      */
-    public boolean isCompanyIDStringValid(String stringID) throws Exception {
+    public boolean isCompanyIDStringValid(String stringID)
+            throws PersistenceException, IOException {
 
         boolean isValid = false;
 

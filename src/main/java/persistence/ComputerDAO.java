@@ -130,10 +130,13 @@ public class ComputerDAO extends DAO<Computer> {
      *            the new date of discontinuation of the computer - may be null
      * @param newCompanyID
      *            the new ID of the company of the computer - may be null
+     * @throws IOException
+     * @throws PersistenceException
      * @throws Exception
      */
     public void update(int id, String newComputerName, Date newIntroducedDate,
-            Date newDiscontinuedDate, Integer newCompanyID) throws Exception {
+            Date newDiscontinuedDate, Integer newCompanyID)
+            throws PersistenceException, IOException {
 
         String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 
@@ -169,9 +172,11 @@ public class ComputerDAO extends DAO<Computer> {
      *
      * @param id
      *            the id of the relevant computer
+     * @throws IOException
+     * @throws PersistenceException
      * @throws Exception
      */
-    public void delete(int id) throws Exception {
+    public void delete(int id) throws PersistenceException, IOException {
 
         String sql = "DELETE FROM `computer` WHERE id = ?";
 

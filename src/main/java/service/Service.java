@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 
+import mapper.MapperException;
 import model.Company;
 import model.Computer;
 import persistence.CompanyDAO;
@@ -34,7 +35,8 @@ public class Service {
         return CompanyDAO.getInstance().listAll();
     }
 
-    public Computer getComputer(int computerID) throws Exception {
+    public Computer getComputer(int computerID)
+            throws PersistenceException, IOException, MapperException {
         return ComputerDAO.getInstance().find(computerID);
     }
 
@@ -44,20 +46,21 @@ public class Service {
     }
 
     public void updateComputer(Integer computerID, String newComputerName, Date newIntroducedDate,
-            Date newDiscontinuedDate, Integer newCompanyID) throws Exception {
+            Date newDiscontinuedDate, Integer newCompanyID)
+            throws PersistenceException, IOException {
         ComputerDAO.getInstance().update(computerID, newComputerName, newIntroducedDate,
                 newDiscontinuedDate, newCompanyID);
     }
 
-    public void deleteComputer(Integer computerID) throws Exception {
+    public void deleteComputer(Integer computerID) throws PersistenceException, IOException {
         ComputerDAO.getInstance().delete(computerID);
     }
 
-    public boolean doesComputerEntryExist(int id) throws Exception {
+    public boolean doesComputerEntryExist(int id) throws PersistenceException, IOException {
         return ComputerDAO.getInstance().doesEntryExist(id);
     }
 
-    public boolean doesCompanyEntryExist(int id) throws Exception {
+    public boolean doesCompanyEntryExist(int id) throws PersistenceException, IOException {
         return CompanyDAO.getInstance().doesEntryExist(id);
     }
 

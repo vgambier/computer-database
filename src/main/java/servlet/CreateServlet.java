@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import persistence.PersistenceException;
 import service.Service;
+import validator.Validator;
 
 @WebServlet(name = "CreateServlet", urlPatterns = "/addComputer")
 public class CreateServlet extends HttpServlet {
@@ -49,18 +50,77 @@ public class CreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // TODO: validation
+        Validator validator = Validator.getInstance();
+        StringBuilder str = new StringBuilder();
+        boolean isEntryValid = true;
+
+        // Back-end validation
+
         String computerName = request.getParameter("computerName");
-        Date introduced = java.sql.Date.valueOf(request.getParameter("introduced"));
-        Date discontinued = java.sql.Date.valueOf(request.getParameter("discontinued"));
-        Integer companyID = Integer.valueOf(request.getParameter("companyID"));
+        if (computerName.equals("")) {
+            str.append("Name is mandatory.\n");
+            isEntryValid = false;
+        }
+
+        Date introduced = null;
+        String introducedString = request.getParameter("introduced");
+        if (!introducedString.equals("") && validator.isDateStringValid(introducedString)) {
+            introduced = java.sql.Date.valueOf(introducedString);
+        } else if (!introducedString.equals("")) {
+            str.append("Introduced date field must be empty or match YYYY-MM-DD format.\n");
+            isEntryValid = false;
+        }
+
+        Date discontinued = null;
+        String discontinuedString = request.getParameter("discontinued");
+        if (!discontinuedString.equals("") && validator.isDateStringValid(discontinuedString)) {
+            discontinued = java.sql.Date.valueOf(discontinuedString);
+        } else if (!discontinuedString.equals("")) {
+            str.append("Discontinued date field must be empty or match YYYY-MM-DD format.\n");
+            isEntryValid = false;
+        }
+
+        if (isEntryValid && introduced != null && discontinued != null
+                && discontinued.before(introduced)) {
+            str.append("The date of discontinuation must be after the date of introduction.");
+        }
+
+        Integer companyID = null;
+        String companyIDString = request.getParameter("companyID");
 
         try {
-            service.addComputer(computerName, introduced, discontinued, companyID);
+            if (companyIDString.equals("0")) { // If the user chose the "--" default option
+                companyID = null; // Needed for the Computer constructor to function as intended
+            } else if (!companyIDString.equals("")
+                    && validator.isCompanyIDStringValid(companyIDString)) {
+                companyID = Integer.valueOf(companyIDString);
+            } else {
+                str.append("Company ID field must be empty (--) or a valid ID.\n");
+                // Here, "empty" means the "--" choice of id 0
+                isEntryValid = false;
+            }
+
+        } catch (NumberFormatException e) {
+            throw new ServletException("Couldn't check company ID validity!", e);
         } catch (PersistenceException e) {
-            throw new ServletException("Could not add the new computer!", e);
+            throw new ServletException("Couldn't check company ID validity!", e);
         } catch (IOException e) {
-            throw new ServletException("Could not add the new computer!", e);
+            throw new ServletException("Couldn't check company ID validity!", e);
+        }
+
+        // Adding entry if form is valid
+
+        if (str.length() == 0) { // If all fields are valid
+            try {
+                service.addComputer(computerName, introduced, discontinued, companyID);
+                request.setAttribute("message", "Entry successfully added.");
+            } catch (PersistenceException e) {
+                throw new ServletException("Could not add the new computer!", e);
+            } catch (IOException e) {
+                throw new ServletException("Could not add the new computer!", e);
+            }
+        } else {
+            request.setAttribute("message", str.toString());
         }
 
         doGet(request, response);
