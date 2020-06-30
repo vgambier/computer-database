@@ -2,8 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
+
 <html>
 <head>
+
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
@@ -11,7 +13,12 @@
 	media="screen">
 <link href="static/css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="static/css/main.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="static/js/jquery.min.js"></script>
+<script type="text/javascript" src="static/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="static/js/formvalidation.js"></script>
+
 </head>
+
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
@@ -26,28 +33,29 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
 
-					<c:out value="${message}" />
+					<c:out value="${message}" /> <!-- Error or confirmation message that shows up after clicking submit -->
 
-					<form action="addComputer" method="POST">
+					<form name="addComputer" id="addComputer" action="addComputer"
+						method="POST">
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name (mandatory)</label> <input
 									type="text" class="form-control" name="computerName"
-									placeholder="Computer name" required>
+									id="computerName" placeholder="Computer name">
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" name="introduced"
-									placeholder="Introduced date">
+									id="introduced" placeholder="Introduced date">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" name="discontinued"
-									placeholder="Discontinued date">
+									id="discontinued" placeholder="Discontinued date">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
-									class="form-control" name="companyID">
+									class="form-control" name="companyID" id="companyID">
 
 									<option value="0">--</option>
 
@@ -66,6 +74,7 @@
 				</div>
 			</div>
 		</div>
+		</script>
 	</section>
 </body>
 </html>

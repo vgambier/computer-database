@@ -96,11 +96,6 @@
 		</div>
 	</section>
 
-								<c:out value="${currentPage} is current page" />
-																<c:out value="${computerPage} is current page" />
-								
-
-
 	<footer class="navbar-fixed-bottom">
 
 		<div class="container text-center">
