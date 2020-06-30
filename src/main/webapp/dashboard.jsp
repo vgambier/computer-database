@@ -18,8 +18,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer
-				Database </a>
+			<a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
 		</div>
 	</header>
 
@@ -27,7 +26,6 @@
 		<div class="container">
 			<h1 id="homeTitle">
 				<c:out value="${computerCount} computers found" />
-				
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
