@@ -3,7 +3,6 @@ package servlet;
 import java.io.IOException;
 import java.sql.Date;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,15 +19,10 @@ import validator.Validator;
 @WebServlet(name = "CreateServlet", urlPatterns = "/addComputer")
 public class CreateServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 5L;
+    private static final long serialVersionUID = 0xC2EA7EL;
 
     private static Service service = Service.getInstance();
     private static final Logger LOG = Logger.getLogger(CreateServlet.class.getName());
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

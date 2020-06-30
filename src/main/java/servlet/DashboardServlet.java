@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,15 +21,10 @@ import validator.Validator;
 @WebServlet(name = "DashboardServlet", urlPatterns = "/dashboard")
 public class DashboardServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 0xDA57B0A2DL;
 
     private static Service service = Service.getInstance();
     private static final Logger LOG = Logger.getLogger(DashboardServlet.class.getName());
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
