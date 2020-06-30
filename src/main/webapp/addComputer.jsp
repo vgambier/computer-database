@@ -33,7 +33,7 @@
 							<div class="form-group">
 								<label for="computerName">Computer name (mandatory)</label> <input
 									type="text" class="form-control" name="computerName"
-									placeholder="Computer name">
+									placeholder="Computer name" required>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input

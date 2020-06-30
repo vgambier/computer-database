@@ -62,10 +62,6 @@ public class ComputerPage extends Page<Computer> {
         return nbPages;
     }
 
-    public static int getMaxItemsPerPage() {
-        return maxItemsPerPage;
-    }
-
     public static void setMaxItemsPerPage(int maxItemsPerPage) {
         ComputerPage.maxItemsPerPage = maxItemsPerPage;
     }

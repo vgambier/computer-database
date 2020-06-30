@@ -27,6 +27,7 @@
 		<div class="container">
 			<h1 id="homeTitle">
 				<c:out value="${computerCount} computers found" />
+				
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
@@ -73,6 +74,7 @@
 
 					</tr>
 				</thead>
+				
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 
@@ -93,6 +95,10 @@
 			</table>
 		</div>
 	</section>
+
+								<c:out value="${currentPage} is current page" />
+																<c:out value="${computerPage} is current page" />
+								
 
 
 	<footer class="navbar-fixed-bottom">

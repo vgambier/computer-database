@@ -40,26 +40,22 @@ public class DashboardServlet extends HttpServlet {
         LOG.info("Settings attributes for MainServlet.");
 
         String currentPageString = request.getParameter("currentPage");
+
         try {
-            if (Validator.getInstance().isPageIDStringValid(currentPageString)) {
-                int currentPage = Integer.valueOf(currentPageString);
-                request.setAttribute("currentPage", currentPage);
-                request.setAttribute("computerPage", new ComputerPage(currentPage));
-            }
-        } catch (NumberFormatException e) {
-            throw new ServletException("Couldn't set session attributes", e);
+
+            int currentPage = Validator.getInstance().isPageIDStringValid(currentPageString)
+                    ? Integer.valueOf(currentPageString)
+                    : 1;
+            request.setAttribute("currentPage", currentPage);
+            request.setAttribute("computerPage", new ComputerPage(currentPage));
+            request.setAttribute("computerCount", service.countComputerEntries());
+
         } catch (IOException e) {
-            throw new ServletException("Couldn't set session attributes", e);
-        } catch (MapperException e) {
-            throw new ServletException("Couldn't set session attributes", e);
-        } catch (PersistenceException e) {
             throw new ServletException("Couldn't set session attributes", e);
         } catch (ModelException e) {
             throw new ServletException("Couldn't set session attributes", e);
-        }
-
-        try {
-            request.setAttribute("computerCount", service.countComputerEntries());
+        } catch (MapperException e) {
+            throw new ServletException("Couldn't set session attributes", e);
         } catch (PersistenceException e) {
             throw new ServletException("Couldn't set session attributes", e);
         }
