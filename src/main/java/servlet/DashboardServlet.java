@@ -17,6 +17,7 @@ import model.ComputerPage;
 import model.ModelException;
 import persistence.PersistenceException;
 import service.Service;
+import validator.Validator;
 
 @WebServlet(name = "DashboardServlet", urlPatterns = "/dashboard")
 public class DashboardServlet extends HttpServlet {
@@ -39,20 +40,27 @@ public class DashboardServlet extends HttpServlet {
         LOG.info("Settings attributes for MainServlet.");
 
         String currentPageString = request.getParameter("currentPage");
-        int currentPage = currentPageString == null ? 1 : Integer.valueOf(currentPageString);
-        request.setAttribute("currentPage", currentPage);
-        // TODO: validate page number, in case the URL is manually edited
-
         try {
-            request.setAttribute("computerPage", new ComputerPage(currentPage));
-            request.setAttribute("computerCount", service.countComputerEntries());
-        } catch (PersistenceException e) {
-            throw new ServletException("Couldn't set session attributes", e);
-        } catch (ModelException e) {
+            if (Validator.getInstance().isPageIDStringValid(currentPageString)) {
+                int currentPage = Integer.valueOf(currentPageString);
+                request.setAttribute("currentPage", currentPage);
+                request.setAttribute("computerPage", new ComputerPage(currentPage));
+            }
+        } catch (NumberFormatException e) {
             throw new ServletException("Couldn't set session attributes", e);
         } catch (IOException e) {
             throw new ServletException("Couldn't set session attributes", e);
         } catch (MapperException e) {
+            throw new ServletException("Couldn't set session attributes", e);
+        } catch (PersistenceException e) {
+            throw new ServletException("Couldn't set session attributes", e);
+        } catch (ModelException e) {
+            throw new ServletException("Couldn't set session attributes", e);
+        }
+
+        try {
+            request.setAttribute("computerCount", service.countComputerEntries());
+        } catch (PersistenceException e) {
             throw new ServletException("Couldn't set session attributes", e);
         }
 
