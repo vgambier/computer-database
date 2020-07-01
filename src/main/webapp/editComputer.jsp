@@ -30,33 +30,35 @@
 						<c:out value="id: ${id}" />
 					</div>
 					<h1>Edit Computer</h1>
-					
+
 					<!-- Error or confirmation message that shows up after clicking submit -->
 					<c:out value="${message}" />
 
-					<form action="editComputer" method="POST">
+					<form name="editComputer" id="editComputer" action="editComputer" method="POST">
 						<input type="hidden" value="${id}" id="id" name="id" />
-						<!-- TODO: Change this value with the computer id -->
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName" name="computerName"
-									placeholder="Computer name">
+									type="text" class="form-control" id="computerName"
+									name="computerName" placeholder="Computer name">
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced" name="introduced"
-									placeholder="Introduced date">
+									type="date" class="form-control" id="introduced"
+									name="introduced" placeholder="Introduced date">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued" name="discontinued"
-									placeholder="Discontinued date">
+									type="date" class="form-control" id="discontinued"
+									name="discontinued" placeholder="Discontinued date">
 							</div>
 							<div class="form-group">
 								<label for="companyID">Company</label> <select
 									class="form-control" id="companyID" name="companyID">
 									<option value="0">--</option>
+									<c:forEach items="${companies}" var="company">
+										<option value="${company.getId()}">${company.getName()}</option>
+									</c:forEach>
 								</select>
 							</div>
 						</fieldset>

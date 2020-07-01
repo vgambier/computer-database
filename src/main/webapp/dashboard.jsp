@@ -10,15 +10,15 @@
 <!-- Bootstrap -->
 <link href="static/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
-<link href="static/css/bootstrap.min.css/css/font-awesome.css"
-	rel="stylesheet" media="screen">
-<link href="static/css/bootstrap.min.css/css/main.css" rel="stylesheet"
-	media="screen">
+<link href="static/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="static/css/main.css" rel="stylesheet" media="screen">
+
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+			<a class="navbar-brand" href="dashboard"> Application - Computer
+				Database </a>
 		</div>
 	</header>
 
@@ -39,8 +39,8 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="editComputer"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+						Computer</a> <a class="btn btn-default" id="editComputer"
+						href="editComputer" onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
 		</div>
@@ -72,7 +72,7 @@
 
 					</tr>
 				</thead>
-				
+
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 
@@ -95,7 +95,6 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-
 		<div class="container text-center">
 			<ul class="pagination">
 
@@ -105,7 +104,9 @@
 					</a></li>
 				</c:if>
 
-				<c:forEach begin="${Math.max(1, currentPage-3)}" end="${Math.min(nbPages, Integer.parseInt(currentPage+3) )}" var="i">
+				<c:forEach begin="${Math.max(1, currentPage-3)}"
+					end="${Math.min(nbPages, Integer.parseInt(currentPage+3) )}"
+					var="i">
 					<li class="page-item"><a class="page-link"
 						href="?currentPage=${i}">${i}</a></li>
 				</c:forEach>
@@ -117,27 +118,20 @@
 				</c:if>
 
 			</ul>
-		</div>
-		<form action="dashboard" method="POST">
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<input type="submit" class="btn btn-default" name="action"
-					value="100" />
-			</div>
+			<form action="dashboard" method="POST">
+				<div class="btn-group btn-group-sm pull-right" role="group">
 
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<input type="submit" class="btn btn-default" name="action"
-					value="50" />
+					<input type="submit" class="btn btn-default" name="action"
+						value="100" /> <input type="submit" class="btn btn-default"
+						name="action" value="50" /> <input type="submit"
+						class="btn btn-default" name="action" value="10" />
+				</div>
+			</form>
 			</div>
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<input type="submit" class="btn btn-default" name="action"
-					value="10" />
-			</div>
-		</form>
-
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="static/js/jquery.min.js"></script>
+	<script src="static/js/bootstrap.min.js"></script>
+	<script src="static/js/dashboard.js"></script>
 
 </body>
 </html>

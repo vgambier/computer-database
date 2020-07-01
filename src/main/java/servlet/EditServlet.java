@@ -45,6 +45,12 @@ public class EditServlet extends HttpServlet {
             throw new ServletException("Couldn't set session attributes", e);
         }
 
+        try {
+            request.setAttribute("companies", service.listAllCompanies());
+        } catch (PersistenceException e) {
+            throw new ServletException("Couldn't set session attributes", e);
+        }
+
         request.getRequestDispatcher("editComputer.jsp").forward(request, response);
     }
 
@@ -62,7 +68,6 @@ public class EditServlet extends HttpServlet {
 
         Integer id = null;
         String idString = request.getParameter("id");
-        System.out.println("@@@@@@@@@@" + idString + "@@");
         try {
             if (!validator.isComputerIDStringValid(idString)) {
                 str.append("Computer ID is invalid.\n");
