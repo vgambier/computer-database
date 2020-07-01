@@ -38,14 +38,14 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer.html">Add
+					<a class="btn btn-success" id="addComputer" href="addComputer">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="delete" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -79,8 +79,9 @@
 					<c:forEach items="${computerPage.computers}" var="computer">
 
 						<tr>
-							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
+							<td class="editMode">
+							<input type="checkbox" name="cb"
+								class="cb" value="${computer.id}"></td>
 							<td><a href="editComputer?id=${computer.id}" onclick="">${computer.getName()}</a></td>
 							<td><c:out value="${computer.getIntroduced()}" /></td>
 							<td><c:out value="${computer.getDiscontinued()}" /></td>
@@ -96,16 +97,17 @@
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-		
+
 			<form action="dashboard" method="POST">
 				<div class="btn-group btn-group-sm pull-right" role="group">
+					<input
+						type="submit" class="btn btn-default" name="action" value="10" />
 					<input type="submit" class="btn btn-default" name="action"
-						value="10" /> <input type="submit" class="btn btn-default"
-						name="action" value="50" /> <input type="submit"
-						class="btn btn-default" name="action" value="100" />
+						value="50" /> <input type="submit" class="btn btn-default"
+						name="action" value="100" />
 				</div>
 			</form>
-			
+
 			<ul class="pagination">
 
 				<c:if test="${currentPage != 1}">

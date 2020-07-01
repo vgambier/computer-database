@@ -64,12 +64,14 @@ public class DashboardServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // Used for changing the number of entries per page
+        String newValue = request.getParameter("action");
 
-        int newNbEntriesPerPage = Integer.valueOf(request.getParameter("action"));
-        System.out.println(newNbEntriesPerPage);
-        ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
+        if (newValue != null) {
+            int newNbEntriesPerPage = Integer.valueOf(request.getParameter("action"));
+            System.out.println(newNbEntriesPerPage);
+            ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
+        }
 
         doGet(request, response);
-
     }
 }
