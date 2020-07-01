@@ -38,9 +38,9 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer"
-						href="editComputer" onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer.html">Add
+						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
 		</div>
@@ -127,7 +127,7 @@
 						class="btn btn-default" name="action" value="10" />
 				</div>
 			</form>
-			</div>
+		</div>
 	</footer>
 	<script src="static/js/jquery.min.js"></script>
 	<script src="static/js/bootstrap.min.js"></script>
