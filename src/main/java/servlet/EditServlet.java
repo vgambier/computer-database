@@ -77,7 +77,10 @@ public class EditServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // TODO: validation is redundant
+        // TODO: validation is redundant with CreateServlet - back-end validation doesn't need to
+        // have explicit error
+        // messages; therefore, extracting part of this method is possible
+        // the extracted method will return a boolean, but the specific error will not be regarded
 
         Validator validator = Validator.getInstance();
         StringBuilder str = new StringBuilder();
