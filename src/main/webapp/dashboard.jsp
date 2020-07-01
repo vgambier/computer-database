@@ -96,6 +96,16 @@
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
+		
+			<form action="dashboard" method="POST">
+				<div class="btn-group btn-group-sm pull-right" role="group">
+					<input type="submit" class="btn btn-default" name="action"
+						value="10" /> <input type="submit" class="btn btn-default"
+						name="action" value="50" /> <input type="submit"
+						class="btn btn-default" name="action" value="100" />
+				</div>
+			</form>
+			
 			<ul class="pagination">
 
 				<c:if test="${currentPage != 1}">
@@ -116,18 +126,9 @@
 							<span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>
-
 			</ul>
-			<form action="dashboard" method="POST">
-				<div class="btn-group btn-group-sm pull-right" role="group">
-
-					<input type="submit" class="btn btn-default" name="action"
-						value="100" /> <input type="submit" class="btn btn-default"
-						name="action" value="50" /> <input type="submit"
-						class="btn btn-default" name="action" value="10" />
-				</div>
-			</form>
 		</div>
+
 	</footer>
 	<script src="static/js/jquery.min.js"></script>
 	<script src="static/js/bootstrap.min.js"></script>
