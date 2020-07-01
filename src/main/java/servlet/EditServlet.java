@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
+import mapper.MapperException;
+import model.Computer;
 import persistence.PersistenceException;
 import service.Service;
 import validator.Validator;
@@ -32,18 +34,35 @@ public class EditServlet extends HttpServlet {
         LOG.info("Settings attributes for EditServlet.");
 
         String computerIDString = request.getParameter("id");
+        int computerID;
 
         try {
             if (Validator.getInstance().isComputerIDStringValid(computerIDString)) {
+                computerID = Integer.valueOf(computerIDString);
                 request.setAttribute("id", computerIDString);
-            } else {
-                // TODO
+            } else { // if no id was given, go back to the main page
+                request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+                return;
             }
         } catch (PersistenceException e) {
             throw new ServletException("Couldn't set session attributes", e);
         } catch (IOException e) {
             throw new ServletException("Couldn't set session attributes", e);
         }
+
+        // Fill the form with existing data
+
+        Computer computer;
+        try {
+            computer = service.getComputer(computerID);
+        } catch (PersistenceException e) {
+            throw new ServletException("Couldn't grab existing computer", e);
+        } catch (IOException e) {
+            throw new ServletException("Couldn't grab existing computer", e);
+        } catch (MapperException e) {
+            throw new ServletException("Couldn't grab existing computer", e);
+        }
+        request.setAttribute("computer", computer);
 
         try {
             request.setAttribute("companies", service.listAllCompanies());

@@ -34,30 +34,42 @@
 					<!-- Error or confirmation message that shows up after clicking submit -->
 					<c:out value="${message}" />
 
-					<form name="editComputer" id="editComputer" action="editComputer" method="POST">
+					<form name="editComputer" id="editComputer" action="editComputer"
+						method="POST">
 						<input type="hidden" value="${id}" id="id" name="id" />
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
-									name="computerName" placeholder="Computer name">
+									value="${computer.name}" type="text" class="form-control"
+									id="computerName" name="computerName"
+									placeholder="Computer name">
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced"
-									name="introduced" placeholder="Introduced date">
+									value="${computer.introduced}" type="date" class="form-control"
+									id="introduced" name="introduced" placeholder="Introduced date">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued"
-									name="discontinued" placeholder="Discontinued date">
+									value="${computer.discontinued}" type="date"
+									class="form-control" id="discontinued" name="discontinued"
+									placeholder="Discontinued date">
 							</div>
 							<div class="form-group">
 								<label for="companyID">Company</label> <select
 									class="form-control" id="companyID" name="companyID">
 									<option value="0">--</option>
 									<c:forEach items="${companies}" var="company">
-										<option value="${company.getId()}">${company.getName()}</option>
+
+										<c:choose>
+											<c:when test="${company.id == computer.companyID}">
+												<option selected="selected" value="${company.getId()}">${company.getName()}</option>
+											</c:when>
+											<c:otherwise>
+												<option value="${company.getId()}">${company.getName()}</option>
+											</c:otherwise>
+										</c:choose>
+
 									</c:forEach>
 								</select>
 							</div>

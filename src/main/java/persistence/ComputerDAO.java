@@ -46,7 +46,7 @@ public class ComputerDAO extends DAO<Computer> {
         Computer computer = null;
 
         String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-                + "introduced, discontinued, company.name AS company_name "
+                + "introduced, discontinued, company.name AS company_name, company_id "
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
                 + "WHERE computer.id = ? ORDER BY computer_id";
 
@@ -212,7 +212,7 @@ public class ComputerDAO extends DAO<Computer> {
         List<Computer> computers = new ArrayList<Computer>();
 
         String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-                + "introduced, discontinued, company.name AS company_name "
+                + "introduced, discontinued, company.name AS company_name, company_id "
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
                 + "LIMIT ? OFFSET ?";
         // This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE)
@@ -250,7 +250,7 @@ public class ComputerDAO extends DAO<Computer> {
     protected String getListAllSQLStatement() {
 
         return "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-                + "introduced, discontinued, company.name AS company_name "
+                + "introduced, discontinued, company.name AS company_name, company_id "
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id";
     }
 
