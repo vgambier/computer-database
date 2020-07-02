@@ -98,7 +98,7 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 
-			<form action="dashboard" method="POST">
+			<form action="dashboard?search=${search}" method="POST">
 				<div class="btn-group btn-group-sm pull-right" role="group">
 					<input
 						type="submit" class="btn btn-default" name="action" value="10" />
