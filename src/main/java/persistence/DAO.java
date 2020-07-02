@@ -38,12 +38,13 @@ public abstract class DAO<T> {
      *
      * @param searchTerm
      *            the search term - an entry match if it contains this string anywhere in its name
+     *            or its company name
      * @return the number of entries in the database
      * @throws PersistenceException
      */
     public int countEntriesWhere(String searchTerm) throws PersistenceException {
-        // SQL injection is impossible: the user has no control over tableName
-        String sql = "SELECT COUNT(*) FROM " + getTableName() + " WHERE name LIKE ?";
+
+        String sql = getCountEntriesWhereSQLStatement();
 
         int nbEntries = -1; // The only way the "if" fails is if the query
                             // fails, but an exception will be thrown anyway
@@ -52,6 +53,7 @@ public abstract class DAO<T> {
                 PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
 
             statement.setString(1, "%" + searchTerm + "%");
+            statement.setString(2, "%" + searchTerm + "%");
 
             try (ResultSet rs = statement.executeQuery()) {
 
@@ -100,8 +102,6 @@ public abstract class DAO<T> {
         return models;
     }
 
-    protected abstract String getListAllSQLStatement();
-
     /**
      * Checks if there is an entry of the given id number in the table.
      *
@@ -138,4 +138,9 @@ public abstract class DAO<T> {
     }
 
     protected abstract String getTableName();
+
+    protected abstract String getListAllSQLStatement();
+
+    protected abstract String getCountEntriesWhereSQLStatement();
+
 }

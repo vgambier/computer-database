@@ -23,7 +23,8 @@ public class DeleteServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.sendRedirect(request.getContextPath() + "/dashboard");
+        response.sendRedirect(request.getContextPath() + "/dashboard"); // TODO + getParameter
+                                                                        // search?
     }
 
     @Override

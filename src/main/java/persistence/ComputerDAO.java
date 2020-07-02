@@ -222,6 +222,7 @@ public class ComputerDAO extends DAO<Computer> {
      *            the value of the SQL OFFSET parameter
      * @param searchTerm
      *            the search term - an entry match if it contains this string anywhere in its name
+     *            or its company name
      * @return the corresponding list of Computer objects
      * @throws IOException
      * @throws ModelException
@@ -235,7 +236,7 @@ public class ComputerDAO extends DAO<Computer> {
         String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
                 + "introduced, discontinued, company.name AS company_name, company_id "
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
-                + "WHERE computer.name LIKE ? LIMIT ? OFFSET ?";
+                + "WHERE computer.name LIKE ? OR company.name LIKE ? LIMIT ? OFFSET ?";
         // This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE)
         // entries
 
@@ -243,8 +244,9 @@ public class ComputerDAO extends DAO<Computer> {
                 PreparedStatement statementList = dbConnector.connect().prepareStatement(sql);) {
 
             statementList.setString(1, "%" + searchTerm + "%");
-            statementList.setInt(2, limit);
-            statementList.setInt(3, offset);
+            statementList.setString(2, "%" + searchTerm + "%");
+            statementList.setInt(3, limit);
+            statementList.setInt(4, offset);
 
             try (ResultSet resultSet = statementList.executeQuery()) {
 
@@ -274,6 +276,14 @@ public class ComputerDAO extends DAO<Computer> {
         return "SELECT computer.id AS computer_id, computer.name AS computer_name, "
                 + "introduced, discontinued, company.name AS company_name, company_id "
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id";
+    }
+
+    @Override
+    protected String getCountEntriesWhereSQLStatement() {
+
+        return "SELECT COUNT(*) FROM `computer` LEFT JOIN `company` "
+                + "ON computer.company_id = company.id "
+                + "WHERE computer.name LIKE ? OR company.name LIKE ?";
     }
 
     @Override
