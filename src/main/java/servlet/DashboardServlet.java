@@ -34,6 +34,10 @@ public class DashboardServlet extends HttpServlet {
 
         String currentPageString = request.getParameter("currentPage");
         String searchTerm = request.getParameter("search");
+        // TODO remove
+        if (searchTerm == null) {
+            searchTerm = "";
+        }
         request.setAttribute("search", searchTerm);
 
         ComputerPage computerPage;
