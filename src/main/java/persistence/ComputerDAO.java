@@ -260,13 +260,6 @@ public class ComputerDAO extends DAO<Computer> {
 
             statementList.setString(1, "%" + searchTerm + "%");
             statementList.setString(2, "%" + searchTerm + "%");
-
-            // TODO remove
-            for (int i = 0; i < 1000; i++) {
-                System.out.println("hello" + orderBy);
-            }
-            System.out.println(statementList);
-
             statementList.setInt(3, limit);
             statementList.setInt(4, offset);
 
@@ -274,8 +267,6 @@ public class ComputerDAO extends DAO<Computer> {
 
                 while (resultSet.next()) {
                     computers.add(ComputerMapper.getInstance().toModel(resultSet));
-                    // TODO: remove
-                    System.out.println(computers);
                 }
 
             } catch (SQLException e) {

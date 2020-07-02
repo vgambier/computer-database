@@ -55,11 +55,6 @@ public class DashboardServlet extends HttpServlet {
                     : 1;
             request.setAttribute("currentPage", currentPage);
 
-            // TODO remove
-            for (int i = 0; i < 1000; i++) {
-                System.out.println("HELLO" + orderBy);
-            }
-
             computerPage = new ComputerPage(currentPage, searchTerm, orderBy);
             request.setAttribute("computerPage", computerPage);
             request.setAttribute("computerCount", service.countComputerEntriesWhere(searchTerm));
