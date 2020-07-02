@@ -11,7 +11,7 @@ import persistence.PersistenceException;
 public class ComputerPage extends Page<Computer> {
 
     private static int maxItemsPerPage = 50;
-    private static int nbPages;
+    private int nbPages;
 
     private List<Computer> computers = new ArrayList<Computer>();
 
@@ -25,6 +25,7 @@ public class ComputerPage extends Page<Computer> {
         if (nbEntries % maxItemsPerPage != 0) {
             nbPages++;
         }
+        nbPages = Math.max(1, nbPages); // Always at least one page
 
         // Checking if the input page number is valid
         checkPageNumber(pageNumber);
@@ -32,6 +33,28 @@ public class ComputerPage extends Page<Computer> {
         // Putting computers in the page
         computers = ComputerDAO.getInstance().listSome(maxItemsPerPage,
                 (pageNumber - 1) * maxItemsPerPage);
+    }
+
+    // TODO: refactor this - searchTerm is set to either searchTerm or "", and then all the logic is
+    // executed in a separate method -- including the methods being used
+    public ComputerPage(int pageNumber, String searchTerm)
+            throws ModelException, IOException, MapperException, PersistenceException {
+
+        // Checking the database to count the number of entries
+        int nbEntries = ComputerDAO.getInstance().countEntriesWhere(searchTerm);
+
+        nbPages = nbEntries / maxItemsPerPage;
+        if (nbEntries % maxItemsPerPage != 0) {
+            nbPages++;
+        }
+        nbPages = Math.max(1, nbPages); // Always at least one page
+
+        // Checking if the input page number is valid
+        checkPageNumber(pageNumber);
+
+        // Putting computers in the page
+        computers = ComputerDAO.getInstance().listSomeWhere(maxItemsPerPage,
+                (pageNumber - 1) * maxItemsPerPage, searchTerm);
     }
 
     /**
@@ -58,7 +81,7 @@ public class ComputerPage extends Page<Computer> {
         return computers;
     }
 
-    public static int getNbPages() {
+    public int getNbPages() {
         return nbPages;
     }
 

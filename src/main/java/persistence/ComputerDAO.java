@@ -219,10 +219,46 @@ public class ComputerDAO extends DAO<Computer> {
         // entries
 
         try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statementList = dbConnector.connect().prepareStatement(sql);) {
+                PreparedStatement statementList = dbConnector.connect().prepareStatement(sql)) {
 
             statementList.setInt(1, limit);
             statementList.setInt(2, offset);
+
+            try (ResultSet resultSet = statementList.executeQuery()) {
+
+                while (resultSet.next()) {
+                    computers.add(ComputerMapper.getInstance().toModel(resultSet));
+                }
+
+            } catch (SQLException e) {
+                throw new ModelException("Couldn't execute the SQL statement.", e);
+            }
+
+        } catch (SQLException e) {
+            throw new ModelException("Couldn't prepare the SQL statement.", e);
+        }
+
+        return computers;
+    }
+
+    // TODO: refactor
+    public List<Computer> listSomeWhere(int limit, int offset, String searchTerm)
+            throws ModelException, MapperException, PersistenceException, IOException {
+        List<Computer> computers = new ArrayList<Computer>();
+
+        String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
+                + "introduced, discontinued, company.name AS company_name, company_id "
+                + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
+                + "WHERE computer.name LIKE ? LIMIT ? OFFSET ?";
+        // This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE)
+        // entries
+
+        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
+                PreparedStatement statementList = dbConnector.connect().prepareStatement(sql);) {
+
+            statementList.setString(1, "%" + searchTerm + "%");
+            statementList.setInt(2, limit);
+            statementList.setInt(3, offset);
 
             try (ResultSet resultSet = statementList.executeQuery()) {
 
@@ -258,4 +294,5 @@ public class ComputerDAO extends DAO<Computer> {
     protected String getTableName() {
         return "computer";
     }
+
 }

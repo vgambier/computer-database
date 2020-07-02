@@ -22,7 +22,6 @@ import validator.Validator;
 public class DashboardServlet extends HttpServlet {
 
     private static final long serialVersionUID = 0xDA57B0A2DL;
-
     private static Service service = Service.getInstance();
     private static final Logger LOG = Logger.getLogger(DashboardServlet.class.getName());
 
@@ -34,6 +33,9 @@ public class DashboardServlet extends HttpServlet {
         LOG.info("Settings attributes for MainServlet.");
 
         String currentPageString = request.getParameter("currentPage");
+        String searchTerm = request.getParameter("search");
+
+        ComputerPage computerPage;
 
         try {
 
@@ -41,7 +43,8 @@ public class DashboardServlet extends HttpServlet {
                     ? Integer.valueOf(currentPageString)
                     : 1;
             request.setAttribute("currentPage", currentPage);
-            request.setAttribute("computerPage", new ComputerPage(currentPage));
+            computerPage = new ComputerPage(currentPage, searchTerm);
+            request.setAttribute("computerPage", computerPage);
             request.setAttribute("computerCount", service.countComputerEntries());
 
         } catch (IOException e) {
@@ -54,7 +57,7 @@ public class DashboardServlet extends HttpServlet {
             throw new ServletException("Couldn't set session attributes", e);
         }
 
-        request.setAttribute("nbPages", ComputerPage.getNbPages());
+        request.setAttribute("nbPages", computerPage.getNbPages());
 
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }

@@ -53,6 +53,35 @@ public abstract class DAO<T> {
         return nbEntries;
     }
 
+    // TODO: refactor
+    public int countEntriesWhere(String searchTerm) throws PersistenceException {
+        // SQL injection is impossible: the user has no control over tableName
+        String sql = "SELECT COUNT(*) FROM " + getTableName() + " WHERE name LIKE ?";
+
+        int nbEntries = -1; // The only way the "if" fails is if the query
+                            // fails, but an exception will be thrown anyway
+
+        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
+                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+
+            statement.setString(1, "%" + searchTerm + "%");
+
+            try (ResultSet rs = statement.executeQuery()) {
+
+                if (rs.next()) {
+                    nbEntries = rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
+        } catch (IOException e) {
+            throw new PersistenceException("Couldn't load the database connector", e);
+        }
+
+        return nbEntries;
+    }
+
     /**
      * Returns all entries from the database as Java objects.
      *
