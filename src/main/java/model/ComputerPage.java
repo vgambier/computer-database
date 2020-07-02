@@ -17,13 +17,16 @@ public class ComputerPage extends Page<Computer> {
 
     public ComputerPage(int pageNumber)
             throws ModelException, IOException, MapperException, PersistenceException {
-
-        this(pageNumber, "");
+        this(pageNumber, "", "computer_id");
     }
 
     public ComputerPage(int pageNumber, String searchTerm)
             throws ModelException, IOException, MapperException, PersistenceException {
+        this(pageNumber, searchTerm, "computer_id");
+    }
 
+    public ComputerPage(int pageNumber, String searchTerm, String orderBy)
+            throws ModelException, IOException, MapperException, PersistenceException {
         // Checking the database to count the number of entries
         int nbEntries = ComputerDAO.getInstance().countEntriesWhere(searchTerm);
 
@@ -38,7 +41,7 @@ public class ComputerPage extends Page<Computer> {
 
         // Putting computers in the page
         computers = ComputerDAO.getInstance().listSomeWhere(maxItemsPerPage,
-                (pageNumber - 1) * maxItemsPerPage, searchTerm);
+                (pageNumber - 1) * maxItemsPerPage, searchTerm, orderBy);
     }
 
     /**

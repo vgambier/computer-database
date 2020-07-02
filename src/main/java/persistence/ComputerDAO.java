@@ -209,7 +209,13 @@ public class ComputerDAO extends DAO<Computer> {
     public List<Computer> listSome(int limit, int offset)
             throws PersistenceException, IOException, ModelException, MapperException {
 
-        return listSomeWhere(limit, offset, "");
+        return listSomeWhere(limit, offset, "", "computer_id");
+    }
+
+    public List<Computer> listSomeWhere(int limit, int offset, String searchTerm)
+            throws ModelException, MapperException, PersistenceException, IOException {
+
+        return listSomeWhere(limit, offset, searchTerm, "computer_id");
     }
 
     /**
@@ -229,22 +235,38 @@ public class ComputerDAO extends DAO<Computer> {
      * @throws MapperException
      * @throws PersistenceException
      */
-    public List<Computer> listSomeWhere(int limit, int offset, String searchTerm)
+    public List<Computer> listSomeWhere(int limit, int offset, String searchTerm, String orderBy)
             throws ModelException, MapperException, PersistenceException, IOException {
+
+        if (!orderBy.equals("computer_id") && !orderBy.equals("computer_name")
+                && !orderBy.equals("introduced") && !orderBy.equals("discontinued")
+                && !orderBy.equals("company_name")) {
+
+            throw new PersistenceException("Invalid column name"); // Avoid SQL injections
+        }
+
         List<Computer> computers = new ArrayList<Computer>();
 
         String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
                 + "introduced, discontinued, company.name AS company_name, company_id "
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
-                + "WHERE computer.name LIKE ? OR company.name LIKE ? LIMIT ? OFFSET ?";
+                + "WHERE computer.name LIKE ? OR company.name LIKE ? " + "ORDER BY " + orderBy
+                + " LIMIT ? OFFSET ?";
         // This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE)
         // entries
 
         try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statementList = dbConnector.connect().prepareStatement(sql);) {
+                PreparedStatement statementList = dbConnector.connect().prepareStatement(sql)) {
 
             statementList.setString(1, "%" + searchTerm + "%");
             statementList.setString(2, "%" + searchTerm + "%");
+
+            // TODO remove
+            for (int i = 0; i < 1000; i++) {
+                System.out.println("hello" + orderBy);
+            }
+            System.out.println(statementList);
+
             statementList.setInt(3, limit);
             statementList.setInt(4, offset);
 
@@ -252,6 +274,8 @@ public class ComputerDAO extends DAO<Computer> {
 
                 while (resultSet.next()) {
                     computers.add(ComputerMapper.getInstance().toModel(resultSet));
+                    // TODO: remove
+                    System.out.println(computers);
                 }
 
             } catch (SQLException e) {

@@ -34,10 +34,17 @@ public class DashboardServlet extends HttpServlet {
 
         String currentPageString = request.getParameter("currentPage");
         String searchTerm = request.getParameter("search");
+        String orderBy = request.getParameter("orderBy");
+
         if (searchTerm == null) {
             searchTerm = "";
         }
         request.setAttribute("search", searchTerm);
+
+        if (orderBy == null) {
+            orderBy = "computer_id";
+        }
+        request.setAttribute("orderBy", orderBy);
 
         ComputerPage computerPage;
 
@@ -47,7 +54,13 @@ public class DashboardServlet extends HttpServlet {
                     ? Integer.valueOf(currentPageString)
                     : 1;
             request.setAttribute("currentPage", currentPage);
-            computerPage = new ComputerPage(currentPage, searchTerm);
+
+            // TODO remove
+            for (int i = 0; i < 1000; i++) {
+                System.out.println("HELLO" + orderBy);
+            }
+
+            computerPage = new ComputerPage(currentPage, searchTerm, orderBy);
             request.setAttribute("computerPage", computerPage);
             request.setAttribute("computerCount", service.countComputerEntriesWhere(searchTerm));
 

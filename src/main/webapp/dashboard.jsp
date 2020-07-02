@@ -63,16 +63,13 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
-						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
-						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=computer_name">Computer name</a></th>
+						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=introduced">Introduced date</a></th>
+						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=discontinued">Discontinued date</a></th>
+						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=company_name">Company</a></th>
 
 					</tr>
 				</thead>
-
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 
@@ -111,7 +108,7 @@
 			<ul class="pagination">
 
 				<c:if test="${currentPage != 1}">
-					<li><a href="?search=${search}&currentPage=${currentPage-1}"
+					<li><a href="?search=${search}&currentPage=${currentPage-1}&orderBy=${orderBy}"
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
@@ -120,11 +117,11 @@
 					end="${Math.min(nbPages, Integer.parseInt(currentPage+3) )}"
 					var="i">
 					<li class="page-item"><a class="page-link"
-						href="?search=${search}&currentPage=${i}">${i}</a></li>
+						href="?search=${search}&currentPage=${i}&orderBy=${orderBy}">${i}</a></li>
 				</c:forEach>
 
 				<c:if test="${currentPage != nbPages}">
-					<li><a href="?search=${search}&currentPage=${currentPage+1}" aria-label="Next">
+					<li><a href="?search=${search}&currentPage=${currentPage+1}&orderBy=${orderBy}" aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>

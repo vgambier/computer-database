@@ -24,7 +24,7 @@ public class DeleteServlet extends HttpServlet {
             throws ServletException, IOException {
 
         response.sendRedirect(request.getContextPath() + "/dashboard"); // TODO + getParameter
-                                                                        // search?
+                                                                        // search? &orderBy
     }
 
     @Override
