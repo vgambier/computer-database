@@ -111,7 +111,7 @@
 			<ul class="pagination">
 
 				<c:if test="${currentPage != 1}">
-					<li><a href="?currentPage=${currentPage-1}"
+					<li><a href="?search=${search}&currentPage=${currentPage-1}"
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
@@ -120,11 +120,11 @@
 					end="${Math.min(nbPages, Integer.parseInt(currentPage+3) )}"
 					var="i">
 					<li class="page-item"><a class="page-link"
-						href="?currentPage=${i}">${i}</a></li>
+						href="?search=${search}&currentPage=${i}">${i}</a></li>
 				</c:forEach>
 
 				<c:if test="${currentPage != nbPages}">
-					<li><a href="?currentPage=${currentPage+1}" aria-label="Next">
+					<li><a href="?search=${search}&currentPage=${currentPage+1}" aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>
