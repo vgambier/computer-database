@@ -18,25 +18,9 @@ public class ComputerPage extends Page<Computer> {
     public ComputerPage(int pageNumber)
             throws ModelException, IOException, MapperException, PersistenceException {
 
-        // Checking the database to count the number of entries
-        int nbEntries = ComputerDAO.getInstance().countEntries();
-
-        nbPages = nbEntries / maxItemsPerPage;
-        if (nbEntries % maxItemsPerPage != 0) {
-            nbPages++;
-        }
-        nbPages = Math.max(1, nbPages); // Always at least one page
-
-        // Checking if the input page number is valid
-        checkPageNumber(pageNumber);
-
-        // Putting computers in the page
-        computers = ComputerDAO.getInstance().listSome(maxItemsPerPage,
-                (pageNumber - 1) * maxItemsPerPage);
+        this(pageNumber, "");
     }
 
-    // TODO: refactor this - searchTerm is set to either searchTerm or "", and then all the logic is
-    // executed in a separate method -- including the methods being used
     public ComputerPage(int pageNumber, String searchTerm)
             throws ModelException, IOException, MapperException, PersistenceException {
 
