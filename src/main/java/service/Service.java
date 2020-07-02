@@ -68,4 +68,9 @@ public class Service {
         return ComputerDAO.getInstance().countEntries();
     }
 
+    public Object countComputerEntriesWhere(String searchTerm) throws PersistenceException {
+        return ComputerDAO.getInstance().countEntriesWhere(searchTerm);
+
+    }
+
 }

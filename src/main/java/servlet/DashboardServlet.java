@@ -34,7 +34,6 @@ public class DashboardServlet extends HttpServlet {
 
         String currentPageString = request.getParameter("currentPage");
         String searchTerm = request.getParameter("search");
-        // TODO remove
         if (searchTerm == null) {
             searchTerm = "";
         }
@@ -50,7 +49,7 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("currentPage", currentPage);
             computerPage = new ComputerPage(currentPage, searchTerm);
             request.setAttribute("computerPage", computerPage);
-            request.setAttribute("computerCount", service.countComputerEntries());
+            request.setAttribute("computerCount", service.countComputerEntriesWhere(searchTerm));
 
         } catch (IOException e) {
             throw new ServletException("Couldn't set session attributes", e);

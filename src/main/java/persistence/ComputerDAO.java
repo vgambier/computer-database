@@ -200,48 +200,34 @@ public class ComputerDAO extends DAO<Computer> {
      *            the value of the SQL LIMIT parameter
      * @param offset
      *            the value of the SQL OFFSET parameter
-     * @throws Exception
      * @return the corresponding list of Computer objects
      * @throws IOException
      * @throws ModelException
      * @throws MapperException
+     * @throws PersistenceException
      */
     public List<Computer> listSome(int limit, int offset)
             throws PersistenceException, IOException, ModelException, MapperException {
 
-        List<Computer> computers = new ArrayList<Computer>();
-
-        String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-                + "introduced, discontinued, company.name AS company_name, company_id "
-                + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
-                + "LIMIT ? OFFSET ?";
-        // This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE)
-        // entries
-
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statementList = dbConnector.connect().prepareStatement(sql)) {
-
-            statementList.setInt(1, limit);
-            statementList.setInt(2, offset);
-
-            try (ResultSet resultSet = statementList.executeQuery()) {
-
-                while (resultSet.next()) {
-                    computers.add(ComputerMapper.getInstance().toModel(resultSet));
-                }
-
-            } catch (SQLException e) {
-                throw new ModelException("Couldn't execute the SQL statement.", e);
-            }
-
-        } catch (SQLException e) {
-            throw new ModelException("Couldn't prepare the SQL statement.", e);
-        }
-
-        return computers;
+        return listSomeWhere(limit, offset, "");
     }
 
-    // TODO: refactor
+    /**
+     * Lists all Computer objects that match the search term, from the given range. This method is
+     * meant to be used to fill ComputerPage objects
+     *
+     * @param limit
+     *            the value of the SQL LIMIT parameter
+     * @param offset
+     *            the value of the SQL OFFSET parameter
+     * @param searchTerm
+     *            the search term - an entry match if it contains this string anywhere in its name
+     * @return the corresponding list of Computer objects
+     * @throws IOException
+     * @throws ModelException
+     * @throws MapperException
+     * @throws PersistenceException
+     */
     public List<Computer> listSomeWhere(int limit, int offset, String searchTerm)
             throws ModelException, MapperException, PersistenceException, IOException {
         List<Computer> computers = new ArrayList<Computer>();

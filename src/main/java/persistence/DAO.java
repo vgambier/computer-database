@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,30 +29,18 @@ public abstract class DAO<T> {
      * @throws PersistenceException
      */
     public int countEntries() throws PersistenceException {
-
-        // SQL injection is impossible: the user has no control over tableName
-        String sql = "SELECT COUNT(*) FROM " + getTableName();
-
-        int nbEntries = -1; // The only way the "if" fails is if the query
-                            // fails, but an exception will be thrown anyway
-
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                Statement statement = dbConnector.connect().prepareStatement(sql);
-                ResultSet rs = statement.executeQuery(sql)) {
-
-            if (rs.next()) {
-                nbEntries = rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-        } catch (IOException e) {
-            throw new PersistenceException("Couldn't load the database connector", e);
-        }
-
-        return nbEntries;
+        return countEntriesWhere("");
     }
 
-    // TODO: refactor
+    /**
+     * Count the number of entries in the database that match the search term. Works for both the
+     * computer database and the company database.
+     *
+     * @param searchTerm
+     *            the search term - an entry match if it contains this string anywhere in its name
+     * @return the number of entries in the database
+     * @throws PersistenceException
+     */
     public int countEntriesWhere(String searchTerm) throws PersistenceException {
         // SQL injection is impossible: the user has no control over tableName
         String sql = "SELECT COUNT(*) FROM " + getTableName() + " WHERE name LIKE ?";
