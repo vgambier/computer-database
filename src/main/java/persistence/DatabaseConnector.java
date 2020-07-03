@@ -13,7 +13,13 @@ import com.zaxxer.hikari.HikariDataSource;
 
 /* This class uses the Singleton pattern */
 
-public class DatabaseConnector implements AutoCloseable {
+public class DatabaseConnector {
+
+    private static HikariDataSource hikariDataSource;
+    private static Connection connection;
+    private static String databaseURL;
+    private static String username;
+    private static String password;
 
     private static DatabaseConnector instance = null;
 
@@ -23,9 +29,17 @@ public class DatabaseConnector implements AutoCloseable {
         Properties properties = new Properties();
         properties.load(inputStream);
         inputStream.close();
+
         databaseURL = properties.getProperty("DATABASE_URL");
         username = properties.getProperty("USERNAME");
         password = properties.getProperty("PASSWORD");
+
+        hikariDataSource = new HikariDataSource();
+        hikariDataSource.setJdbcUrl(databaseURL);
+        hikariDataSource.setUsername(username);
+        hikariDataSource.setPassword(password);
+        hikariDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        hikariDataSource.setMaximumPoolSize(100);
     }
 
     public static DatabaseConnector getInstance() throws IOException {
@@ -34,12 +48,6 @@ public class DatabaseConnector implements AutoCloseable {
         }
         return instance;
     }
-
-    private static HikariDataSource hikariDataSource;
-    private static Connection connection;
-    private static String databaseURL;
-    private static String username;
-    private static String password;
 
     // TODO: add more logging
     private static final Logger LOG = Logger.getLogger(DatabaseConnector.class.getName());
@@ -56,42 +64,22 @@ public class DatabaseConnector implements AutoCloseable {
 
         LOG.info("Connecting to the database:\nURL: " + databaseURL + "\nUsername: " + username);
 
-        hikariDataSource = new HikariDataSource();
-        hikariDataSource.setJdbcUrl(databaseURL);
-        hikariDataSource.setUsername(username);
-        hikariDataSource.setPassword(password);
-        hikariDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-
-        connection = hikariDataSource.getConnection();
-
-        return connection;
+        return hikariDataSource.getConnection();
     }
 
     /**
      * Disconnects from the database.
      *
      * @throws PersistenceException
+     *
+     * @Override public void close() throws PersistenceException {
+     *
+     *           LOG.info("Disconnecting from the database.");
+     *
+     *           // Closing the connection if (connection != null) { try { connection.close();
+     *           connection = null;
+     *
+     *           } catch (SQLException e) { throw new PersistenceException("Couldn't close the
+     *           connection!", e); } } }
      */
-    @Override
-    public void close() throws PersistenceException {
-
-        LOG.info("Disconnecting from the database.");
-
-        // Closing the connection
-        if (connection != null) {
-            try {
-                connection.close();
-                connection = null;
-
-            } catch (SQLException e) {
-                throw new PersistenceException("Couldn't close the connection!", e);
-            }
-        }
-
-        if (hikariDataSource != null) {
-            hikariDataSource.close();
-            hikariDataSource = null;
-        }
-
-    }
 }

@@ -1,6 +1,7 @@
 package persistence;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -50,8 +51,8 @@ public class ComputerDAO extends DAO<Computer> {
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
                 + "WHERE computer.id = ? ORDER BY computer_id";
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, id);
 
@@ -95,8 +96,8 @@ public class ComputerDAO extends DAO<Computer> {
 
         // Converting to dates
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, computerName);
             statement.setDate(2, introducedDate); // possibly null
@@ -142,8 +143,8 @@ public class ComputerDAO extends DAO<Computer> {
 
         // Converting to dates
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, newComputerName);
             statement.setDate(2, newIntroducedDate); // possibly null
@@ -180,8 +181,9 @@ public class ComputerDAO extends DAO<Computer> {
 
         String sql = "DELETE FROM `computer` WHERE id = ?";
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -255,8 +257,8 @@ public class ComputerDAO extends DAO<Computer> {
         // This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE)
         // entries
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statementList = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statementList = connection.prepareStatement(sql)) {
 
             statementList.setString(1, "%" + searchTerm + "%");
             statementList.setString(2, "%" + searchTerm + "%");

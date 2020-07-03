@@ -30,7 +30,7 @@ public class DashboardServlet extends HttpServlet {
             throws ServletException, IOException {
 
         BasicConfigurator.configure(); // configuring the Logger
-        LOG.info("Settings attributes for MainServlet.");
+        LOG.info("Settings attributes for DashboardServlet.");
 
         String currentPageString = request.getParameter("currentPage");
         String searchTerm = request.getParameter("search");

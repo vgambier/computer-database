@@ -1,6 +1,7 @@
 package persistence;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,8 +50,8 @@ public abstract class DAO<T> {
         int nbEntries = -1; // The only way the "if" fails is if the query
                             // fails, but an exception will be thrown anyway
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, "%" + searchTerm + "%");
             statement.setString(2, "%" + searchTerm + "%");
@@ -83,8 +84,8 @@ public abstract class DAO<T> {
 
         String sql = getListAllSQLStatement();
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql);
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -119,8 +120,8 @@ public abstract class DAO<T> {
         // SQL injection is impossible: the user has no control over tableName
         String sql = "SELECT COUNT(1) FROM " + getTableName() + " WHERE id = ?";
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {

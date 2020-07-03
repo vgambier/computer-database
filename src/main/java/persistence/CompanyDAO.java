@@ -47,13 +47,10 @@ public class CompanyDAO extends DAO<Company> {
 
     public void delete(Integer companyID) throws PersistenceException {
 
-        // TODO do this properly (rollback, etc.)
-
         String sqlComputers = "DELETE FROM `computer` WHERE company_id = ?";
         String sqlCompany = "DELETE FROM `company` WHERE id = ?";
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                Connection connection = dbConnector.connect()) {
+        try (Connection connection = DatabaseConnector.getInstance().connect()) {
 
             connection.setAutoCommit(false);
 
