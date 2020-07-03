@@ -1,6 +1,7 @@
 package persistence;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -44,34 +45,36 @@ public class CompanyDAO extends DAO<Company> {
         return "SELECT COUNT(*) FROM `company` WHERE name LIKE ?";
     }
 
-    public void delete(Integer companyID) throws PersistenceException, IOException {
+    public void delete(Integer companyID) throws PersistenceException {
 
         // TODO do this properly (rollback, etc.)
 
-        String sql_computers = "DELETE FROM `computer` WHERE company_id = ?";
+        String sqlComputers = "DELETE FROM `computer` WHERE company_id = ?";
+        String sqlCompany = "DELETE FROM `company` WHERE id = ?";
 
         try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect()
-                        .prepareStatement(sql_computers)) {
-            statement.setInt(1, companyID);
-            statement.executeUpdate();
+                Connection connection = dbConnector.connect()) {
+
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement computersStatement = connection.prepareStatement(sqlComputers);
+                    PreparedStatement companyStatement = connection.prepareStatement(sqlCompany)) {
+
+                computersStatement.setInt(1, companyID);
+                computersStatement.executeUpdate();
+
+                companyStatement.setInt(1, companyID);
+                companyStatement.executeUpdate();
+            }
+
+            connection.commit();
+
+        } catch (IOException e) {
+            throw new PersistenceException("Couldn't prepare and execute the SQL statements.", e);
         } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
+            throw new PersistenceException("Couldn't prepare and execute the SQL statements.", e);
         }
-
-        System.out.println("Computer entries deleted.");
-
-        String sql_company = "DELETE FROM `company` WHERE id = ?";
-
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql_company)) {
-            statement.setInt(1, companyID);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-        }
-
-        System.out.println("Company entry deleted.");
+        System.out.println("Company succesfully deleted.");
 
     }
 
