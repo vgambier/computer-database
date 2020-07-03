@@ -56,6 +56,10 @@ public class Service {
         ComputerDAO.getInstance().delete(computerID);
     }
 
+    public void deleteCompany(Integer companyID) throws PersistenceException, IOException {
+        CompanyDAO.getInstance().delete(companyID);
+    }
+
     public boolean doesComputerEntryExist(int id) throws PersistenceException, IOException {
         return ComputerDAO.getInstance().doesEntryExist(id);
     }
@@ -72,5 +76,4 @@ public class Service {
         return ComputerDAO.getInstance().countEntriesWhere(searchTerm);
 
     }
-
 }
