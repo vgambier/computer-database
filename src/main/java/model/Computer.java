@@ -13,7 +13,7 @@ public class Computer {
     private LocalDate introduced;
     private LocalDate discontinued;
     private String company;
-    private int companyID; // TODO: improve model
+    private int companyID; // TODO: improve model?
 
     public Computer(int id, String name, LocalDate introduced, LocalDate discontinued,
             String company, int companyID) {
