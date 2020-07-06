@@ -332,7 +332,7 @@ public class CLI {
             }
         } else {
             System.out.println(
-                    "Please include the id of the company you want to delete, e.g.: 'delete 12'.");
+                    "Please include the id of the company you want to delete, e.g.: 'deletecompany 12'.");
         }
     }
 

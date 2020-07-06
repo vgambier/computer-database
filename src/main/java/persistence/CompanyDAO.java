@@ -62,17 +62,25 @@ public class CompanyDAO extends DAO<Company> {
 
                 companyStatement.setInt(1, companyID);
                 companyStatement.executeUpdate();
+
+                connection.commit();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.rollback();
+                    } catch (SQLException e) {
+                        throw new PersistenceException("Couldn't rollback transacton.", e);
+                    }
+                }
             }
 
-            connection.commit();
+            System.out.println("Company succesfully deleted.");
 
-        } catch (IOException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statements.", e);
         } catch (SQLException e) {
             throw new PersistenceException("Couldn't prepare and execute the SQL statements.", e);
+        } catch (IOException e) {
+            throw new PersistenceException("Couldn't prepare and execute the SQL statements.", e);
+
         }
-        System.out.println("Company succesfully deleted.");
-
     }
-
 }
