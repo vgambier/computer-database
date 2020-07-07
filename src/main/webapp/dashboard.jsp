@@ -10,10 +10,9 @@
 <!-- Bootstrap -->
 <link href="static/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
-<link href="static/css/bootstrap.min.css/css/font-awesome.css"
-	rel="stylesheet" media="screen">
-<link href="static/css/bootstrap.min.css/css/main.css" rel="stylesheet"
-	media="screen">
+<link href="static/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="static/css/main.css" rel="stylesheet" media="screen">
+
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -27,7 +26,6 @@
 		<div class="container">
 			<h1 id="homeTitle">
 				<c:out value="${computerCount} computers found" />
-				
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
@@ -47,7 +45,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="delete" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -65,25 +63,23 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
-						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
-						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=computer_name">Computer name</a></th>
+						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=introduced">Introduced date</a></th>
+						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=discontinued">Discontinued date</a></th>
+						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=company_name">Company</a></th>
 
 					</tr>
 				</thead>
-				
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 
 					<c:forEach items="${computerPage.computers}" var="computer">
 
 						<tr>
-							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
-							<td><a href="editComputer" onclick="">${computer.getName()}</a></td>
+							<td class="editMode">
+							<input type="checkbox" name="cb"
+								class="cb" value="${computer.id}"></td>
+							<td><a href="editComputer?id=${computer.id}" onclick="">${computer.getName()}</a></td>
 							<td><c:out value="${computer.getIntroduced()}" /></td>
 							<td><c:out value="${computer.getDiscontinued()}" /></td>
 							<td><c:out value="${computer.getCompany()}" /></td>
@@ -97,49 +93,45 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-
 		<div class="container text-center">
+
+			<form action="dashboard?search=${search}" method="POST">
+				<div class="btn-group btn-group-sm pull-right" role="group">
+					<input
+						type="submit" class="btn btn-default" name="action" value="10" />
+					<input type="submit" class="btn btn-default" name="action"
+						value="50" /> <input type="submit" class="btn btn-default"
+						name="action" value="100" />
+				</div>
+			</form>
+
 			<ul class="pagination">
 
 				<c:if test="${currentPage != 1}">
-					<li><a href="?currentPage=${currentPage-1}"
+					<li><a href="?search=${search}&currentPage=${currentPage-1}&orderBy=${orderBy}"
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
 
-				<c:forEach begin="${Math.max(1, currentPage-3)}" end="${Math.min(nbPages, Integer.parseInt(currentPage+3) )}" var="i">
+				<c:forEach begin="${Math.max(1, currentPage-3)}"
+					end="${Math.min(nbPages, Integer.parseInt(currentPage+3) )}"
+					var="i">
 					<li class="page-item"><a class="page-link"
-						href="?currentPage=${i}">${i}</a></li>
+						href="?search=${search}&currentPage=${i}&orderBy=${orderBy}">${i}</a></li>
 				</c:forEach>
 
 				<c:if test="${currentPage != nbPages}">
-					<li><a href="?currentPage=${currentPage+1}" aria-label="Next">
+					<li><a href="?search=${search}&currentPage=${currentPage+1}&orderBy=${orderBy}" aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>
-
 			</ul>
 		</div>
-		<form action="dashboard" method="POST">
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<input type="submit" class="btn btn-default" name="action"
-					value="100" />
-			</div>
-
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<input type="submit" class="btn btn-default" name="action"
-					value="50" />
-			</div>
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<input type="submit" class="btn btn-default" name="action"
-					value="10" />
-			</div>
-		</form>
 
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="static/js/jquery.min.js"></script>
+	<script src="static/js/bootstrap.min.js"></script>
+	<script src="static/js/dashboard.js"></script>
 
 </body>
 </html>

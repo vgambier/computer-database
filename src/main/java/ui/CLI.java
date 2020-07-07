@@ -1,5 +1,6 @@
 package ui;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.Scanner;
 
@@ -18,7 +19,9 @@ public class CLI {
             "companies: shows the list of all companies",
             "computerinfo <id>: shows all details pertaining to a given computer",
             "create: create a computer", "update: update the data of a given computer",
-            "delete <id>: delete a given computer", "quit: exit the program");
+            "delete <id>: delete a given computer",
+            "deletecompany <id>: delete a given company and all associated computers",
+            "quit: exit the program");
     private static Scanner scanner = new Scanner(System.in);
     private static Service service = Service.getInstance();
 
@@ -66,6 +69,10 @@ public class CLI {
 
                 case "delete" :
                     delete(arr);
+                    break;
+
+                case "deletecompany" :
+                    deletecompany(arr);
                     break;
 
                 case "quit" :
@@ -311,6 +318,21 @@ public class CLI {
         } else {
             System.out.println(
                     "Please include the id of the computer you want to delete, e.g.: 'delete 54'.");
+        }
+    }
+
+    private static void deletecompany(String[] arr)
+            throws NumberFormatException, PersistenceException, IOException {
+        if (arr.length >= 2) {
+            if (!Validator.getInstance().isCompanyIDStringValid(arr[1])) {
+                System.out.println(
+                        "Company ID must be a positive integer and correspond to an existing entry.");
+            } else {
+                service.deleteCompany(Integer.valueOf(arr[1]));
+            }
+        } else {
+            System.out.println(
+                    "Please include the id of the company you want to delete, e.g.: 'deletecompany 12'.");
         }
     }
 

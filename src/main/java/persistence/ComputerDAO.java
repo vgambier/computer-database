@@ -1,6 +1,7 @@
 package persistence;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,12 +47,12 @@ public class ComputerDAO extends DAO<Computer> {
         Computer computer = null;
 
         String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-                + "introduced, discontinued, company.name AS company_name "
+                + "introduced, discontinued, company.name AS company_name, company_id "
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
                 + "WHERE computer.id = ? ORDER BY computer_id";
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, id);
 
@@ -95,8 +96,8 @@ public class ComputerDAO extends DAO<Computer> {
 
         // Converting to dates
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, computerName);
             statement.setDate(2, introducedDate); // possibly null
@@ -142,8 +143,8 @@ public class ComputerDAO extends DAO<Computer> {
 
         // Converting to dates
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, newComputerName);
             statement.setDate(2, newIntroducedDate); // possibly null
@@ -180,8 +181,9 @@ public class ComputerDAO extends DAO<Computer> {
 
         String sql = "DELETE FROM `computer` WHERE id = ?";
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
+
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -200,29 +202,68 @@ public class ComputerDAO extends DAO<Computer> {
      *            the value of the SQL LIMIT parameter
      * @param offset
      *            the value of the SQL OFFSET parameter
-     * @throws Exception
      * @return the corresponding list of Computer objects
      * @throws IOException
      * @throws ModelException
      * @throws MapperException
+     * @throws PersistenceException
      */
     public List<Computer> listSome(int limit, int offset)
             throws PersistenceException, IOException, ModelException, MapperException {
 
+        return listSomeWhere(limit, offset, "", "computer_id");
+    }
+
+    public List<Computer> listSomeWhere(int limit, int offset, String searchTerm)
+            throws ModelException, MapperException, PersistenceException, IOException {
+
+        return listSomeWhere(limit, offset, searchTerm, "computer_id");
+    }
+
+    /**
+     * Lists all Computer objects that match the search term, from the given range. This method is
+     * meant to be used to fill ComputerPage objects
+     *
+     * @param limit
+     *            the value of the SQL LIMIT parameter
+     * @param offset
+     *            the value of the SQL OFFSET parameter
+     * @param searchTerm
+     *            the search term - an entry match if it contains this string anywhere in its name
+     *            or its company name
+     * @return the corresponding list of Computer objects
+     * @throws IOException
+     * @throws ModelException
+     * @throws MapperException
+     * @throws PersistenceException
+     */
+    public List<Computer> listSomeWhere(int limit, int offset, String searchTerm, String orderBy)
+            throws ModelException, MapperException, PersistenceException, IOException {
+
+        if (!orderBy.equals("computer_id") && !orderBy.equals("computer_name")
+                && !orderBy.equals("introduced") && !orderBy.equals("discontinued")
+                && !orderBy.equals("company_name")) {
+
+            throw new PersistenceException("Invalid column name"); // Avoid SQL injections
+        }
+
         List<Computer> computers = new ArrayList<Computer>();
 
         String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-                + "introduced, discontinued, company.name AS company_name "
+                + "introduced, discontinued, company.name AS company_name, company_id "
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
-                + "LIMIT ? OFFSET ?";
+                + "WHERE computer.name LIKE ? OR company.name LIKE ? " + "ORDER BY " + orderBy
+                + " LIMIT ? OFFSET ?";
         // This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE)
         // entries
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statementList = dbConnector.connect().prepareStatement(sql);) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statementList = connection.prepareStatement(sql)) {
 
-            statementList.setInt(1, limit);
-            statementList.setInt(2, offset);
+            statementList.setString(1, "%" + searchTerm + "%");
+            statementList.setString(2, "%" + searchTerm + "%");
+            statementList.setInt(3, limit);
+            statementList.setInt(4, offset);
 
             try (ResultSet resultSet = statementList.executeQuery()) {
 
@@ -250,12 +291,21 @@ public class ComputerDAO extends DAO<Computer> {
     protected String getListAllSQLStatement() {
 
         return "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-                + "introduced, discontinued, company.name AS company_name "
+                + "introduced, discontinued, company.name AS company_name, company_id "
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id";
+    }
+
+    @Override
+    protected String getCountEntriesWhereSQLStatement() {
+
+        return "SELECT COUNT(*) FROM `computer` LEFT JOIN `company` "
+                + "ON computer.company_id = company.id "
+                + "WHERE computer.name LIKE ? OR company.name LIKE ?";
     }
 
     @Override
     protected String getTableName() {
         return "computer";
     }
+
 }

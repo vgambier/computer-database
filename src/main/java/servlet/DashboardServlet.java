@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,24 +21,32 @@ import validator.Validator;
 @WebServlet(name = "DashboardServlet", urlPatterns = "/dashboard")
 public class DashboardServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 4L;
-
+    private static final long serialVersionUID = 0xDA57B0A2DL;
     private static Service service = Service.getInstance();
     private static final Logger LOG = Logger.getLogger(DashboardServlet.class.getName());
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         BasicConfigurator.configure(); // configuring the Logger
-        LOG.info("Settings attributes for MainServlet.");
+        LOG.info("Settings attributes for DashboardServlet.");
 
         String currentPageString = request.getParameter("currentPage");
+        String searchTerm = request.getParameter("search");
+        String orderBy = request.getParameter("orderBy");
+
+        if (searchTerm == null) {
+            searchTerm = "";
+        }
+        request.setAttribute("search", searchTerm);
+
+        if (orderBy == null) {
+            orderBy = "computer_id";
+        }
+        request.setAttribute("orderBy", orderBy);
+
+        ComputerPage computerPage;
 
         try {
 
@@ -47,8 +54,10 @@ public class DashboardServlet extends HttpServlet {
                     ? Integer.valueOf(currentPageString)
                     : 1;
             request.setAttribute("currentPage", currentPage);
-            request.setAttribute("computerPage", new ComputerPage(currentPage));
-            request.setAttribute("computerCount", service.countComputerEntries());
+
+            computerPage = new ComputerPage(currentPage, searchTerm, orderBy);
+            request.setAttribute("computerPage", computerPage);
+            request.setAttribute("computerCount", service.countComputerEntriesWhere(searchTerm));
 
         } catch (IOException e) {
             throw new ServletException("Couldn't set session attributes", e);
@@ -60,7 +69,7 @@ public class DashboardServlet extends HttpServlet {
             throw new ServletException("Couldn't set session attributes", e);
         }
 
-        request.setAttribute("nbPages", ComputerPage.getNbPages());
+        request.setAttribute("nbPages", computerPage.getNbPages());
 
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
@@ -70,12 +79,14 @@ public class DashboardServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // Used for changing the number of entries per page
+        String newValue = request.getParameter("action");
 
-        int newNbEntriesPerPage = Integer.valueOf(request.getParameter("action"));
-        System.out.println(newNbEntriesPerPage);
-        ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
+        if (newValue != null) {
+            int newNbEntriesPerPage = Integer.valueOf(request.getParameter("action"));
+            System.out.println(newNbEntriesPerPage);
+            ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
+        }
 
         doGet(request, response);
-
     }
 }

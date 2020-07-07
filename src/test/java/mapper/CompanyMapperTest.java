@@ -37,10 +37,11 @@ public class CompanyMapperTest {
         Mockito.when(resultSet.getDate("introduced")).thenReturn(Date.valueOf("2020-01-01"));
         Mockito.when(resultSet.getDate("discontinued")).thenReturn(Date.valueOf("2021-01-01"));
         Mockito.when(resultSet.getString("company_name")).thenReturn("Samsung");
+        Mockito.when(resultSet.getInt("company_id")).thenReturn(1);
 
         Computer computer = ComputerMapper.getInstance().toModel(resultSet);
         Computer computer2 = new Computer(12, "testName", LocalDate.of(2020, 01, 01),
-                LocalDate.of(2021, 01, 01), "Samsung");
+                LocalDate.of(2021, 01, 01), "Samsung", 1);
 
         Assert.assertEquals(computer, computer2);
     }

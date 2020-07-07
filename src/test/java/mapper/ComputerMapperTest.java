@@ -38,6 +38,7 @@ public class ComputerMapperTest {
         Mockito.when(resultSet.getDate("introduced")).thenReturn(Date.valueOf("2020-01-01"));
         Mockito.when(resultSet.getDate("discontinued")).thenReturn(Date.valueOf("2021-01-01"));
         Mockito.when(resultSet.getString("company_name")).thenReturn("Samsung");
+        Mockito.when(resultSet.getInt("company_id")).thenReturn(1);
 
         Computer computer = ComputerMapper.getInstance().toModel(resultSet);
 
@@ -57,6 +58,7 @@ public class ComputerMapperTest {
         Mockito.when(resultSet.getString("computer_name")).thenThrow(SQLException.class);
         Mockito.when(resultSet.getDate("introduced")).thenThrow(SQLException.class);
         Mockito.when(resultSet.getDate("discontinued")).thenThrow(SQLException.class);
+        Mockito.when(resultSet.getString("company_name")).thenThrow(SQLException.class);
         Mockito.when(resultSet.getString("company_id")).thenThrow(SQLException.class);
 
         ComputerMapper.getInstance().toModel(resultSet);

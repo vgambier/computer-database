@@ -36,7 +36,9 @@ public class ComputerMapper extends Mapper<Computer> {
                             ? null
                             : rs.getDate("discontinued").toLocalDate(),
 
-                    rs.getString("company_name"));
+                    rs.getString("company_name"),
+
+                    rs.getInt("company_id"));
 
         } catch (SQLException e) {
             throw new MapperException("ResultSet object did not have a first entry!", e);

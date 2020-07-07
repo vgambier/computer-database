@@ -69,9 +69,11 @@ public class Validator {
      * @param stringID
      *            the id of the computer entry we want to check, as a String
      * @return true if and only if there is a computer with this id in the database
-     * @throws Exception
+     * @throws IOException
+     * @throws PersistenceException
      */
-    public boolean isComputerIDStringValid(String stringID) throws Exception {
+    public boolean isComputerIDStringValid(String stringID)
+            throws PersistenceException, IOException {
 
         boolean isValid = false;
 

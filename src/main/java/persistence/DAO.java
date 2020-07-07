@@ -1,10 +1,10 @@
 package persistence;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,20 +30,39 @@ public abstract class DAO<T> {
      * @throws PersistenceException
      */
     public int countEntries() throws PersistenceException {
+        return countEntriesWhere("");
+    }
 
-        // SQL injection is impossible: the user has no control over tableName
-        String sql = "SELECT COUNT(*) FROM " + getTableName();
+    /**
+     * Count the number of entries in the database that match the search term. Works for both the
+     * computer database and the company database.
+     *
+     * @param searchTerm
+     *            the search term - an entry match if it contains this string anywhere in its name
+     *            or its company name
+     * @return the number of entries in the database
+     * @throws PersistenceException
+     */
+    public int countEntriesWhere(String searchTerm) throws PersistenceException {
+
+        String sql = getCountEntriesWhereSQLStatement();
 
         int nbEntries = -1; // The only way the "if" fails is if the query
                             // fails, but an exception will be thrown anyway
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                Statement statement = dbConnector.connect().prepareStatement(sql);
-                ResultSet rs = statement.executeQuery(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            if (rs.next()) {
-                nbEntries = rs.getInt(1);
+            statement.setString(1, "%" + searchTerm + "%");
+            statement.setString(2, "%" + searchTerm + "%");
+
+            try (ResultSet rs = statement.executeQuery()) {
+
+                if (rs.next()) {
+                    nbEntries = rs.getInt(1);
+                }
             }
+
         } catch (SQLException e) {
             throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         } catch (IOException e) {
@@ -65,8 +84,8 @@ public abstract class DAO<T> {
 
         String sql = getListAllSQLStatement();
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql);
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -83,8 +102,6 @@ public abstract class DAO<T> {
 
         return models;
     }
-
-    protected abstract String getListAllSQLStatement();
 
     /**
      * Checks if there is an entry of the given id number in the table.
@@ -103,8 +120,8 @@ public abstract class DAO<T> {
         // SQL injection is impossible: the user has no control over tableName
         String sql = "SELECT COUNT(1) FROM " + getTableName() + " WHERE id = ?";
 
-        try (DatabaseConnector dbConnector = DatabaseConnector.getInstance();
-                PreparedStatement statement = dbConnector.connect().prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnector.getInstance().connect();
+                PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -122,4 +139,9 @@ public abstract class DAO<T> {
     }
 
     protected abstract String getTableName();
+
+    protected abstract String getListAllSQLStatement();
+
+    protected abstract String getCountEntriesWhereSQLStatement();
+
 }

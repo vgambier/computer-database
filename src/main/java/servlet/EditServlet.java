@@ -12,24 +12,57 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
+import mapper.MapperException;
+import model.Computer;
 import persistence.PersistenceException;
 import service.Service;
 import validator.Validator;
 
-@WebServlet(name = "CreateServlet", urlPatterns = "/addComputer")
-public class CreateServlet extends HttpServlet {
+@WebServlet(name = "EditServlet", urlPatterns = "/editComputer")
+public class EditServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 0xC2EA7EL;
+    private static final long serialVersionUID = 0xED17L;
 
     private static Service service = Service.getInstance();
-    private static final Logger LOG = Logger.getLogger(CreateServlet.class.getName());
+    private static final Logger LOG = Logger.getLogger(EditServlet.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         BasicConfigurator.configure(); // configuring the Logger
-        LOG.info("Settings attributes for CreateServlet.");
+        LOG.info("Settings attributes for EditServlet.");
+
+        String computerIDString = request.getParameter("id");
+        int computerID;
+
+        try {
+            if (Validator.getInstance().isComputerIDStringValid(computerIDString)) {
+                computerID = Integer.valueOf(computerIDString);
+                request.setAttribute("id", computerIDString);
+            } else { // if no id was given, go back to the main page
+                request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+                return;
+            }
+        } catch (PersistenceException e) {
+            throw new ServletException("Couldn't set session attributes", e);
+        } catch (IOException e) {
+            throw new ServletException("Couldn't set session attributes", e);
+        }
+
+        // Fill the form with existing data
+
+        Computer computer;
+        try {
+            computer = service.getComputer(computerID);
+        } catch (PersistenceException e) {
+            throw new ServletException("Couldn't grab existing computer", e);
+        } catch (IOException e) {
+            throw new ServletException("Couldn't grab existing computer", e);
+        } catch (MapperException e) {
+            throw new ServletException("Couldn't grab existing computer", e);
+        }
+        request.setAttribute("computer", computer);
 
         try {
             request.setAttribute("companies", service.listAllCompanies());
@@ -37,18 +70,39 @@ public class CreateServlet extends HttpServlet {
             throw new ServletException("Couldn't set session attributes", e);
         }
 
-        request.getRequestDispatcher("addComputer.jsp").forward(request, response);
+        request.getRequestDispatcher("editComputer.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // TODO: validation is redundant with CreateServlet - back-end validation doesn't need to
+        // have explicit error
+        // messages; therefore, extracting part of this method is possible
+        // the extracted method will return a boolean, but the specific error will not be regarded
+
         Validator validator = Validator.getInstance();
         StringBuilder str = new StringBuilder();
         boolean isEntryValid = true;
 
         // Back-end validation
+
+        Integer id = null;
+        String idString = request.getParameter("id");
+        try {
+            if (!validator.isComputerIDStringValid(idString)) {
+                str.append("Computer ID is invalid.\n");
+                isEntryValid = false;
+            } else {
+                id = Integer.parseInt(idString);
+            }
+        } catch (PersistenceException e) {
+            throw new ServletException("Couldn't check computer ID validity!", e);
+        } catch (IOException e) {
+            throw new ServletException("Couldn't check computer ID validity!", e);
+
+        }
 
         String computerName = request.getParameter("computerName");
         if (computerName.equals("")) {
@@ -104,12 +158,12 @@ public class CreateServlet extends HttpServlet {
 
         if (str.length() == 0) { // If all fields are valid
             try {
-                service.addComputer(computerName, introduced, discontinued, companyID);
-                request.setAttribute("message", "Entry successfully added.");
+                service.updateComputer(id, computerName, introduced, discontinued, companyID);
+                request.setAttribute("message", "Entry successfully edited.");
             } catch (PersistenceException e) {
-                throw new ServletException("Could not add the new computer!", e);
+                throw new ServletException("Could not edit the computer!", e);
             } catch (IOException e) {
-                throw new ServletException("Could not add the new computer!", e);
+                throw new ServletException("Could not edit the computer!", e);
             }
         } else {
             request.setAttribute("message", str.toString());

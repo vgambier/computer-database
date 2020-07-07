@@ -4,7 +4,7 @@ package mapper;
 
 public class MapperException extends Exception {
 
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 0x3ABBE2L;
 
     public MapperException() {
     }

@@ -13,14 +13,16 @@ public class Computer {
     private LocalDate introduced;
     private LocalDate discontinued;
     private String company;
+    private int companyID; // TODO: improve model
 
     public Computer(int id, String name, LocalDate introduced, LocalDate discontinued,
-            String company) {
+            String company, int companyID) {
         this.id = id;
         this.name = name;
         this.introduced = introduced;
         this.discontinued = discontinued;
         this.company = company;
+        this.companyID = companyID;
     }
 
     public int getId() {
@@ -41,6 +43,10 @@ public class Computer {
 
     public String getCompany() {
         return company;
+    }
+
+    public int getCompanyID() {
+        return companyID;
     }
 
     @Override

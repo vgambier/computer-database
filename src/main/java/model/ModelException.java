@@ -2,7 +2,7 @@ package model;
 
 public class ModelException extends Exception {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 0xB0DEL;
 
     public ModelException() {
     }
@@ -19,8 +19,8 @@ public class ModelException extends Exception {
         super(message, cause);
     }
 
-    public ModelException(String message, Throwable cause,
-            boolean enableSuppression, boolean writableStackTrace) {
+    public ModelException(String message, Throwable cause, boolean enableSuppression,
+            boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
