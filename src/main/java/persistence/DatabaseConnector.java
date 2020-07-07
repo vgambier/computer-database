@@ -16,7 +16,6 @@ import com.zaxxer.hikari.HikariDataSource;
 public class DatabaseConnector {
 
     private static HikariDataSource hikariDataSource;
-    private static Connection connection;
     private static String databaseURL;
     private static String username;
     private static String password;
@@ -61,25 +60,8 @@ public class DatabaseConnector {
     public Connection connect() throws SQLException {
 
         BasicConfigurator.configure(); // configuring the Logger
-
         LOG.info("Connecting to the database:\nURL: " + databaseURL + "\nUsername: " + username);
 
         return hikariDataSource.getConnection();
     }
-
-    /**
-     * Disconnects from the database.
-     *
-     * @throws PersistenceException
-     *
-     * @Override public void close() throws PersistenceException {
-     *
-     *           LOG.info("Disconnecting from the database.");
-     *
-     *           // Closing the connection if (connection != null) { try { connection.close();
-     *           connection = null;
-     *
-     *           } catch (SQLException e) { throw new PersistenceException("Couldn't close the
-     *           connection!", e); } } }
-     */
 }

@@ -1,13 +1,15 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
  * @author victor
  *
  */
-public class Computer {
+public class Computer implements Serializable {
 
+    private static final long serialVersionUID = -772706640304719028L;
     private int id;
     private String name;
     private LocalDate introduced;
@@ -23,6 +25,9 @@ public class Computer {
         this.discontinued = discontinued;
         this.company = company;
         this.companyID = companyID;
+    }
+
+    public Computer() {
     }
 
     public int getId() {

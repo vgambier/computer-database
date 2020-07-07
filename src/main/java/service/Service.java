@@ -56,7 +56,7 @@ public class Service {
         ComputerDAO.getInstance().delete(computerID);
     }
 
-    public void deleteCompany(Integer companyID) throws PersistenceException, IOException {
+    public void deleteCompany(Integer companyID) throws PersistenceException {
         CompanyDAO.getInstance().delete(companyID);
     }
 

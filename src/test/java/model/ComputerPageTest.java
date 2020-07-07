@@ -17,6 +17,8 @@ import org.junit.Test;
 import persistence.ComputerDAO;
 import persistence.DatabaseConnector;
 
+// TODO: add more unit tests everywhere
+
 public class ComputerPageTest extends DBTestCase {
 
     public ComputerPageTest(String name) throws IOException {

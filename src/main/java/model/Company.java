@@ -1,13 +1,19 @@
 package model;
 
-public class Company {
+import java.io.Serializable;
 
+public class Company implements Serializable {
+
+    private static final long serialVersionUID = 1474235254628858107L;
     private int id;
     private String name;
 
     public Company(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Company() {
     }
 
     @Override
