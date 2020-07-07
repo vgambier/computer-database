@@ -1,11 +1,5 @@
 package persistence;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import mapper.CompanyMapper;
 import model.Company;
 
@@ -13,49 +7,32 @@ import model.Company;
 
 public class CompanyDAO extends DAO<Company> {
 
-	private static CompanyDAO INSTANCE = null;
+    private static CompanyDAO instance = null;
 
-	private CompanyDAO() {
-	}
+    private CompanyDAO() {
+    }
 
-	// Singleton instance getter
-	public static CompanyDAO getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new CompanyDAO();
-		tableName = "company";
-		return INSTANCE;
-	}
-	/**
-	 * Returns all companies from the database as Java objects
-	 * 
-	 * @throws Exception
-	 */
-	public List<Company> listAll() throws Exception {
+    // Singleton instance getter
+    public static CompanyDAO getInstance() {
+        if (instance == null) {
+            instance = new CompanyDAO();
+        }
+        return instance;
+    }
 
-		List<Company> companies = new ArrayList<Company>();
-		String sql = "SELECT id, name FROM `company`";
-		PreparedStatement statement = null;
+    @Override
+    public CompanyMapper getTypeMapper() {
+        return CompanyMapper.getInstance();
+    }
 
-		try (DatabaseConnection dbConnection = DatabaseConnection.getInstance()) {
+    @Override
+    protected String getListAllSQLStatement() {
+        return "SELECT id, name FROM company";
+    }
 
-			statement = dbConnection.connect().prepareStatement(sql);
-
-			// Connecting to the database and executing the query
-			ResultSet resultSet = statement.executeQuery();
-
-			while (resultSet.next())
-				companies.add(new Company(resultSet.getInt("id"), resultSet.getString("name")));
-
-		} catch (SQLException e) {
-			throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-		}
-
-		return companies;
-	}
-
-	@Override
-	public CompanyMapper getTypeMapper() {
-		return CompanyMapper.getInstance();
-	}
+    @Override
+    protected String getTableName() {
+        return "company";
+    }
 
 }

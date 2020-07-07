@@ -2,23 +2,31 @@ package model;
 
 public class Company {
 
-	private int id;
-	private String name;
+    private int id;
+    private String name;
 
-	public Company(int id, String name) {
-		this.id = id;
-		this.name = name;
-	}
+    public Company(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
-	@Override
-	public String toString() {
+    @Override
+    public String toString() {
 
-		StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
 
-		stringBuilder.append("id: ").append(id).append("\t");
-		stringBuilder.append("name: ").append(name).append("\t");
+        stringBuilder.append("id: ").append(id).append("\t");
+        stringBuilder.append("name: ").append(name);
 
-		return stringBuilder.toString();
-	}
+        return stringBuilder.toString();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 
 }
