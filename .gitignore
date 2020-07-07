@@ -6,3 +6,5 @@
 /.settings/
 /src/main/resources/db-setup/
 /src/test/resources/db-setup/
+/src/main/resources/.properties
+/src/test/resources/.properties
