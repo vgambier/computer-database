@@ -14,23 +14,7 @@ import mapper.MapperException;
 import model.Computer;
 import model.ModelException;
 
-/* This class uses the Singleton pattern */
-
 public class ComputerDAO extends DAO<Computer> {
-
-    private static ComputerDAO instance = null;
-
-    private ComputerDAO() {
-        super();
-    }
-
-    // Singleton instance getter
-    public static ComputerDAO getInstance() {
-        if (instance == null) {
-            instance = new ComputerDAO();
-        }
-        return instance;
-    }
 
     /**
      * Finds a computer in the database, and returns a corresponding Java object.

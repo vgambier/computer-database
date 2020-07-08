@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import mapper.MapperException;
 import persistence.ComputerDAO;
 import persistence.PersistenceException;
 
-public class ComputerPage extends Page<Computer> {
+public class ComputerPage {
 
     private static int maxItemsPerPage = 50;
     private int nbPages;
@@ -27,8 +31,12 @@ public class ComputerPage extends Page<Computer> {
 
     public ComputerPage(int pageNumber, String searchTerm, String orderBy)
             throws ModelException, IOException, MapperException, PersistenceException {
+
         // Checking the database to count the number of entries
-        int nbEntries = ComputerDAO.getInstance().countEntriesWhere(searchTerm);
+        ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
+        ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAOBean");
+        ((ConfigurableApplicationContext) context).close();
+        int nbEntries = computerDAO.countEntriesWhere(searchTerm);
 
         nbPages = nbEntries / maxItemsPerPage;
         if (nbEntries % maxItemsPerPage != 0) {
@@ -40,8 +48,8 @@ public class ComputerPage extends Page<Computer> {
         checkPageNumber(pageNumber);
 
         // Putting computers in the page
-        computers = ComputerDAO.getInstance().listSomeWhere(maxItemsPerPage,
-                (pageNumber - 1) * maxItemsPerPage, searchTerm, orderBy);
+        computers = computerDAO.listSomeWhere(maxItemsPerPage, (pageNumber - 1) * maxItemsPerPage,
+                searchTerm, orderBy);
     }
 
     /**

@@ -38,7 +38,7 @@ public class DatabaseConnector {
         hikariDataSource.setUsername(username);
         hikariDataSource.setPassword(password);
         hikariDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        hikariDataSource.setMaximumPoolSize(100);
+        hikariDataSource.setMaximumPoolSize(200);
     }
 
     public static DatabaseConnector getInstance() throws IOException {
