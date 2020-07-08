@@ -98,8 +98,6 @@ public class ComputerDAO extends DAO<Computer> {
         } catch (SQLException e) {
             throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         }
-
-        System.out.println("Entry added.");
     }
 
     /**
@@ -147,9 +145,6 @@ public class ComputerDAO extends DAO<Computer> {
         } catch (SQLException e) {
             throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         }
-
-        System.out.println("Entry updated.");
-
     }
 
     /**
@@ -173,9 +168,6 @@ public class ComputerDAO extends DAO<Computer> {
         } catch (SQLException e) {
             throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
         }
-
-        System.out.println("Entry deleted.");
-
     }
 
     /**

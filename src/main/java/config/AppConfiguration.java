@@ -22,7 +22,6 @@ public class AppConfiguration {
 
     @Bean(name = "serviceBean")
     public Service service() {
-        return new Service();
+        return new Service(computerDAO(), companyDAO());
     }
-
 }

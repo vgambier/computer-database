@@ -222,7 +222,7 @@ public class CLI {
         Integer companyID = companyIDString.equals("") ? null : Integer.valueOf(companyIDString);
 
         service.addComputer(computerName, introducedDate, discontinuedDate, companyID);
-
+        System.out.println("Entry added.");
     }
 
     /**
@@ -299,6 +299,7 @@ public class CLI {
 
         service.updateComputer(computerID, newComputerName, newIntroducedDate, newDiscontinuedDate,
                 newCompanyID);
+        System.out.println("Entry updated.");
 
     }
 
@@ -318,6 +319,7 @@ public class CLI {
                         "Computer ID must be a positive integer and correspond to an existing entry.");
             } else {
                 service.deleteComputer(Integer.valueOf(arr[1]));
+                System.out.println("Entry deleted.");
             }
         } else {
             System.out.println(
