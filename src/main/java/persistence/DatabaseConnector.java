@@ -6,8 +6,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -49,7 +49,7 @@ public class DatabaseConnector {
     }
 
     // TODO: add more logging
-    private static final Logger LOG = Logger.getLogger(DatabaseConnector.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseConnector.class);
 
     /**
      * Connects to the database.
@@ -59,7 +59,6 @@ public class DatabaseConnector {
      */
     public Connection connect() throws SQLException {
 
-        BasicConfigurator.configure(); // configuring the Logger
         LOG.info("Connecting to the database:\nURL: " + databaseURL + "\nUsername: " + username);
 
         return hikariDataSource.getConnection();

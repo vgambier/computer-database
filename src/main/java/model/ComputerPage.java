@@ -70,7 +70,7 @@ public class ComputerPage {
         }
     }
 
-    // Getters
+    // Getters and setters
 
     public List<Computer> getComputers() {
         return computers;

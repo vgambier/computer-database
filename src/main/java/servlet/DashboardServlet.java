@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import mapper.MapperException;
@@ -25,16 +25,18 @@ public class DashboardServlet extends HttpServlet {
     private static final long serialVersionUID = 0xDA57B0A2DL;
     private static Service service = (Service) new ClassPathXmlApplicationContext(
             "Spring-Module.xml").getBean("serviceBean");
-    private static final Logger LOG = Logger.getLogger(DashboardServlet.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(DashboardServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        BasicConfigurator.configure(); // configuring the Logger
         LOG.info("Settings attributes for DashboardServlet.");
 
         String currentPageString = request.getParameter("currentPage");
+        if (currentPageString == null) {
+            currentPageString = "1";
+        }
         String searchTerm = request.getParameter("search");
         String orderBy = request.getParameter("orderBy");
 
@@ -85,7 +87,6 @@ public class DashboardServlet extends HttpServlet {
 
         if (newValue != null) {
             int newNbEntriesPerPage = Integer.valueOf(request.getParameter("action"));
-            System.out.println(newNbEntriesPerPage);
             ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
         }
 

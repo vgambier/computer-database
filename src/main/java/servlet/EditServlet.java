@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import mapper.MapperException;
@@ -26,13 +26,12 @@ public class EditServlet extends HttpServlet {
 
     private static Service service = (Service) new ClassPathXmlApplicationContext(
             "Spring-Module.xml").getBean("serviceBean");
-    private static final Logger LOG = Logger.getLogger(EditServlet.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(EditServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        BasicConfigurator.configure(); // configuring the Logger
         LOG.info("Settings attributes for EditServlet.");
 
         String computerIDString = request.getParameter("id");
