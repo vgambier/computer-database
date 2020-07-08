@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import mapper.MapperException;
 import model.ComputerPage;
@@ -22,7 +23,8 @@ import validator.Validator;
 public class DashboardServlet extends HttpServlet {
 
     private static final long serialVersionUID = 0xDA57B0A2DL;
-    private static Service service = Service.getInstance();
+    private static Service service = (Service) new ClassPathXmlApplicationContext(
+            "Spring-Module.xml").getBean("serviceBean");
     private static final Logger LOG = Logger.getLogger(DashboardServlet.class.getName());
 
     @Override

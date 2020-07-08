@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import mapper.MapperException;
 import model.Computer;
@@ -23,7 +24,8 @@ public class EditServlet extends HttpServlet {
 
     private static final long serialVersionUID = 0xED17L;
 
-    private static Service service = Service.getInstance();
+    private static Service service = (Service) new ClassPathXmlApplicationContext(
+            "Spring-Module.xml").getBean("serviceBean");
     private static final Logger LOG = Logger.getLogger(EditServlet.class.getName());
 
     @Override

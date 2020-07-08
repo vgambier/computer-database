@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.Scanner;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import model.Company;
 import model.Computer;
 import model.ComputerPage;
@@ -23,7 +25,8 @@ public class CLI {
             "deletecompany <id>: delete a given company and all associated computers",
             "quit: exit the program");
     private static Scanner scanner = new Scanner(System.in);
-    private static Service service = Service.getInstance();
+    private static Service service = (Service) new ClassPathXmlApplicationContext(
+            "Spring-Module.xml").getBean("serviceBean");
 
     public static void main(String[] args) throws Exception {
 

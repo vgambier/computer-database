@@ -5,6 +5,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import mapper.MapperException;
 import model.ComputerPage;
 import model.ModelException;
@@ -79,7 +83,10 @@ public class Validator {
 
         if (isStringInteger(stringID)) {
             int id = Integer.valueOf(stringID);
-            isValid = Service.getInstance().doesComputerEntryExist(id);
+            ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
+            Service service = (Service) context.getBean("serviceBean");
+            ((ConfigurableApplicationContext) context).close();
+            isValid = service.doesComputerEntryExist(id);
         }
 
         return isValid;
@@ -102,7 +109,10 @@ public class Validator {
 
         if (isStringInteger(stringID)) {
             int id = Integer.valueOf(stringID);
-            isValid = Service.getInstance().doesCompanyEntryExist(id);
+            ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
+            Service service = (Service) context.getBean("serviceBean");
+            ((ConfigurableApplicationContext) context).close();
+            isValid = service.doesCompanyEntryExist(id);
         }
 
         return isValid;

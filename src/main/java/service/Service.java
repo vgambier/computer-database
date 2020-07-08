@@ -15,21 +15,7 @@ import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import persistence.PersistenceException;
 
-/* This class uses the Singleton pattern */
-
 public class Service {
-
-    private static Service instance = null;
-
-    private Service() {
-    }
-
-    public static Service getInstance() {
-        if (instance == null) {
-            instance = new Service();
-        }
-        return instance;
-    }
 
     public List<Computer> listAllComputers() throws PersistenceException {
         ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
@@ -111,6 +97,5 @@ public class Service {
         ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAOBean");
         ((ConfigurableApplicationContext) context).close();
         return computerDAO.countEntriesWhere(searchTerm);
-
     }
 }
