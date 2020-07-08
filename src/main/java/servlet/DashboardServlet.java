@@ -10,8 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import config.AppConfiguration;
 import mapper.MapperException;
 import model.ComputerPage;
 import model.ModelException;
@@ -23,8 +24,8 @@ import validator.Validator;
 public class DashboardServlet extends HttpServlet {
 
     private static final long serialVersionUID = 0xDA57B0A2DL;
-    private static Service service = (Service) new ClassPathXmlApplicationContext(
-            "Spring-Module.xml").getBean("serviceBean");
+    private static Service service = (Service) new AnnotationConfigApplicationContext(
+            AppConfiguration.class).getBean("serviceBean");
     private static final Logger LOG = LoggerFactory.getLogger(DashboardServlet.class);
 
     @Override

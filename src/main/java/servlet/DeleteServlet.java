@@ -8,8 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import config.AppConfiguration;
 import persistence.PersistenceException;
 import service.Service;
 import validator.Validator;
@@ -19,8 +20,8 @@ public class DeleteServlet extends HttpServlet {
 
     private static final long serialVersionUID = 0xD31373L;
 
-    private static Service service = (Service) new ClassPathXmlApplicationContext(
-            "Spring-Module.xml").getBean("serviceBean");
+    private static Service service = (Service) new AnnotationConfigApplicationContext(
+            AppConfiguration.class).getBean("serviceBean");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

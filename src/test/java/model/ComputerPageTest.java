@@ -15,8 +15,9 @@ import org.dbunit.operation.DatabaseOperation;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import config.AppConfiguration;
 import persistence.ComputerDAO;
 import persistence.DatabaseConnector;
 
@@ -48,7 +49,7 @@ public class ComputerPageTest extends DBTestCase {
     public void testDataLoaded() throws Exception {
         IDataSet dataSet = getDatabaseDataSet();
         assertNotNull(dataSet);
-        ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Module.xml");
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
         ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAOBean");
         ((ConfigurableApplicationContext) context).close();
         double rowCount = computerDAO.countEntries();
