@@ -9,12 +9,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
+
+import config.JdbcConfiguration;
 import mapper.ComputerMapper;
 import mapper.MapperException;
 import model.Computer;
 import model.ModelException;
 
+@Component
 public class ComputerDAO extends DAO<Computer> {
+
+    private DatabaseConnector databaseConnector = (DatabaseConnector) new AnnotationConfigApplicationContext(
+            JdbcConfiguration.class).getBean("databaseConnectorBean");
 
     /**
      * Finds a computer in the database, and returns a corresponding Java object.
@@ -23,10 +31,9 @@ public class ComputerDAO extends DAO<Computer> {
      *            the id of the computer in the database
      * @return a Computer object, with the same attributes as the computer entry in the database
      * @throws PersistenceException
-     * @throws IOException
      * @throws MapperException
      */
-    public Computer find(int id) throws PersistenceException, IOException, MapperException {
+    public Computer find(int id) throws PersistenceException, MapperException {
 
         Computer computer = null;
 
@@ -35,7 +42,7 @@ public class ComputerDAO extends DAO<Computer> {
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
                 + "WHERE computer.id = ? ORDER BY computer_id";
 
-        try (Connection connection = DatabaseConnector.getInstance().connect();
+        try (Connection connection = databaseConnector.connect();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, id);
@@ -74,13 +81,13 @@ public class ComputerDAO extends DAO<Computer> {
      * @throws Exception
      */
     public void add(String computerName, Date introducedDate, Date discontinuedDate,
-            Integer companyID) throws PersistenceException, IOException {
+            Integer companyID) throws PersistenceException {
 
         String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 
         // Converting to dates
 
-        try (Connection connection = DatabaseConnector.getInstance().connect();
+        try (Connection connection = databaseConnector.connect();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, computerName);
@@ -118,14 +125,13 @@ public class ComputerDAO extends DAO<Computer> {
      * @throws Exception
      */
     public void update(int id, String newComputerName, Date newIntroducedDate,
-            Date newDiscontinuedDate, Integer newCompanyID)
-            throws PersistenceException, IOException {
+            Date newDiscontinuedDate, Integer newCompanyID) throws PersistenceException {
 
         String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 
         // Converting to dates
 
-        try (Connection connection = DatabaseConnector.getInstance().connect();
+        try (Connection connection = databaseConnector.connect();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, newComputerName);
@@ -156,11 +162,11 @@ public class ComputerDAO extends DAO<Computer> {
      * @throws PersistenceException
      * @throws Exception
      */
-    public void delete(int id) throws PersistenceException, IOException {
+    public void delete(int id) throws PersistenceException {
 
         String sql = "DELETE FROM `computer` WHERE id = ?";
 
-        try (Connection connection = DatabaseConnector.getInstance().connect();
+        try (Connection connection = databaseConnector.connect();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, id);
@@ -179,19 +185,18 @@ public class ComputerDAO extends DAO<Computer> {
      * @param offset
      *            the value of the SQL OFFSET parameter
      * @return the corresponding list of Computer objects
-     * @throws IOException
      * @throws ModelException
      * @throws MapperException
      * @throws PersistenceException
      */
     public List<Computer> listSome(int limit, int offset)
-            throws PersistenceException, IOException, ModelException, MapperException {
+            throws PersistenceException, ModelException, MapperException {
 
         return listSomeWhere(limit, offset, "", "computer_id");
     }
 
     public List<Computer> listSomeWhere(int limit, int offset, String searchTerm)
-            throws ModelException, MapperException, PersistenceException, IOException {
+            throws ModelException, MapperException, PersistenceException {
 
         return listSomeWhere(limit, offset, searchTerm, "computer_id");
     }
@@ -214,7 +219,7 @@ public class ComputerDAO extends DAO<Computer> {
      * @throws PersistenceException
      */
     public List<Computer> listSomeWhere(int limit, int offset, String searchTerm, String orderBy)
-            throws ModelException, MapperException, PersistenceException, IOException {
+            throws ModelException, MapperException, PersistenceException {
 
         if (!orderBy.equals("computer_id") && !orderBy.equals("computer_name")
                 && !orderBy.equals("introduced") && !orderBy.equals("discontinued")
@@ -233,7 +238,7 @@ public class ComputerDAO extends DAO<Computer> {
         // This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE)
         // entries
 
-        try (Connection connection = DatabaseConnector.getInstance().connect();
+        try (Connection connection = databaseConnector.connect();
                 PreparedStatement statementList = connection.prepareStatement(sql)) {
 
             statementList.setString(1, "%" + searchTerm + "%");

@@ -59,8 +59,6 @@ public class EditServlet extends HttpServlet {
             computer = service.getComputer(computerID);
         } catch (PersistenceException e) {
             throw new ServletException("Couldn't grab existing computer", e);
-        } catch (IOException e) {
-            throw new ServletException("Couldn't grab existing computer", e);
         } catch (MapperException e) {
             throw new ServletException("Couldn't grab existing computer", e);
         }
@@ -102,9 +100,6 @@ public class EditServlet extends HttpServlet {
             }
         } catch (PersistenceException e) {
             throw new ServletException("Couldn't check computer ID validity!", e);
-        } catch (IOException e) {
-            throw new ServletException("Couldn't check computer ID validity!", e);
-
         }
 
         String computerName = request.getParameter("computerName");
@@ -153,8 +148,6 @@ public class EditServlet extends HttpServlet {
             throw new ServletException("Couldn't check company ID validity!", e);
         } catch (PersistenceException e) {
             throw new ServletException("Couldn't check company ID validity!", e);
-        } catch (IOException e) {
-            throw new ServletException("Couldn't check company ID validity!", e);
         }
 
         // Adding entry if form is valid
@@ -164,8 +157,6 @@ public class EditServlet extends HttpServlet {
                 service.updateComputer(id, computerName, introduced, discontinued, companyID);
                 request.setAttribute("message", "Entry successfully edited.");
             } catch (PersistenceException e) {
-                throw new ServletException("Could not edit the computer!", e);
-            } catch (IOException e) {
                 throw new ServletException("Could not edit the computer!", e);
             }
         } else {

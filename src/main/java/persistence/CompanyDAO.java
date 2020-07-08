@@ -1,14 +1,19 @@
 package persistence;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import config.JdbcConfiguration;
 import mapper.CompanyMapper;
 import model.Company;
 
 public class CompanyDAO extends DAO<Company> {
+
+    private DatabaseConnector databaseConnector = (DatabaseConnector) new AnnotationConfigApplicationContext(
+            JdbcConfiguration.class).getBean("databaseConnectorBean");
 
     @Override
     public CompanyMapper getTypeMapper() {
@@ -35,7 +40,7 @@ public class CompanyDAO extends DAO<Company> {
         String sqlComputers = "DELETE FROM `computer` WHERE company_id = ?";
         String sqlCompany = "DELETE FROM `company` WHERE id = ?";
 
-        try (Connection connection = DatabaseConnector.getInstance().connect()) {
+        try (Connection connection = databaseConnector.connect()) {
 
             connection.setAutoCommit(false);
 
@@ -63,9 +68,6 @@ public class CompanyDAO extends DAO<Company> {
 
         } catch (SQLException e) {
             throw new PersistenceException("Couldn't prepare and execute the SQL statements.", e);
-        } catch (IOException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statements.", e);
-
         }
     }
 }

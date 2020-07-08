@@ -1,6 +1,5 @@
 package ui;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.util.Scanner;
 
@@ -328,7 +327,7 @@ public class CLI {
     }
 
     private static void deletecompany(String[] arr)
-            throws NumberFormatException, PersistenceException, IOException {
+            throws NumberFormatException, PersistenceException {
         if (arr.length >= 2) {
             if (!Validator.getInstance().isCompanyIDStringValid(arr[1])) {
                 System.out.println(

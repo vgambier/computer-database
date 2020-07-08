@@ -51,8 +51,6 @@ public class DeleteServlet extends HttpServlet {
                 throw new ServletException("Couldn't delete computer", e);
             } catch (PersistenceException e) {
                 throw new ServletException("Couldn't delete computer", e);
-            } catch (IOException e) {
-                throw new ServletException("Couldn't delete computer", e);
             }
         }
 

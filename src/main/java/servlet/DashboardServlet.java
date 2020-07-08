@@ -64,8 +64,6 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("computerPage", computerPage);
             request.setAttribute("computerCount", service.countComputerEntriesWhere(searchTerm));
 
-        } catch (IOException e) {
-            throw new ServletException("Couldn't set session attributes", e);
         } catch (ModelException e) {
             throw new ServletException("Couldn't set session attributes", e);
         } catch (MapperException e) {

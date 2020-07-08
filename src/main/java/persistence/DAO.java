@@ -8,10 +8,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
+
+import config.JdbcConfiguration;
 import mapper.Mapper;
 import mapper.MapperException;
 
+@Component
 public abstract class DAO<T> {
+
+    private DatabaseConnector databaseConnector = (DatabaseConnector) new AnnotationConfigApplicationContext(
+            JdbcConfiguration.class).getBean("databaseConnectorBean");
 
     /**
      * Returns a Mapper<T> object where T is the the same T as the one in the current DAO<T> type.
@@ -50,7 +58,7 @@ public abstract class DAO<T> {
         int nbEntries = -1; // The only way the "if" fails is if the query
                             // fails, but an exception will be thrown anyway
 
-        try (Connection connection = DatabaseConnector.getInstance().connect();
+        try (Connection connection = databaseConnector.connect();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, "%" + searchTerm + "%");
@@ -65,8 +73,6 @@ public abstract class DAO<T> {
 
         } catch (SQLException e) {
             throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-        } catch (IOException e) {
-            throw new PersistenceException("Couldn't load the database connector", e);
         }
 
         return nbEntries;
@@ -84,7 +90,7 @@ public abstract class DAO<T> {
 
         String sql = getListAllSQLStatement();
 
-        try (Connection connection = DatabaseConnector.getInstance().connect();
+        try (Connection connection = databaseConnector.connect();
                 PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery()) {
 
@@ -94,8 +100,6 @@ public abstract class DAO<T> {
 
         } catch (SQLException e) {
             throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-        } catch (IOException e) {
-            throw new PersistenceException("Couldn't find the database login .properties file.", e);
         } catch (MapperException e) {
             throw new PersistenceException("Couldn't map the database entries to model!", e);
         }
@@ -113,14 +117,14 @@ public abstract class DAO<T> {
      * @throws PersistenceException
      * @throws Exception
      */
-    public boolean doesEntryExist(int id) throws PersistenceException, IOException {
+    public boolean doesEntryExist(int id) throws PersistenceException {
 
         boolean doesEntryExist = false;
 
         // SQL injection is impossible: the user has no control over tableName
         String sql = "SELECT COUNT(1) FROM " + getTableName() + " WHERE id = ?";
 
-        try (Connection connection = DatabaseConnector.getInstance().connect();
+        try (Connection connection = databaseConnector.connect();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, id);

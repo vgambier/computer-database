@@ -45,7 +45,7 @@ public class Validator {
      * @throws PersistenceException
      */
     public boolean isPageIDStringValid(String pageID)
-            throws NumberFormatException, IOException, MapperException, PersistenceException {
+            throws NumberFormatException, MapperException, PersistenceException {
 
         boolean isPageNumberOk = true;
 
@@ -74,11 +74,9 @@ public class Validator {
      * @param stringID
      *            the id of the computer entry we want to check, as a String
      * @return true if and only if there is a computer with this id in the database
-     * @throws IOException
      * @throws PersistenceException
      */
-    public boolean isComputerIDStringValid(String stringID)
-            throws PersistenceException, IOException {
+    public boolean isComputerIDStringValid(String stringID) throws PersistenceException {
 
         boolean isValid = false;
 
@@ -101,11 +99,9 @@ public class Validator {
      * @param stringID
      *            the id of the company entry we want to check, as a String
      * @return true if and only if there is a company with this id in the database
-     * @throws IOException
      * @throws PersistenceException
      */
-    public boolean isCompanyIDStringValid(String stringID)
-            throws PersistenceException, IOException {
+    public boolean isCompanyIDStringValid(String stringID) throws PersistenceException {
 
         boolean isValid = false;
 

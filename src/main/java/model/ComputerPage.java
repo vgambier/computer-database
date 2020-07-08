@@ -1,6 +1,5 @@
 package model;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,17 +20,17 @@ public class ComputerPage {
     private List<Computer> computers = new ArrayList<Computer>();
 
     public ComputerPage(int pageNumber)
-            throws ModelException, IOException, MapperException, PersistenceException {
+            throws ModelException, MapperException, PersistenceException {
         this(pageNumber, "", "computer_id");
     }
 
     public ComputerPage(int pageNumber, String searchTerm)
-            throws ModelException, IOException, MapperException, PersistenceException {
+            throws ModelException, MapperException, PersistenceException {
         this(pageNumber, searchTerm, "computer_id");
     }
 
     public ComputerPage(int pageNumber, String searchTerm, String orderBy)
-            throws ModelException, IOException, MapperException, PersistenceException {
+            throws ModelException, MapperException, PersistenceException {
 
         // Checking the database to count the number of entries
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);

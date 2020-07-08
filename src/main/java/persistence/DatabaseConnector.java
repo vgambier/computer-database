@@ -1,10 +1,7 @@
 package persistence;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,37 +12,10 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class DatabaseConnector {
 
-    private static HikariDataSource hikariDataSource;
-    private static String databaseURL;
-    private static String username;
-    private static String password;
+    private HikariDataSource hikariDataSource;
 
-    private static DatabaseConnector instance = null;
-
-    private DatabaseConnector() throws IOException {
-
-        InputStream inputStream = DatabaseConnector.class.getResourceAsStream("/.properties");
-        Properties properties = new Properties();
-        properties.load(inputStream);
-        inputStream.close();
-
-        databaseURL = properties.getProperty("DATABASE_URL");
-        username = properties.getProperty("USERNAME");
-        password = properties.getProperty("PASSWORD");
-
-        hikariDataSource = new HikariDataSource();
-        hikariDataSource.setJdbcUrl(databaseURL);
-        hikariDataSource.setUsername(username);
-        hikariDataSource.setPassword(password);
-        hikariDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        hikariDataSource.setMaximumPoolSize(10);
-    }
-
-    public static DatabaseConnector getInstance() throws IOException {
-        if (instance == null) {
-            instance = new DatabaseConnector();
-        }
-        return instance;
+    public DatabaseConnector(HikariDataSource hikariDataSource) {
+        this.hikariDataSource = hikariDataSource;
     }
 
     // TODO: add more logging
@@ -59,8 +29,7 @@ public class DatabaseConnector {
      */
     public Connection connect() throws SQLException {
 
-        LOG.info("Connecting to the database:\nURL: " + databaseURL + "\nUsername: " + username);
-
+        LOG.info("Connecting to the database");
         return hikariDataSource.getConnection();
     }
 }

@@ -98,8 +98,6 @@ public class CreateServlet extends HttpServlet {
             throw new ServletException("Couldn't check company ID validity!", e);
         } catch (PersistenceException e) {
             throw new ServletException("Couldn't check company ID validity!", e);
-        } catch (IOException e) {
-            throw new ServletException("Couldn't check company ID validity!", e);
         }
 
         // Adding entry if form is valid
@@ -109,8 +107,6 @@ public class CreateServlet extends HttpServlet {
                 service.addComputer(computerName, introduced, discontinued, companyID);
                 request.setAttribute("message", "Entry successfully added.");
             } catch (PersistenceException e) {
-                throw new ServletException("Could not add the new computer!", e);
-            } catch (IOException e) {
                 throw new ServletException("Could not add the new computer!", e);
             }
         } else {
