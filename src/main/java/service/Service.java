@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import mapper.MapperException;
 import model.Company;
 import model.Computer;
+import model.ComputerPage;
+import model.ModelException;
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import persistence.PersistenceException;
@@ -67,7 +69,24 @@ public class Service {
         return computerDAO.countEntries();
     }
 
-    public Object countComputerEntriesWhere(String searchTerm) throws PersistenceException {
+    public int countComputerEntriesWhere(String searchTerm) throws PersistenceException {
         return computerDAO.countEntriesWhere(searchTerm);
+    }
+
+    public void fill(ComputerPage computerPage)
+            throws ModelException, MapperException, PersistenceException {
+        fill(computerPage, "", "computer_id");
+    }
+
+    public void fill(ComputerPage computerPage, String searchTerm, String orderBy)
+            throws ModelException, MapperException, PersistenceException {
+
+        int maxItemsPerPage = ComputerPage.getMaxItemsPerPage();
+
+        // Putting computers in the page
+        List<Computer> computers = computerDAO.listSomeWhere(maxItemsPerPage,
+                (computerPage.getPageNumber() - 1) * maxItemsPerPage, searchTerm, orderBy);
+
+        computerPage.setComputers(computers);
     }
 }

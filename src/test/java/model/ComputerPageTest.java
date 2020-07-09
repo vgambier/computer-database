@@ -57,12 +57,12 @@ public class ComputerPageTest extends DBTestCase {
 
     @Test(expected = ModelException.class)
     public void invalidNegativeIDConstructor() throws Exception {
-        new ComputerPage(-1);
+        new ComputerPage(15, -1); // Assuming there are 15 entries
     }
 
     @Test(expected = ModelException.class)
     public void invalidBigIDConstructor() throws Exception {
-        new ComputerPage(Integer.MAX_VALUE);
+        new ComputerPage(15, Integer.MAX_VALUE); // Assuming there are 15 entries
     }
 
     @Override

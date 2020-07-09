@@ -3,54 +3,27 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import config.AppConfiguration;
-import config.JdbcConfiguration;
-import mapper.MapperException;
-import persistence.ComputerDAO;
-import persistence.PersistenceException;
-
 public class ComputerPage {
 
     private static int maxItemsPerPage = 50;
-    private int nbPages;
-
+    private static int nbPages;
+    private int pageNumber;
     private List<Computer> computers = new ArrayList<Computer>();
 
-    public ComputerPage(int pageNumber)
-            throws ModelException, MapperException, PersistenceException {
-        this(pageNumber, "", "computer_id");
-    }
-
-    public ComputerPage(int pageNumber, String searchTerm)
-            throws ModelException, MapperException, PersistenceException {
-        this(pageNumber, searchTerm, "computer_id");
-    }
-
-    public ComputerPage(int pageNumber, String searchTerm, String orderBy)
-            throws ModelException, MapperException, PersistenceException {
+    public ComputerPage(int nbEntries, int pageNumber) throws ModelException {
 
         // Checking the database to count the number of entries
-        // TODO pas un deuxième contexte
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class,
-                JdbcConfiguration.class);
-        ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAOBean");
-        int nbEntries = computerDAO.countEntriesWhere(searchTerm);
 
         nbPages = nbEntries / maxItemsPerPage;
-        if (nbEntries % maxItemsPerPage != 0) {
+        if (nbEntries % maxItemsPerPage != 0) { // Ensuring the last page exists even when it's
+                                                // full
             nbPages++;
         }
         nbPages = Math.max(1, nbPages); // Always at least one page
 
         // Checking if the input page number is valid
         checkPageNumber(pageNumber);
-
-        // Putting computers in the page
-        computers = computerDAO.listSomeWhere(maxItemsPerPage, (pageNumber - 1) * maxItemsPerPage,
-                searchTerm, orderBy);
+        this.pageNumber = pageNumber;
     }
 
     /**
@@ -61,7 +34,7 @@ public class ComputerPage {
      * @throws ModelException
      *             if the page number is not valid
      */
-    private void checkPageNumber(int pageNumber) throws ModelException {
+    private static void checkPageNumber(int pageNumber) throws ModelException {
 
         if (pageNumber > nbPages) {
             StringBuilder str = new StringBuilder();
@@ -77,12 +50,23 @@ public class ComputerPage {
         return computers;
     }
 
-    public int getNbPages() {
+    public void setComputers(List<Computer> computers) {
+        this.computers = computers;
+    }
+
+    public static int getNbPages() {
         return nbPages;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public static int getMaxItemsPerPage() {
+        return maxItemsPerPage;
     }
 
     public static void setMaxItemsPerPage(int maxItemsPerPage) {
         ComputerPage.maxItemsPerPage = maxItemsPerPage;
     }
-
 }

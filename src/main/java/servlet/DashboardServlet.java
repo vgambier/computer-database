@@ -58,14 +58,17 @@ public class DashboardServlet extends HttpServlet {
 
         try {
 
-            int currentPage = Validator.getInstance().isPageIDStringValid(currentPageString)
-                    ? Integer.valueOf(currentPageString)
-                    : 1;
+            int nbEntries = service.countComputerEntriesWhere(searchTerm);
+
+            int currentPage = Validator.getInstance().isPageIDStringValid(nbEntries,
+                    currentPageString) ? Integer.valueOf(currentPageString) : 1;
             request.setAttribute("currentPage", currentPage);
 
-            computerPage = new ComputerPage(currentPage, searchTerm, orderBy);
+            // TODO did this even work? no "where"
+            computerPage = new ComputerPage(nbEntries, currentPage);
+            service.fill(computerPage, searchTerm, orderBy);
             request.setAttribute("computerPage", computerPage);
-            request.setAttribute("computerCount", service.countComputerEntriesWhere(searchTerm));
+            request.setAttribute("computerCount", nbEntries);
 
         } catch (ModelException e) {
             throw new ServletException("Couldn't set session attributes", e);
@@ -75,7 +78,7 @@ public class DashboardServlet extends HttpServlet {
             throw new ServletException("Couldn't set session attributes", e);
         }
 
-        request.setAttribute("nbPages", computerPage.getNbPages());
+        request.setAttribute("nbPages", ComputerPage.getNbPages());
 
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }

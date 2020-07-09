@@ -125,8 +125,10 @@ public class CLI {
 
         if (arr.length >= 2) { // if a second argument has been given
 
-            if (Validator.getInstance().isPageIDStringValid(arr[1])) {
-                for (Computer computer : new ComputerPage(Integer.valueOf(arr[1])).getComputers()) {
+            int nbEntries = service.countComputerEntries();
+            if (Validator.getInstance().isPageIDStringValid(nbEntries, arr[1])) {
+                for (Computer computer : new ComputerPage(nbEntries, Integer.valueOf(arr[1]))
+                        .getComputers()) {
                     System.out.println(computer);
                 }
             }

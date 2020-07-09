@@ -178,31 +178,6 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     /**
-     * Lists all Computer objects from the given range. This method is meant to be used to fill
-     * ComputerPage objects
-     *
-     * @param limit
-     *            the value of the SQL LIMIT parameter
-     * @param offset
-     *            the value of the SQL OFFSET parameter
-     * @return the corresponding list of Computer objects
-     * @throws ModelException
-     * @throws MapperException
-     * @throws PersistenceException
-     */
-    public List<Computer> listSome(int limit, int offset)
-            throws PersistenceException, ModelException, MapperException {
-
-        return listSomeWhere(limit, offset, "", "computer_id");
-    }
-
-    public List<Computer> listSomeWhere(int limit, int offset, String searchTerm)
-            throws ModelException, MapperException, PersistenceException {
-
-        return listSomeWhere(limit, offset, searchTerm, "computer_id");
-    }
-
-    /**
      * Lists all Computer objects that match the search term, from the given range. This method is
      * meant to be used to fill ComputerPage objects
      *

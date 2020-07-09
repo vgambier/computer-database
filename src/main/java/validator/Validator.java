@@ -10,7 +10,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import config.AppConfiguration;
 import config.JdbcConfiguration;
-import mapper.MapperException;
 import model.ComputerPage;
 import model.ModelException;
 import persistence.PersistenceException;
@@ -36,16 +35,15 @@ public class Validator {
     private static DateFormat formatter;
 
     /**
+     * @param nbEntries
+     *            the total number of entries in the database
      * @param pageID
      *            the id of the company entry we want to check, as a String
      * @return true if and only if the input corresponds to a page in the pagination system
      * @throws NumberFormatException
      * @throws IOException
-     * @throws MapperException
-     * @throws PersistenceException
      */
-    public boolean isPageIDStringValid(String pageID)
-            throws NumberFormatException, MapperException, PersistenceException {
+    public boolean isPageIDStringValid(int nbEntries, String pageID) throws NumberFormatException {
 
         boolean isPageNumberOk = true;
 
@@ -54,7 +52,7 @@ public class Validator {
             isPageNumberOk = false;
         } else {
             try {
-                new ComputerPage(Integer.valueOf(pageID));
+                new ComputerPage(nbEntries, Integer.valueOf(pageID));
                 isPageNumberOk = true; // previous line didn't throw an
                                        // exception, so it must be ok
             } catch (@SuppressWarnings("unused") ModelException e) {
