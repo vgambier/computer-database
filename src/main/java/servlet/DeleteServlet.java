@@ -14,7 +14,6 @@ import config.AppConfiguration;
 import config.JdbcConfiguration;
 import persistence.PersistenceException;
 import service.Service;
-import validator.Validator;
 
 @WebServlet(name = "DeleteServlet", urlPatterns = "/delete")
 public class DeleteServlet extends HttpServlet {
@@ -44,7 +43,7 @@ public class DeleteServlet extends HttpServlet {
         for (String computerIDString : selection) {
 
             try {
-                if (Validator.getInstance().isComputerIDStringValid(computerIDString)) {
+                if (service.getValidator().isComputerIDStringValid(computerIDString)) {
                     int computerID = Integer.valueOf(computerIDString);
                     service.deleteComputer(computerID);
                 }

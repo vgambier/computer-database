@@ -7,13 +7,14 @@ import org.springframework.context.annotation.Configuration;
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import service.Service;
+import validator.Validator;
 
 @Configuration
-@ComponentScan({"persistence"})
+@ComponentScan({"persistence, validator"})
 public class AppConfiguration {
 
     @Bean(name = "serviceBean")
-    public Service service(ComputerDAO computerDAO, CompanyDAO companyDAO) {
-        return new Service(computerDAO, companyDAO);
+    public Service service(ComputerDAO computerDAO, CompanyDAO companyDAO, Validator validator) {
+        return new Service(computerDAO, companyDAO, validator);
     }
 }

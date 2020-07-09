@@ -1,6 +1,7 @@
 package ui;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -12,7 +13,6 @@ import model.Computer;
 import model.ComputerPage;
 import persistence.PersistenceException;
 import service.Service;
-import validator.Validator;
 
 public class CLI {
 
@@ -126,9 +126,11 @@ public class CLI {
         if (arr.length >= 2) { // if a second argument has been given
 
             int nbEntries = service.countComputerEntries();
-            if (Validator.getInstance().isPageIDStringValid(nbEntries, arr[1])) {
-                for (Computer computer : new ComputerPage(nbEntries, Integer.valueOf(arr[1]))
-                        .getComputers()) {
+            if (service.getValidator().isPageIDStringValid(nbEntries, arr[1])) {
+                ComputerPage computerPage = new ComputerPage(nbEntries, Integer.valueOf(arr[1]));
+                service.fill(computerPage);
+                List<Computer> computers = computerPage.getComputers();
+                for (Computer computer : computers) {
                     System.out.println(computer);
                 }
             }
@@ -162,7 +164,7 @@ public class CLI {
 
         if (arr.length >= 2) {
 
-            if (!Validator.getInstance().isComputerIDStringValid(arr[1])) {
+            if (!isComputerIDStringValid(arr[1])) {
                 System.out.println(
                         "Computer ID must be a positive integer and correspond to an existing entry.");
             } else {
@@ -213,8 +215,7 @@ public class CLI {
             System.out.println("Please enter the id of the company of the computer (optional):");
             companyIDString = scanner.nextLine();
 
-            if (!companyIDString.equals("")
-                    && !Validator.getInstance().isCompanyIDStringValid(companyIDString)) {
+            if (!companyIDString.equals("") && !isCompanyIDStringValid(companyIDString)) {
                 System.out.println(
                         "Company ID must be a positive integer and correspond to an existing entry.");
             } else {
@@ -240,7 +241,7 @@ public class CLI {
             System.out.println("Please enter the ID of the computer you wish to update:");
             computerIDString = scanner.nextLine();
 
-            if (!Validator.getInstance().isComputerIDStringValid(computerIDString)) {
+            if (!isComputerIDStringValid(computerIDString)) {
                 System.out.println(
                         "Computer ID must be a positive integer and correspond to an existing entry.");
                 computerIDString = ""; // Reject input
@@ -286,8 +287,7 @@ public class CLI {
             System.out.println("Please enter the id of the company of the computer (optional):");
             newCompanyIDString = scanner.nextLine();
 
-            if (!newCompanyIDString.equals("")
-                    && !Validator.getInstance().isCompanyIDStringValid(newCompanyIDString)) {
+            if (!newCompanyIDString.equals("") && !isCompanyIDStringValid(newCompanyIDString)) {
                 System.out.println(
                         "Company ID must be a positive integer and correspond to an existing entry.");
             } else {
@@ -316,7 +316,7 @@ public class CLI {
     private static void delete(String[] arr) throws Exception {
 
         if (arr.length >= 2) {
-            if (!Validator.getInstance().isComputerIDStringValid(arr[1])) {
+            if (!isComputerIDStringValid(arr[1])) {
                 System.out.println(
                         "Computer ID must be a positive integer and correspond to an existing entry.");
             } else {
@@ -332,7 +332,7 @@ public class CLI {
     private static void deletecompany(String[] arr)
             throws NumberFormatException, PersistenceException {
         if (arr.length >= 2) {
-            if (!Validator.getInstance().isCompanyIDStringValid(arr[1])) {
+            if (!isCompanyIDStringValid(arr[1])) {
                 System.out.println(
                         "Company ID must be a positive integer and correspond to an existing entry.");
             } else {
@@ -366,11 +366,54 @@ public class CLI {
 
             userInput = scanner.nextLine();
             isDateValid = userInput.equals("")
-                    || Validator.getInstance().isDateStringValid(userInput);
+                    || service.getValidator().isDateStringValid(userInput);
         }
 
         date = userInput.equals("") ? null : java.sql.Date.valueOf(userInput);
 
         return date;
     }
+
+    /**
+     * Checks if a given String is a valid computer ID, using isStringInteger() and
+     * service.doesComputerEntryExist().
+     *
+     * @param stringID
+     *            the id of the computer entry we want to check, as a String
+     * @return true if and only if there is a computer with this id in the database
+     * @throws PersistenceException
+     */
+    private static boolean isComputerIDStringValid(String stringID) throws PersistenceException {
+
+        boolean isValid = false;
+
+        if (service.getValidator().isStringInteger(stringID)) {
+            int id = Integer.valueOf(stringID);
+            isValid = service.doesComputerEntryExist(id);
+        }
+
+        return isValid;
+    }
+
+    /**
+     * Checks if a given String is a valid company ID, using isStringInteger() and
+     * companyDAO.doesEntryExist().
+     *
+     * @param stringID
+     *            the id of the company entry we want to check, as a String
+     * @return true if and only if there is a company with this id in the database
+     * @throws PersistenceException
+     */
+    private static boolean isCompanyIDStringValid(String stringID) throws PersistenceException {
+
+        boolean isValid = false;
+
+        if (service.getValidator().isStringInteger(stringID)) {
+            int id = Integer.valueOf(stringID);
+            isValid = service.doesCompanyEntryExist(id);
+        }
+
+        return isValid;
+    }
+
 }

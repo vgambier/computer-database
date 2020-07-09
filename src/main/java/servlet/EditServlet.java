@@ -41,7 +41,7 @@ public class EditServlet extends HttpServlet {
         int computerID;
 
         try {
-            if (Validator.getInstance().isComputerIDStringValid(computerIDString)) {
+            if (service.getValidator().isComputerIDStringValid(computerIDString)) {
                 computerID = Integer.valueOf(computerIDString);
                 request.setAttribute("id", computerIDString);
             } else { // if no id was given, go back to the main page
@@ -85,7 +85,7 @@ public class EditServlet extends HttpServlet {
         // the extracted method will return a boolean, but the specific error will not be regarded
         // The extracted method should be a Validator method that take a DTO as input
 
-        Validator validator = Validator.getInstance();
+        Validator validator = service.getValidator();
         StringBuilder str = new StringBuilder();
         boolean isEntryValid = true;
 

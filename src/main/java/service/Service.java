@@ -13,17 +13,20 @@ import model.ModelException;
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import persistence.PersistenceException;
+import validator.Validator;
 
 @Component
 public class Service {
 
     private ComputerDAO computerDAO;
     private CompanyDAO companyDAO;
+    private Validator validator;
 
-    public Service(ComputerDAO computerDAO, CompanyDAO companyDAO) {
+    public Service(ComputerDAO computerDAO, CompanyDAO companyDAO, Validator validator) {
         super();
         this.computerDAO = computerDAO;
         this.companyDAO = companyDAO;
+        this.validator = validator;
     }
 
     public List<Computer> listAllComputers() throws PersistenceException {
@@ -88,5 +91,9 @@ public class Service {
                 (computerPage.getPageNumber() - 1) * maxItemsPerPage, searchTerm, orderBy);
 
         computerPage.setComputers(computers);
+    }
+
+    public Validator getValidator() {
+        return validator;
     }
 }

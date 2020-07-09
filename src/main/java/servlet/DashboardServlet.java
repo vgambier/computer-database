@@ -19,7 +19,6 @@ import model.ComputerPage;
 import model.ModelException;
 import persistence.PersistenceException;
 import service.Service;
-import validator.Validator;
 
 @WebServlet(name = "DashboardServlet", urlPatterns = "/dashboard")
 public class DashboardServlet extends HttpServlet {
@@ -60,11 +59,10 @@ public class DashboardServlet extends HttpServlet {
 
             int nbEntries = service.countComputerEntriesWhere(searchTerm);
 
-            int currentPage = Validator.getInstance().isPageIDStringValid(nbEntries,
+            int currentPage = service.getValidator().isPageIDStringValid(nbEntries,
                     currentPageString) ? Integer.valueOf(currentPageString) : 1;
             request.setAttribute("currentPage", currentPage);
 
-            // TODO did this even work? no "where"
             computerPage = new ComputerPage(nbEntries, currentPage);
             service.fill(computerPage, searchTerm, orderBy);
             request.setAttribute("computerPage", computerPage);

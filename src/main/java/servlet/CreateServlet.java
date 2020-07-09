@@ -48,7 +48,7 @@ public class CreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Validator validator = Validator.getInstance();
+        Validator validator = service.getValidator();
         StringBuilder str = new StringBuilder();
         boolean isEntryValid = true;
 
