@@ -8,18 +8,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Component;
-
-import config.JdbcConfiguration;
 import mapper.Mapper;
 import mapper.MapperException;
 
-@Component
 public abstract class DAO<T> {
 
-    private DatabaseConnector databaseConnector = (DatabaseConnector) new AnnotationConfigApplicationContext(
-            JdbcConfiguration.class).getBean("databaseConnectorBean");
+    protected DatabaseConnector databaseConnector;
+
+    public DAO(DatabaseConnector databaseConnector) {
+        this.databaseConnector = databaseConnector;
+    }
 
     /**
      * Returns a Mapper<T> object where T is the the same T as the one in the current DAO<T> type.

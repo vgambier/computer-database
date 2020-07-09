@@ -6,10 +6,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import config.AppConfiguration;
+import config.JdbcConfiguration;
 import mapper.MapperException;
 import model.ComputerPage;
 import model.ModelException;
@@ -82,10 +82,10 @@ public class Validator {
 
         if (isStringInteger(stringID)) {
             int id = Integer.valueOf(stringID);
+            // TODO pas un deuxième contexte
             ApplicationContext context = new AnnotationConfigApplicationContext(
-                    AppConfiguration.class);
+                    AppConfiguration.class, JdbcConfiguration.class);
             Service service = (Service) context.getBean("serviceBean");
-            ((ConfigurableApplicationContext) context).close();
             isValid = service.doesComputerEntryExist(id);
         }
 
@@ -107,10 +107,10 @@ public class Validator {
 
         if (isStringInteger(stringID)) {
             int id = Integer.valueOf(stringID);
+            // TODO pas un deuxième contexte
             ApplicationContext context = new AnnotationConfigApplicationContext(
-                    AppConfiguration.class);
+                    AppConfiguration.class, JdbcConfiguration.class);
             Service service = (Service) context.getBean("serviceBean");
-            ((ConfigurableApplicationContext) context).close();
             isValid = service.doesCompanyEntryExist(id);
         }
 

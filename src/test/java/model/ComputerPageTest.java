@@ -14,7 +14,6 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import config.AppConfiguration;
@@ -49,9 +48,9 @@ public class ComputerPageTest extends DBTestCase {
     public void testDataLoaded() throws Exception {
         IDataSet dataSet = getDatabaseDataSet();
         assertNotNull(dataSet);
+        // TODO pas un deuxième contexte ???
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
         ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAOBean");
-        ((ConfigurableApplicationContext) context).close();
         double rowCount = computerDAO.countEntries();
         assertEquals(8.0, rowCount);
     }

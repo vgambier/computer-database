@@ -7,6 +7,7 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -15,9 +16,8 @@ import persistence.DatabaseConnector;
 import persistence.PersistenceException;
 
 @Configuration
+@ComponentScan({"persistence"})
 public class JdbcConfiguration {
-
-    private static DatabaseConnector databaseConnector;
 
     @Bean
     public HikariDataSource hikariDataSource() throws PersistenceException {
@@ -51,12 +51,9 @@ public class JdbcConfiguration {
     }
 
     @Bean(name = "databaseConnectorBean")
-    public DatabaseConnector databaseConnector() throws PersistenceException {
+    public DatabaseConnector databaseConnector(HikariDataSource hikariDataSource) {
 
-        if (databaseConnector == null) {
-            databaseConnector = new DatabaseConnector(hikariDataSource());
-        }
-        return databaseConnector;
+        return new DatabaseConnector(hikariDataSource);
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.Scanner;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import config.AppConfiguration;
+import config.JdbcConfiguration;
 import model.Company;
 import model.Computer;
 import model.ComputerPage;
@@ -26,7 +27,7 @@ public class CLI {
             "quit: exit the program");
     private static Scanner scanner = new Scanner(System.in);
     private static Service service = (Service) new AnnotationConfigApplicationContext(
-            AppConfiguration.class).getBean("serviceBean");
+            AppConfiguration.class, JdbcConfiguration.class).getBean("serviceBean");
 
     public static void main(String[] args) throws Exception {
 

@@ -3,6 +3,8 @@ package service;
 import java.sql.Date;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import mapper.MapperException;
 import model.Company;
 import model.Computer;
@@ -10,6 +12,7 @@ import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import persistence.PersistenceException;
 
+@Component
 public class Service {
 
     private ComputerDAO computerDAO;

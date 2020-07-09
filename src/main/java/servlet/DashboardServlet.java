@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import config.AppConfiguration;
+import config.JdbcConfiguration;
 import mapper.MapperException;
 import model.ComputerPage;
 import model.ModelException;
@@ -24,8 +25,10 @@ import validator.Validator;
 public class DashboardServlet extends HttpServlet {
 
     private static final long serialVersionUID = 0xDA57B0A2DL;
+
     private static Service service = (Service) new AnnotationConfigApplicationContext(
-            AppConfiguration.class).getBean("serviceBean");
+            AppConfiguration.class, JdbcConfiguration.class).getBean("serviceBean");
+
     private static final Logger LOG = LoggerFactory.getLogger(DashboardServlet.class);
 
     @Override

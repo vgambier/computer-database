@@ -9,20 +9,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import config.JdbcConfiguration;
 import mapper.ComputerMapper;
 import mapper.MapperException;
 import model.Computer;
 import model.ModelException;
 
-@Component
+@Component("computerDAOBean")
 public class ComputerDAO extends DAO<Computer> {
 
-    private DatabaseConnector databaseConnector = (DatabaseConnector) new AnnotationConfigApplicationContext(
-            JdbcConfiguration.class).getBean("databaseConnectorBean");
+    @Autowired
+    public ComputerDAO(DatabaseConnector databaseConnector) {
+        super(databaseConnector);
+    }
 
     /**
      * Finds a computer in the database, and returns a corresponding Java object.

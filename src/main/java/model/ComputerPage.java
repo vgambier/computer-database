@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import config.AppConfiguration;
+import config.JdbcConfiguration;
 import mapper.MapperException;
 import persistence.ComputerDAO;
 import persistence.PersistenceException;
@@ -33,9 +33,10 @@ public class ComputerPage {
             throws ModelException, MapperException, PersistenceException {
 
         // Checking the database to count the number of entries
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+        // TODO pas un deuxième contexte
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class,
+                JdbcConfiguration.class);
         ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAOBean");
-        ((ConfigurableApplicationContext) context).close();
         int nbEntries = computerDAO.countEntriesWhere(searchTerm);
 
         nbPages = nbEntries / maxItemsPerPage;

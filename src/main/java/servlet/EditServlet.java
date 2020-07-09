@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import config.AppConfiguration;
+import config.JdbcConfiguration;
 import mapper.MapperException;
 import model.Computer;
 import persistence.PersistenceException;
@@ -26,7 +27,8 @@ public class EditServlet extends HttpServlet {
     private static final long serialVersionUID = 0xED17L;
 
     private static Service service = (Service) new AnnotationConfigApplicationContext(
-            AppConfiguration.class).getBean("serviceBean");
+            AppConfiguration.class, JdbcConfiguration.class).getBean("serviceBean");
+
     private static final Logger LOG = LoggerFactory.getLogger(EditServlet.class);
 
     @Override

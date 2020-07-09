@@ -4,16 +4,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import config.JdbcConfiguration;
 import mapper.CompanyMapper;
 import model.Company;
 
+@Component("companyDAOBean")
 public class CompanyDAO extends DAO<Company> {
 
-    private DatabaseConnector databaseConnector = (DatabaseConnector) new AnnotationConfigApplicationContext(
-            JdbcConfiguration.class).getBean("databaseConnectorBean");
+    @Autowired
+    public CompanyDAO(DatabaseConnector databaseConnector) {
+        super(databaseConnector);
+    }
 
     @Override
     public CompanyMapper getTypeMapper() {
