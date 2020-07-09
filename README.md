@@ -1,6 +1,6 @@
 # computer-database
 
-Current version: 2.1.0
+Current version: 2.1.1
 
 ## About
 This program can connect to an SQL database of computers and companies. The user can manipulate the data via a command line interface (CLI), if run as a Java application, or a Web UI, if deployed on a Tomcat server.
