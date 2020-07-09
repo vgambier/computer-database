@@ -28,7 +28,7 @@ public class DeleteServlet extends HttpServlet {
             throws ServletException, IOException {
 
         response.sendRedirect(request.getContextPath() + "/dashboard"); // TODO + getParameter
-                                                                        // search? &orderBy
+                                                                        // ?orderBy
     }
 
     @Override
@@ -43,7 +43,9 @@ public class DeleteServlet extends HttpServlet {
         for (String computerIDString : selection) {
 
             try {
-                if (service.getValidator().isComputerIDStringValid(computerIDString)) {
+                if (service.getValidator().isStringInteger(computerIDString)
+                        && service.doesComputerEntryExist(Integer.valueOf(computerIDString))) {
+
                     int computerID = Integer.valueOf(computerIDString);
                     service.deleteComputer(computerID);
                 }

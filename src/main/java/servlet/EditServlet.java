@@ -41,7 +41,8 @@ public class EditServlet extends HttpServlet {
         int computerID;
 
         try {
-            if (service.getValidator().isComputerIDStringValid(computerIDString)) {
+            if (service.getValidator().isStringInteger(computerIDString)
+                    && service.doesComputerEntryExist(Integer.valueOf(computerIDString))) {
                 computerID = Integer.valueOf(computerIDString);
                 request.setAttribute("id", computerIDString);
             } else { // if no id was given, go back to the main page
@@ -94,7 +95,8 @@ public class EditServlet extends HttpServlet {
         Integer id = null;
         String idString = request.getParameter("id");
         try {
-            if (!validator.isComputerIDStringValid(idString)) {
+            if (!service.getValidator().isStringInteger(idString)
+                    || !service.doesComputerEntryExist(Integer.valueOf(idString))) {
                 str.append("Computer ID is invalid.\n");
                 isEntryValid = false;
             } else {
@@ -138,8 +140,8 @@ public class EditServlet extends HttpServlet {
         try {
             if (companyIDString.equals("0")) { // If the user chose the "--" default option
                 companyID = null; // Needed for the Computer constructor to function as intended
-            } else if (!companyIDString.equals("")
-                    && validator.isCompanyIDStringValid(companyIDString)) {
+            } else if (!companyIDString.equals("") && validator.isStringInteger(companyIDString)
+                    && service.doesCompanyEntryExist(Integer.valueOf(companyIDString))) {
                 companyID = Integer.valueOf(companyIDString);
             } else {
                 str.append("Company ID field must be empty (--) or a valid ID.\n");

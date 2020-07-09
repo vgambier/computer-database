@@ -88,8 +88,8 @@ public class CreateServlet extends HttpServlet {
         try {
             if (companyIDString.equals("0")) { // If the user chose the "--" default option
                 companyID = null; // Needed for the Computer constructor to function as intended
-            } else if (!companyIDString.equals("")
-                    && validator.isCompanyIDStringValid(companyIDString)) {
+            } else if (!companyIDString.equals("") && validator.isStringInteger(companyIDString)
+                    && service.doesCompanyEntryExist(Integer.valueOf(companyIDString))) {
                 companyID = Integer.valueOf(companyIDString);
             } else {
                 str.append("Company ID field must be empty (--) or a valid ID.\n");
