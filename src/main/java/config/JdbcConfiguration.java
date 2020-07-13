@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -52,8 +53,13 @@ public class JdbcConfiguration {
 
     @Bean(name = "databaseConnectorBean")
     public DatabaseConnector databaseConnector(HikariDataSource hikariDataSource) {
-
         return new DatabaseConnector(hikariDataSource);
+    }
+
+    @Bean(name = "namedParameterJdbcTemplateBean")
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(
+            HikariDataSource hikariDataSource) {
+        return new NamedParameterJdbcTemplate(hikariDataSource);
     }
 
 }

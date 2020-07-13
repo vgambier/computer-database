@@ -8,15 +8,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+
 import mapper.Mapper;
 import mapper.MapperException;
 
 public abstract class DAO<T> {
 
     protected DatabaseConnector databaseConnector;
+    protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public DAO(DatabaseConnector databaseConnector) {
+    public DAO(DatabaseConnector databaseConnector,
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.databaseConnector = databaseConnector;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     /**
@@ -35,7 +42,7 @@ public abstract class DAO<T> {
      * @return the number of entries in the database
      * @throws PersistenceException
      */
-    public int countEntries() throws PersistenceException {
+    public int countEntries() {
         return countEntriesWhere("");
     }
 
@@ -47,33 +54,15 @@ public abstract class DAO<T> {
      *            the search term - an entry match if it contains this string anywhere in its name
      *            or its company name
      * @return the number of entries in the database
-     * @throws PersistenceException
      */
-    public int countEntriesWhere(String searchTerm) throws PersistenceException {
+    public int countEntriesWhere(String searchTerm) {
 
         String sql = getCountEntriesWhereSQLStatement();
 
-        int nbEntries = -1; // The only way the "if" fails is if the query
-                            // fails, but an exception will be thrown anyway
+        SqlParameterSource namedParameters = new MapSqlParameterSource("search_term",
+                "%" + searchTerm + "%");
 
-        try (Connection connection = databaseConnector.connect();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, "%" + searchTerm + "%");
-            statement.setString(2, "%" + searchTerm + "%");
-
-            try (ResultSet rs = statement.executeQuery()) {
-
-                if (rs.next()) {
-                    nbEntries = rs.getInt(1);
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-        }
-
-        return nbEntries;
+        return namedParameterJdbcTemplate.queryForObject(sql, namedParameters, Integer.class);
     }
 
     /**

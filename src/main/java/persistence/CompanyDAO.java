@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import mapper.CompanyMapper;
@@ -14,8 +15,9 @@ import model.Company;
 public class CompanyDAO extends DAO<Company> {
 
     @Autowired
-    public CompanyDAO(DatabaseConnector databaseConnector) {
-        super(databaseConnector);
+    public CompanyDAO(DatabaseConnector databaseConnector,
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        super(databaseConnector, namedParameterJdbcTemplate);
     }
 
     @Override
@@ -35,7 +37,7 @@ public class CompanyDAO extends DAO<Company> {
 
     @Override
     protected String getCountEntriesWhereSQLStatement() {
-        return "SELECT COUNT(*) FROM `company` WHERE name LIKE ?";
+        return "SELECT COUNT(*) FROM `company` WHERE name LIKE :search_term";
     }
 
     public void delete(Integer companyID) throws PersistenceException {

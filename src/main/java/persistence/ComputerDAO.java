@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import mapper.ComputerMapper;
@@ -21,8 +22,9 @@ import model.ModelException;
 public class ComputerDAO extends DAO<Computer> {
 
     @Autowired
-    public ComputerDAO(DatabaseConnector databaseConnector) {
-        super(databaseConnector);
+    public ComputerDAO(DatabaseConnector databaseConnector,
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        super(databaseConnector, namedParameterJdbcTemplate);
     }
 
     /**
@@ -257,7 +259,7 @@ public class ComputerDAO extends DAO<Computer> {
 
         return "SELECT COUNT(*) FROM `computer` LEFT JOIN `company` "
                 + "ON computer.company_id = company.id "
-                + "WHERE computer.name LIKE ? OR company.name LIKE ?";
+                + "WHERE computer.name LIKE :search_term OR company.name LIKE :search_term";
     }
 
     @Override

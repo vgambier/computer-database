@@ -23,6 +23,7 @@ public class DatabaseConnector {
     // TODO: add more logging
     private static final Logger LOG = LoggerFactory.getLogger(DatabaseConnector.class);
 
+    // TODO: Deprecate
     /**
      * Connects to the database.
      *
@@ -33,5 +34,9 @@ public class DatabaseConnector {
 
         LOG.info("Connecting to the database");
         return hikariDataSource.getConnection();
+    }
+
+    public HikariDataSource getHikariDataSource() {
+        return hikariDataSource;
     }
 }
