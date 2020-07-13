@@ -15,7 +15,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import config.AppConfiguration;
 import config.JdbcConfiguration;
-import mapper.MapperException;
 import model.Computer;
 import persistence.PersistenceException;
 import service.Service;
@@ -55,14 +54,7 @@ public class EditServlet extends HttpServlet {
 
         // Fill the form with existing data
 
-        Computer computer;
-        try {
-            computer = service.getComputer(computerID);
-        } catch (PersistenceException e) {
-            throw new ServletException("Couldn't grab existing computer", e);
-        } catch (MapperException e) {
-            throw new ServletException("Couldn't grab existing computer", e);
-        }
+        Computer computer = service.getComputer(computerID);
 
         request.setAttribute("computer", computer);
         request.setAttribute("companies", service.listAllCompanies());

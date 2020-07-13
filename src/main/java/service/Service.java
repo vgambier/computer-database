@@ -37,7 +37,7 @@ public class Service {
         return companyDAO.listAll();
     }
 
-    public Computer getComputer(int computerID) throws PersistenceException, MapperException {
+    public Computer getComputer(int computerID) {
         return computerDAO.find(computerID);
     }
 
@@ -87,7 +87,7 @@ public class Service {
         int maxItemsPerPage = ComputerPage.getMaxItemsPerPage();
 
         // Putting computers in the page
-        List<Computer> computers = computerDAO.listSomeWhere(maxItemsPerPage,
+        List<Computer> computers = computerDAO.listSomeMatching(maxItemsPerPage,
                 (computerPage.getPageNumber() - 1) * maxItemsPerPage, searchTerm, orderBy);
 
         computerPage.setComputers(computers);

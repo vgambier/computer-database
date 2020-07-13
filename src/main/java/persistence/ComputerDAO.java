@@ -1,25 +1,28 @@
 package persistence;
 
-import java.io.IOException;
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import mapper.ComputerMapper;
-import mapper.MapperException;
 import model.Computer;
-import model.ModelException;
 
 @Component("computerDAOBean")
 public class ComputerDAO extends DAO<Computer> {
+
+    private static final String FIND_ENTRY_QUERY = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
+            + "introduced, discontinued, company.name AS company_name, company_id "
+            + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
+            + "WHERE computer.id = :id ORDER BY computer_id";
+
+    private static final String ADD_ENTRY_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (:name, :introduced, :discontinued, :company_id)";
+    private static final String UPDATE_ENTRY_QUERY = "UPDATE computer SET name = :name, introduced = :introduced, discontinued = :discontinued, company_id = :company_id WHERE id = :id";
+    private static final String DELETE_ENTRY_QUERY = "DELETE FROM `computer` WHERE id = :id";
 
     @Autowired
     public ComputerDAO(DatabaseConnector databaseConnector,
@@ -33,39 +36,11 @@ public class ComputerDAO extends DAO<Computer> {
      * @param id
      *            the id of the computer in the database
      * @return a Computer object, with the same attributes as the computer entry in the database
-     * @throws PersistenceException
-     * @throws MapperException
      */
-    public Computer find(int id) throws PersistenceException, MapperException {
+    public Computer find(int id) {
 
-        Computer computer = null;
-
-        String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-                + "introduced, discontinued, company.name AS company_name, company_id "
-                + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
-                + "WHERE computer.id = ? ORDER BY computer_id";
-
-        try (Connection connection = databaseConnector.connect();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setInt(1, id);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-
-                if (resultSet.isBeforeFirst()) {
-                    resultSet.next();
-                    computer = ComputerMapper.getInstance().toModel(resultSet);
-                }
-
-            } catch (SQLException e) {
-                throw new PersistenceException("Couldn't execute the SQL statement.", e);
-            }
-
-        } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare the SQL statement.", e);
-        }
-
-        return computer;
+        SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
+        return namedParameterJdbcTemplate.query(FIND_ENTRY_QUERY, namedParameters, mapper).get(0);
     }
 
     /**
@@ -79,35 +54,16 @@ public class ComputerDAO extends DAO<Computer> {
      *            the date of discontinuation of the new computer - may be null
      * @param companyID
      *            the ID of the company of the new computer - may be null
-     * @throws IOException
-     * @throws PersistenceException
-     * @throws Exception
      */
     public void add(String computerName, Date introducedDate, Date discontinuedDate,
-            Integer companyID) throws PersistenceException {
+            Integer companyID) {
 
-        String sql = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource("name", computerName);
+        namedParameters.addValue("introduced", introducedDate); // Possibly null
+        namedParameters.addValue("discontinued", discontinuedDate); // Possibly null
+        namedParameters.addValue("company_id", companyID); // Possibly null
 
-        // Converting to dates
-
-        try (Connection connection = databaseConnector.connect();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, computerName);
-            statement.setDate(2, introducedDate); // possibly null
-            statement.setDate(3, discontinuedDate); // possibly null
-
-            if (companyID == null) {
-                statement.setNull(4, java.sql.Types.INTEGER);
-            } else {
-                statement.setInt(4, companyID);
-            }
-
-            statement.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-        }
+        namedParameterJdbcTemplate.update(ADD_ENTRY_QUERY, namedParameters);
     }
 
     /**
@@ -123,37 +79,17 @@ public class ComputerDAO extends DAO<Computer> {
      *            the new date of discontinuation of the computer - may be null
      * @param newCompanyID
      *            the new ID of the company of the computer - may be null
-     * @throws IOException
-     * @throws PersistenceException
-     * @throws Exception
      */
     public void update(int id, String newComputerName, Date newIntroducedDate,
-            Date newDiscontinuedDate, Integer newCompanyID) throws PersistenceException {
+            Date newDiscontinuedDate, Integer newCompanyID) {
 
-        String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource("name", newComputerName);
+        namedParameters.addValue("introduced", newIntroducedDate); // Possibly null
+        namedParameters.addValue("discontinued", newDiscontinuedDate); // Possibly null
+        namedParameters.addValue("company_id", newCompanyID); // Possibly null
+        namedParameters.addValue("id", id);
 
-        // Converting to dates
-
-        try (Connection connection = databaseConnector.connect();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setString(1, newComputerName);
-            statement.setDate(2, newIntroducedDate); // possibly null
-            statement.setDate(3, newDiscontinuedDate); // possibly null
-
-            if (newCompanyID == null) {
-                statement.setNull(4, java.sql.Types.INTEGER);
-            } else {
-                statement.setInt(4, newCompanyID);
-            }
-
-            statement.setInt(5, id);
-
-            statement.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-        }
+        namedParameterJdbcTemplate.update(UPDATE_ENTRY_QUERY, namedParameters);
     }
 
     /**
@@ -161,22 +97,11 @@ public class ComputerDAO extends DAO<Computer> {
      *
      * @param id
      *            the id of the relevant computer
-     * @throws IOException
-     * @throws PersistenceException
-     * @throws Exception
      */
-    public void delete(int id) throws PersistenceException {
+    public void delete(int id) {
 
-        String sql = "DELETE FROM `computer` WHERE id = ?";
-
-        try (Connection connection = databaseConnector.connect();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setInt(1, id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-        }
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
+        namedParameterJdbcTemplate.update(DELETE_ENTRY_QUERY, namedParameters);
     }
 
     /**
@@ -191,54 +116,33 @@ public class ComputerDAO extends DAO<Computer> {
      *            the search term - an entry match if it contains this string anywhere in its name
      *            or its company name
      * @return the corresponding list of Computer objects
-     * @throws IOException
-     * @throws ModelException
-     * @throws MapperException
      * @throws PersistenceException
      */
-    public List<Computer> listSomeWhere(int limit, int offset, String searchTerm, String orderBy)
-            throws ModelException, MapperException, PersistenceException {
+    public List<Computer> listSomeMatching(int limit, int offset, String searchTerm, String orderBy)
+            throws PersistenceException {
 
+        // Avoid SQL injections
         if (!orderBy.equals("computer_id") && !orderBy.equals("computer_name")
                 && !orderBy.equals("introduced") && !orderBy.equals("discontinued")
                 && !orderBy.equals("company_name")) {
 
-            throw new PersistenceException("Invalid column name"); // Avoid SQL injections
+            throw new PersistenceException("Invalid column name");
         }
-
-        List<Computer> computers = new ArrayList<Computer>();
 
         String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
                 + "introduced, discontinued, company.name AS company_name, company_id "
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
-                + "WHERE computer.name LIKE ? OR company.name LIKE ? " + "ORDER BY " + orderBy
-                + " LIMIT ? OFFSET ?";
+                + "WHERE computer.name LIKE :searchTerm OR company.name LIKE :searchTerm "
+                + "ORDER BY " + orderBy + " LIMIT :limit OFFSET :offset";
         // This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE)
         // entries
 
-        try (Connection connection = databaseConnector.connect();
-                PreparedStatement statementList = connection.prepareStatement(sql)) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource("searchTerm",
+                "%" + searchTerm + "%");
+        namedParameters.addValue("limit", limit);
+        namedParameters.addValue("offset", offset);
+        return namedParameterJdbcTemplate.query(sql, namedParameters, mapper);
 
-            statementList.setString(1, "%" + searchTerm + "%");
-            statementList.setString(2, "%" + searchTerm + "%");
-            statementList.setInt(3, limit);
-            statementList.setInt(4, offset);
-
-            try (ResultSet resultSet = statementList.executeQuery()) {
-
-                while (resultSet.next()) {
-                    computers.add(ComputerMapper.getInstance().toModel(resultSet));
-                }
-
-            } catch (SQLException e) {
-                throw new ModelException("Couldn't execute the SQL statement.", e);
-            }
-
-        } catch (SQLException e) {
-            throw new ModelException("Couldn't prepare the SQL statement.", e);
-        }
-
-        return computers;
     }
 
     @Override
