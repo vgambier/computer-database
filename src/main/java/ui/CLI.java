@@ -108,7 +108,7 @@ public class CLI {
      *
      * @throws Exception
      */
-    private static void computers() throws PersistenceException {
+    private static void computers() {
         for (Computer computer : service.listAllComputers()) {
             System.out.println(computer);
         }
@@ -146,7 +146,7 @@ public class CLI {
      *
      * @throws Exception
      */
-    private static void companies() throws Exception {
+    private static void companies() {
         for (Company company : service.listAllCompanies()) {
             System.out.println(company);
         }
@@ -383,7 +383,7 @@ public class CLI {
      * @return true if and only if there is a computer with this id in the database
      * @throws PersistenceException
      */
-    private static boolean isComputerIDStringValid(String stringID) throws PersistenceException {
+    private static boolean isComputerIDStringValid(String stringID) {
 
         boolean isValid = false;
 
@@ -404,7 +404,7 @@ public class CLI {
      * @return true if and only if there is a company with this id in the database
      * @throws PersistenceException
      */
-    private static boolean isCompanyIDStringValid(String stringID) throws PersistenceException {
+    private static boolean isCompanyIDStringValid(String stringID) {
 
         boolean isValid = false;
 

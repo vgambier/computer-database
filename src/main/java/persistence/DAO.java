@@ -1,39 +1,25 @@
 package persistence;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-
-import mapper.Mapper;
-import mapper.MapperException;
 
 public abstract class DAO<T> {
 
     protected DatabaseConnector databaseConnector;
     protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    protected RowMapper<T> mapper;
 
     public DAO(DatabaseConnector databaseConnector,
-            NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate, RowMapper<T> mapper) {
         this.databaseConnector = databaseConnector;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.mapper = mapper;
     }
-
-    /**
-     * Returns a Mapper<T> object where T is the the same T as the one in the current DAO<T> type.
-     * For example, if this method is called by an instance of ComputerDAO, it should return an
-     * instance of ComputerMapper
-     *
-     * @return a Mapper<T> object
-     */
-    public abstract Mapper<T> getTypeMapper();
 
     /**
      * Count the number of entries in the database. Works for both the computer database and the
@@ -57,6 +43,7 @@ public abstract class DAO<T> {
      */
     public int countEntriesWhere(String searchTerm) {
 
+        // TODO: turn these into final static attributes
         String sql = getCountEntriesWhereSQLStatement();
 
         SqlParameterSource namedParameters = new MapSqlParameterSource("search_term",
@@ -69,29 +56,11 @@ public abstract class DAO<T> {
      * Returns all entries from the database as Java objects.
      *
      * @return the list of Java objects
-     * @throws PersistenceException
      */
-    public List<T> listAll() throws PersistenceException {
-
-        List<T> models = new ArrayList<T>();
+    public List<T> listAll() {
 
         String sql = getListAllSQLStatement();
-
-        try (Connection connection = databaseConnector.connect();
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                models.add(getTypeMapper().toModel(resultSet));
-            }
-
-        } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statement.", e);
-        } catch (MapperException e) {
-            throw new PersistenceException("Couldn't map the database entries to model!", e);
-        }
-
-        return models;
+        return namedParameterJdbcTemplate.query(sql, mapper);
     }
 
     /**
@@ -104,35 +73,20 @@ public abstract class DAO<T> {
      * @throws PersistenceException
      * @throws Exception
      */
-    public boolean doesEntryExist(int id) throws PersistenceException {
-
-        boolean doesEntryExist = false;
+    public boolean doesEntryExist(int id) {
 
         // SQL injection is impossible: the user has no control over tableName
-        String sql = "SELECT COUNT(1) FROM " + getTableName() + " WHERE id = ?";
+        String sql = "SELECT COUNT(1) FROM " + getTableName() + " WHERE id = :id";
 
-        try (Connection connection = databaseConnector.connect();
-                PreparedStatement statement = connection.prepareStatement(sql)) {
+        SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
 
-            statement.setInt(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                // true if the query returned one entry, since the result set returned either 0 or 1
-                // entry
-                doesEntryExist = resultSet.next() && resultSet.getInt(1) == 1;
-            } catch (SQLException e) {
-                throw new PersistenceException("Couldn't execute the SQL statement.", e);
-            }
-
-        } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare the SQL statement.", e);
-        }
-        return doesEntryExist;
+        return namedParameterJdbcTemplate.queryForObject(sql, namedParameters, Integer.class) == 1;
+        // this is true if the query returned one entry
+        // since the result set returned either 0 or 1 entry
     }
 
     protected abstract String getTableName();
-
     protected abstract String getListAllSQLStatement();
-
     protected abstract String getCountEntriesWhereSQLStatement();
 
 }

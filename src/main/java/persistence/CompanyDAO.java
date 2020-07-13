@@ -17,12 +17,7 @@ public class CompanyDAO extends DAO<Company> {
     @Autowired
     public CompanyDAO(DatabaseConnector databaseConnector,
             NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        super(databaseConnector, namedParameterJdbcTemplate);
-    }
-
-    @Override
-    public CompanyMapper getTypeMapper() {
-        return CompanyMapper.getInstance();
+        super(databaseConnector, namedParameterJdbcTemplate, CompanyMapper.getInstance());
     }
 
     @Override

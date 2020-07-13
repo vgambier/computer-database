@@ -49,8 +49,6 @@ public class EditServlet extends HttpServlet {
                 request.getRequestDispatcher("dashboard.jsp").forward(request, response);
                 return;
             }
-        } catch (PersistenceException e) {
-            throw new ServletException("Couldn't set session attributes", e);
         } catch (IOException e) {
             throw new ServletException("Couldn't set session attributes", e);
         }
@@ -65,13 +63,9 @@ public class EditServlet extends HttpServlet {
         } catch (MapperException e) {
             throw new ServletException("Couldn't grab existing computer", e);
         }
-        request.setAttribute("computer", computer);
 
-        try {
-            request.setAttribute("companies", service.listAllCompanies());
-        } catch (PersistenceException e) {
-            throw new ServletException("Couldn't set session attributes", e);
-        }
+        request.setAttribute("computer", computer);
+        request.setAttribute("companies", service.listAllCompanies());
 
         request.getRequestDispatcher("editComputer.jsp").forward(request, response);
     }
@@ -94,16 +88,13 @@ public class EditServlet extends HttpServlet {
 
         Integer id = null;
         String idString = request.getParameter("id");
-        try {
-            if (!service.getValidator().isStringInteger(idString)
-                    || !service.doesComputerEntryExist(Integer.valueOf(idString))) {
-                str.append("Computer ID is invalid.\n");
-                isEntryValid = false;
-            } else {
-                id = Integer.parseInt(idString);
-            }
-        } catch (PersistenceException e) {
-            throw new ServletException("Couldn't check computer ID validity!", e);
+
+        if (!service.getValidator().isStringInteger(idString)
+                || !service.doesComputerEntryExist(Integer.valueOf(idString))) {
+            str.append("Computer ID is invalid.\n");
+            isEntryValid = false;
+        } else {
+            id = Integer.parseInt(idString);
         }
 
         String computerName = request.getParameter("computerName");
@@ -149,8 +140,6 @@ public class EditServlet extends HttpServlet {
                 isEntryValid = false;
             }
         } catch (NumberFormatException e) {
-            throw new ServletException("Couldn't check company ID validity!", e);
-        } catch (PersistenceException e) {
             throw new ServletException("Couldn't check company ID validity!", e);
         }
 

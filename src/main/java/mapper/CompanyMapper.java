@@ -3,11 +3,13 @@ package mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import model.Company;
 
 /* This class uses the Singleton pattern */
 
-public class CompanyMapper extends Mapper<Company> {
+public class CompanyMapper implements RowMapper<Company> {
 
     private static CompanyMapper instance = null;
 
@@ -21,7 +23,7 @@ public class CompanyMapper extends Mapper<Company> {
         return instance;
     }
 
-    @Override
+    // TODO: deprecate
     public Company toModel(ResultSet rs) throws MapperException {
 
         try {
@@ -30,5 +32,10 @@ public class CompanyMapper extends Mapper<Company> {
             throw new MapperException("ResultSet object did not have a first entry!", e);
         }
 
+    }
+
+    @Override
+    public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return new Company(rs.getInt("id"), rs.getString("name"));
     }
 }

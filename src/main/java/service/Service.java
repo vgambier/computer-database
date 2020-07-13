@@ -29,11 +29,11 @@ public class Service {
         this.validator = validator;
     }
 
-    public List<Computer> listAllComputers() throws PersistenceException {
+    public List<Computer> listAllComputers() {
         return computerDAO.listAll();
     }
 
-    public List<Company> listAllCompanies() throws PersistenceException {
+    public List<Company> listAllCompanies() {
         return companyDAO.listAll();
     }
 
@@ -60,19 +60,19 @@ public class Service {
         companyDAO.delete(companyID);
     }
 
-    public boolean doesComputerEntryExist(int id) throws PersistenceException {
+    public boolean doesComputerEntryExist(int id) {
         return computerDAO.doesEntryExist(id);
     }
 
-    public boolean doesCompanyEntryExist(int id) throws PersistenceException {
+    public boolean doesCompanyEntryExist(int id) {
         return companyDAO.doesEntryExist(id);
     }
 
-    public int countComputerEntries() throws PersistenceException {
+    public int countComputerEntries() {
         return computerDAO.countEntries();
     }
 
-    public int countComputerEntriesWhere(String searchTerm) throws PersistenceException {
+    public int countComputerEntriesWhere(String searchTerm) {
         return computerDAO.countEntriesWhere(searchTerm);
     }
 

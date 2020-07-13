@@ -24,7 +24,7 @@ public class ComputerDAO extends DAO<Computer> {
     @Autowired
     public ComputerDAO(DatabaseConnector databaseConnector,
             NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        super(databaseConnector, namedParameterJdbcTemplate);
+        super(databaseConnector, namedParameterJdbcTemplate, ComputerMapper.getInstance());
     }
 
     /**
@@ -239,11 +239,6 @@ public class ComputerDAO extends DAO<Computer> {
         }
 
         return computers;
-    }
-
-    @Override
-    public ComputerMapper getTypeMapper() {
-        return ComputerMapper.getInstance();
     }
 
     @Override

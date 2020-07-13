@@ -35,11 +35,7 @@ public class CreateServlet extends HttpServlet {
 
         LOG.info("Settings attributes for CreateServlet.");
 
-        try {
-            request.setAttribute("companies", service.listAllCompanies());
-        } catch (PersistenceException e) {
-            throw new ServletException("Couldn't set session attributes", e);
-        }
+        request.setAttribute("companies", service.listAllCompanies());
 
         request.getRequestDispatcher("addComputer.jsp").forward(request, response);
     }
@@ -97,8 +93,6 @@ public class CreateServlet extends HttpServlet {
                 isEntryValid = false;
             }
         } catch (NumberFormatException e) {
-            throw new ServletException("Couldn't check company ID validity!", e);
-        } catch (PersistenceException e) {
             throw new ServletException("Couldn't check company ID validity!", e);
         }
 
