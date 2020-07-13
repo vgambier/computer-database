@@ -43,7 +43,6 @@ public abstract class DAO<T> {
      */
     public int countEntriesWhere(String searchTerm) {
 
-        // TODO: turn these into final static attributes
         String sql = getCountEntriesWhereSQLStatement();
 
         SqlParameterSource namedParameters = new MapSqlParameterSource("search_term",

@@ -37,6 +37,7 @@ public class JdbcConfiguration {
         String username = properties.getProperty("USERNAME");
         String password = properties.getProperty("PASSWORD");
 
+        // TODO: add more logging
         Logger LOG = LoggerFactory.getLogger(DatabaseConnector.class);
         LOG.info("Initializing Hikari DataSource to database:\nURL: " + databaseURL + "\nUsername: "
                 + username);
