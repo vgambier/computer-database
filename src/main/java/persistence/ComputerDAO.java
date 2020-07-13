@@ -242,14 +242,6 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    protected String getListAllSQLStatement() {
-
-        return "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-                + "introduced, discontinued, company.name AS company_name, company_id "
-                + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id";
-    }
-
-    @Override
     protected String getCountEntriesWhereSQLStatement() {
 
         return "SELECT COUNT(*) FROM `computer` LEFT JOIN `company` "
@@ -258,8 +250,16 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    protected String getTableName() {
-        return "computer";
+    protected String getListAllSQLStatement() {
+
+        return "SELECT computer.id AS computer_id, computer.name AS computer_name, "
+                + "introduced, discontinued, company.name AS company_name, company_id "
+                + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id";
+    }
+
+    @Override
+    protected String getDoesEntryExistSQLStatement() {
+        return "SELECT COUNT(1) FROM `computer` WHERE id = :id";
     }
 
 }

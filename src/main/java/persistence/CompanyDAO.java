@@ -20,21 +20,6 @@ public class CompanyDAO extends DAO<Company> {
         super(databaseConnector, namedParameterJdbcTemplate, CompanyMapper.getInstance());
     }
 
-    @Override
-    protected String getListAllSQLStatement() {
-        return "SELECT id, name FROM company";
-    }
-
-    @Override
-    protected String getTableName() {
-        return "company";
-    }
-
-    @Override
-    protected String getCountEntriesWhereSQLStatement() {
-        return "SELECT COUNT(*) FROM `company` WHERE name LIKE :search_term";
-    }
-
     public void delete(Integer companyID) throws PersistenceException {
 
         String sqlComputers = "DELETE FROM `computer` WHERE company_id = ?";
@@ -69,5 +54,20 @@ public class CompanyDAO extends DAO<Company> {
         } catch (SQLException e) {
             throw new PersistenceException("Couldn't prepare and execute the SQL statements.", e);
         }
+    }
+
+    @Override
+    protected String getCountEntriesWhereSQLStatement() {
+        return "SELECT COUNT(*) FROM `company` WHERE name LIKE :search_term";
+    }
+
+    @Override
+    protected String getListAllSQLStatement() {
+        return "SELECT id, name FROM company";
+    }
+
+    @Override
+    protected String getDoesEntryExistSQLStatement() {
+        return "SELECT COUNT(1) FROM `company` WHERE id = :id";
     }
 }

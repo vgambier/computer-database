@@ -75,8 +75,7 @@ public abstract class DAO<T> {
      */
     public boolean doesEntryExist(int id) {
 
-        // SQL injection is impossible: the user has no control over tableName
-        String sql = "SELECT COUNT(1) FROM " + getTableName() + " WHERE id = :id";
+        String sql = getDoesEntryExistSQLStatement();
 
         SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
 
@@ -85,8 +84,8 @@ public abstract class DAO<T> {
         // since the result set returned either 0 or 1 entry
     }
 
-    protected abstract String getTableName();
-    protected abstract String getListAllSQLStatement();
     protected abstract String getCountEntriesWhereSQLStatement();
+    protected abstract String getListAllSQLStatement();
+    protected abstract String getDoesEntryExistSQLStatement();
 
 }
