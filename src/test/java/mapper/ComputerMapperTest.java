@@ -30,7 +30,7 @@ public class ComputerMapperTest {
     }
 
     @Test
-    public void testToModelResultSet() throws SQLException, MapperException {
+    public void testMapRowResultSet() throws SQLException {
 
         // ResultSet with a full entry
         Mockito.when(resultSet.getInt("computer_id")).thenReturn(12);
@@ -40,7 +40,7 @@ public class ComputerMapperTest {
         Mockito.when(resultSet.getString("company_name")).thenReturn("Samsung");
         Mockito.when(resultSet.getInt("company_id")).thenReturn(1);
 
-        Computer computer = ComputerMapper.getInstance().toModel(resultSet);
+        Computer computer = ComputerMapper.getInstance().mapRow(resultSet, 1);
 
         Assert.assertNotNull(computer);
         Assert.assertEquals(12, computer.getId());
@@ -51,8 +51,8 @@ public class ComputerMapperTest {
     }
 
     @SuppressWarnings("unchecked")
-    @Test(expected = MapperException.class)
-    public void testToModelEmptyResultSet() throws SQLException, MapperException {
+    @Test(expected = SQLException.class)
+    public void testToModelEmptyResultSet() throws SQLException {
 
         Mockito.when(resultSet.getInt("computer_id")).thenThrow(SQLException.class);
         Mockito.when(resultSet.getString("computer_name")).thenThrow(SQLException.class);
@@ -61,7 +61,7 @@ public class ComputerMapperTest {
         Mockito.when(resultSet.getString("company_name")).thenThrow(SQLException.class);
         Mockito.when(resultSet.getString("company_id")).thenThrow(SQLException.class);
 
-        ComputerMapper.getInstance().toModel(resultSet);
+        ComputerMapper.getInstance().mapRow(resultSet, 1);
 
     }
 }

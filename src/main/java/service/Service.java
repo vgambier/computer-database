@@ -5,11 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import mapper.MapperException;
 import model.Company;
 import model.Computer;
 import model.ComputerPage;
-import model.ModelException;
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import persistence.PersistenceException;
@@ -42,21 +40,21 @@ public class Service {
     }
 
     public void addComputer(String computerName, Date introducedDate, Date discontinuedDate,
-            Integer companyID) throws PersistenceException {
+            Integer companyID) {
         computerDAO.add(computerName, introducedDate, discontinuedDate, companyID);
     }
 
     public void updateComputer(Integer computerID, String newComputerName, Date newIntroducedDate,
-            Date newDiscontinuedDate, Integer newCompanyID) throws PersistenceException {
+            Date newDiscontinuedDate, Integer newCompanyID) {
         computerDAO.update(computerID, newComputerName, newIntroducedDate, newDiscontinuedDate,
                 newCompanyID);
     }
 
-    public void deleteComputer(Integer computerID) throws PersistenceException {
+    public void deleteComputer(Integer computerID) {
         computerDAO.delete(computerID);
     }
 
-    public void deleteCompany(Integer companyID) throws PersistenceException {
+    public void deleteCompany(Integer companyID) {
         companyDAO.delete(companyID);
     }
 
@@ -76,13 +74,12 @@ public class Service {
         return computerDAO.countEntriesWhere(searchTerm);
     }
 
-    public void fill(ComputerPage computerPage)
-            throws ModelException, MapperException, PersistenceException {
+    public void fill(ComputerPage computerPage) throws PersistenceException {
         fill(computerPage, "", "computer_id");
     }
 
     public void fill(ComputerPage computerPage, String searchTerm, String orderBy)
-            throws ModelException, MapperException, PersistenceException {
+            throws PersistenceException {
 
         int maxItemsPerPage = ComputerPage.getMaxItemsPerPage();
 

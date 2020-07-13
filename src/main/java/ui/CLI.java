@@ -329,14 +329,14 @@ public class CLI {
         }
     }
 
-    private static void deletecompany(String[] arr)
-            throws NumberFormatException, PersistenceException {
+    private static void deletecompany(String[] arr) throws NumberFormatException {
         if (arr.length >= 2) {
             if (!isCompanyIDStringValid(arr[1])) {
                 System.out.println(
                         "Company ID must be a positive integer and correspond to an existing entry.");
             } else {
                 service.deleteCompany(Integer.valueOf(arr[1]));
+                System.out.println("Company succesfully deleted.");
             }
         } else {
             System.out.println(

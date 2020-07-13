@@ -23,17 +23,6 @@ public class CompanyMapper implements RowMapper<Company> {
         return instance;
     }
 
-    // TODO: deprecate
-    public Company toModel(ResultSet rs) throws MapperException {
-
-        try {
-            return new Company(rs.getInt("id"), rs.getString("name"));
-        } catch (SQLException e) {
-            throw new MapperException("ResultSet object did not have a first entry!", e);
-        }
-
-    }
-
     @Override
     public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new Company(rs.getInt("id"), rs.getString("name"));

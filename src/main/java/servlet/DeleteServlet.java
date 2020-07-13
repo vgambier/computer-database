@@ -12,7 +12,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import config.AppConfiguration;
 import config.JdbcConfiguration;
-import persistence.PersistenceException;
 import service.Service;
 
 @WebServlet(name = "DeleteServlet", urlPatterns = "/delete")
@@ -50,8 +49,6 @@ public class DeleteServlet extends HttpServlet {
                     service.deleteComputer(computerID);
                 }
             } catch (NumberFormatException e) {
-                throw new ServletException("Couldn't delete computer", e);
-            } catch (PersistenceException e) {
                 throw new ServletException("Couldn't delete computer", e);
             }
         }

@@ -14,7 +14,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import config.AppConfiguration;
 import config.JdbcConfiguration;
-import mapper.MapperException;
 import model.ComputerPage;
 import model.ModelException;
 import persistence.PersistenceException;
@@ -69,8 +68,6 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("computerCount", nbEntries);
 
         } catch (ModelException e) {
-            throw new ServletException("Couldn't set session attributes", e);
-        } catch (MapperException e) {
             throw new ServletException("Couldn't set session attributes", e);
         } catch (PersistenceException e) {
             throw new ServletException("Couldn't set session attributes", e);

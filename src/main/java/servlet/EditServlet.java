@@ -16,7 +16,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import config.AppConfiguration;
 import config.JdbcConfiguration;
 import model.Computer;
-import persistence.PersistenceException;
 import service.Service;
 import validator.Validator;
 
@@ -138,12 +137,8 @@ public class EditServlet extends HttpServlet {
         // Adding entry if form is valid
 
         if (str.length() == 0) { // If all fields are valid
-            try {
-                service.updateComputer(id, computerName, introduced, discontinued, companyID);
-                request.setAttribute("message", "Entry successfully edited.");
-            } catch (PersistenceException e) {
-                throw new ServletException("Could not edit the computer!", e);
-            }
+            service.updateComputer(id, computerName, introduced, discontinued, companyID);
+            request.setAttribute("message", "Entry successfully edited.");
         } else {
             request.setAttribute("message", str.toString());
         }

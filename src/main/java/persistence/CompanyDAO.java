@@ -1,12 +1,10 @@
 package persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import mapper.CompanyMapper;
 import model.Company;
@@ -14,46 +12,24 @@ import model.Company;
 @Component("companyDAOBean")
 public class CompanyDAO extends DAO<Company> {
 
+    private static final String DELETE_COMPUTERS_MATCHING_QUERY = "DELETE FROM `computer` WHERE company_id = :company_id";
+    private static final String DELETE_COMPANY_MATCHING_QUERY = "DELETE FROM `company` WHERE id = :id";
+
     @Autowired
     public CompanyDAO(DatabaseConnector databaseConnector,
             NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(databaseConnector, namedParameterJdbcTemplate, CompanyMapper.getInstance());
     }
 
-    public void delete(Integer companyID) throws PersistenceException {
+    @Transactional(rollbackFor = {Exception.class})
+    public void delete(Integer companyID) {
 
-        String sqlComputers = "DELETE FROM `computer` WHERE company_id = ?";
-        String sqlCompany = "DELETE FROM `company` WHERE id = ?";
+        MapSqlParameterSource computerNamedParameters = new MapSqlParameterSource("company_id",
+                companyID);
+        namedParameterJdbcTemplate.update(DELETE_COMPUTERS_MATCHING_QUERY, computerNamedParameters);
 
-        try (Connection connection = databaseConnector.connect()) {
-
-            connection.setAutoCommit(false);
-
-            try (PreparedStatement computersStatement = connection.prepareStatement(sqlComputers);
-                    PreparedStatement companyStatement = connection.prepareStatement(sqlCompany)) {
-
-                computersStatement.setInt(1, companyID);
-                computersStatement.executeUpdate();
-
-                companyStatement.setInt(1, companyID);
-                companyStatement.executeUpdate();
-
-                connection.commit();
-            } finally {
-                if (connection != null) {
-                    try {
-                        connection.rollback();
-                    } catch (SQLException e) {
-                        throw new PersistenceException("Couldn't rollback transacton.", e);
-                    }
-                }
-            }
-
-            System.out.println("Company succesfully deleted.");
-
-        } catch (SQLException e) {
-            throw new PersistenceException("Couldn't prepare and execute the SQL statements.", e);
-        }
+        MapSqlParameterSource companyNamedParameters = new MapSqlParameterSource("id", companyID);
+        namedParameterJdbcTemplate.update(DELETE_COMPANY_MATCHING_QUERY, companyNamedParameters);
     }
 
     @Override
