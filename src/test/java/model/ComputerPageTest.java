@@ -18,8 +18,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import config.AppConfiguration;
-import persistence.ComputerDAO;
+import config.JdbcConfiguration;
 import persistence.DatabaseConnector;
+import service.Service;
 
 // TODO: add more unit tests everywhere
 
@@ -50,12 +51,15 @@ public class ComputerPageTest extends DBTestCase {
         IDataSet dataSet = getDatabaseDataSet();
         assertNotNull(dataSet);
 
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
-        ComputerDAO computerDAO = (ComputerDAO) context.getBean("computerDAOBean");
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class,
+                JdbcConfiguration.class);
+        Service service = (Service) context.getBean("serviceBean");
+
+        double rowCount = service.countComputerEntries();
+        assertEquals(8.0, rowCount);
+
         ((ConfigurableApplicationContext) context).close();
 
-        double rowCount = computerDAO.countEntries();
-        assertEquals(8.0, rowCount);
     }
 
     @Test(expected = ModelException.class)
