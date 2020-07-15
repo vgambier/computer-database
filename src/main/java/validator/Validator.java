@@ -1,30 +1,32 @@
 package validator;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import model.ComputerPage;
 import model.ModelException;
 
 // TODO: move error messages to CLI
+// TODO: should this stay a Bean?
 
 /**
  * @author Victor Gambier
  *
  */
-@Component("validatorBean")
+@Component
 public class Validator {
 
+    private static DateFormat formatter;
+
+    @Autowired
     public Validator() {
         formatter = new SimpleDateFormat("yyyy-MM-dd");
         formatter.setLenient(false); // allows stricter format check
     }
-
-    private static DateFormat formatter;
 
     /**
      * @param nbEntries
@@ -33,7 +35,6 @@ public class Validator {
      *            the id of the company entry we want to check, as a String
      * @return true if and only if the input corresponds to a page in the pagination system
      * @throws NumberFormatException
-     * @throws IOException
      */
     public boolean isPageIDStringValid(int nbEntries, String pageID) throws NumberFormatException {
 

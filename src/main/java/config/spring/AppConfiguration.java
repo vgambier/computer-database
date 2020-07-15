@@ -6,19 +6,31 @@ import org.springframework.context.annotation.Configuration;
 
 import persistence.CompanyDAO;
 import persistence.ComputerDAO;
-import service.Service;
+import service.CompanyService;
+import service.ComputerService;
 import validator.Validator;
 
 /**
  * @author Victor Gambier
  *
+ *         Configures the beans used for general purposes.
  */
 @Configuration
-@ComponentScan({"persistence, validator"})
+@ComponentScan({"persistence, validator"}) // TODO: add servlet package
 public class AppConfiguration {
 
-    @Bean(name = "serviceBean")
-    public Service service(ComputerDAO computerDAO, CompanyDAO companyDAO, Validator validator) {
-        return new Service(computerDAO, companyDAO, validator);
+    @Bean(name = "computerServiceBean")
+    public ComputerService computerService(ComputerDAO computerDAO) {
+        return new ComputerService(computerDAO);
+    }
+
+    @Bean(name = "companyServiceBean")
+    public CompanyService companyService(CompanyDAO companyDAO) {
+        return new CompanyService(companyDAO);
+    }
+
+    @Bean(name = "validatorBean")
+    public Validator validator() {
+        return new Validator();
     }
 }

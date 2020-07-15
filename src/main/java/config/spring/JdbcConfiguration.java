@@ -19,6 +19,7 @@ import persistence.PersistenceException;
 /**
  * @author Victor Gambier
  *
+ *         Configures the beans that are used to connect to the database.
  */
 @Configuration
 @ComponentScan({"persistence"})

@@ -8,23 +8,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import config.spring.AppConfiguration;
-import config.spring.JdbcConfiguration;
-import service.Service;
+import service.ComputerService;
+import validator.Validator;
 
 /**
  * @author Victor Gambier
  *
  */
+@Component
 @WebServlet(name = "DeleteServlet", urlPatterns = "/delete")
 public class DeleteServlet extends HttpServlet {
 
     private static final long serialVersionUID = 0xD31373L;
 
-    private static Service service = (Service) new AnnotationConfigApplicationContext(
-            AppConfiguration.class, JdbcConfiguration.class).getBean("serviceBean");
+    private ComputerService computerService;
+    private Validator validator;
+
+    @Autowired
+    public DeleteServlet(ComputerService computerService, Validator validator) {
+        this.computerService = computerService;
+        this.validator = validator;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,11 +53,11 @@ public class DeleteServlet extends HttpServlet {
         for (String computerIDString : selection) {
 
             try {
-                if (service.getValidator().isStringInteger(computerIDString)
-                        && service.doesComputerEntryExist(Integer.valueOf(computerIDString))) {
+                if (validator.isStringInteger(computerIDString) && computerService
+                        .doesComputerEntryExist(Integer.valueOf(computerIDString))) {
 
                     int computerID = Integer.valueOf(computerIDString);
-                    service.deleteComputer(computerID);
+                    computerService.deleteComputer(computerID);
                 }
             } catch (NumberFormatException e) {
                 throw new ServletException("Couldn't delete computer", e);

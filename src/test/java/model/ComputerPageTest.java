@@ -19,7 +19,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import config.spring.AppConfiguration;
 import config.spring.JdbcConfiguration;
-import service.Service;
+import service.ComputerService;
 
 // TODO: add more unit tests everywhere
 
@@ -52,9 +52,9 @@ public class ComputerPageTest extends DBTestCase {
 
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class,
                 JdbcConfiguration.class);
-        Service service = (Service) context.getBean("serviceBean");
+        ComputerService computerService = (ComputerService) context.getBean("computerServiceBean");
 
-        double rowCount = service.countComputerEntries();
+        double rowCount = computerService.countComputerEntries();
         assertEquals(8.0, rowCount);
 
         ((ConfigurableApplicationContext) context).close();

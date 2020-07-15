@@ -3,42 +3,30 @@ package service;
 import java.sql.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import model.Company;
 import model.Computer;
 import model.ComputerPage;
-import persistence.CompanyDAO;
 import persistence.ComputerDAO;
 import persistence.PersistenceException;
-import validator.Validator;
-
-// TODO: split into two Service classes
 
 /**
  * @author Victor Gambier
  *
  */
 @Component
-public class Service {
+public class ComputerService {
 
     private ComputerDAO computerDAO;
-    private CompanyDAO companyDAO;
-    private Validator validator;
 
-    public Service(ComputerDAO computerDAO, CompanyDAO companyDAO, Validator validator) {
-        super();
+    @Autowired
+    public ComputerService(ComputerDAO computerDAO) {
         this.computerDAO = computerDAO;
-        this.companyDAO = companyDAO;
-        this.validator = validator;
     }
 
     public List<Computer> listAllComputers() {
         return computerDAO.listAll();
-    }
-
-    public List<Company> listAllCompanies() {
-        return companyDAO.listAll();
     }
 
     public Computer getComputer(int computerID) {
@@ -60,16 +48,8 @@ public class Service {
         computerDAO.delete(computerID);
     }
 
-    public void deleteCompany(Integer companyID) {
-        companyDAO.delete(companyID);
-    }
-
     public boolean doesComputerEntryExist(int id) {
         return computerDAO.doesEntryExist(id);
-    }
-
-    public boolean doesCompanyEntryExist(int id) {
-        return companyDAO.doesEntryExist(id);
     }
 
     public int countComputerEntries() {
@@ -95,11 +75,5 @@ public class Service {
 
         // These query parameters work even for the last page which only has
         // (nbEntries % MAX_ITEMS_PER_PAGE) entries, because of the way "LIMIT" works in SQL
-    }
-
-    // Getters
-
-    public Validator getValidator() {
-        return validator;
     }
 }

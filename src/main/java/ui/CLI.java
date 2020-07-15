@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import config.spring.AppConfiguration;
@@ -12,7 +13,9 @@ import model.Company;
 import model.Computer;
 import model.ComputerPage;
 import persistence.PersistenceException;
-import service.Service;
+import service.CompanyService;
+import service.ComputerService;
+import validator.Validator;
 
 /**
  * @author Victor Gambier
@@ -30,8 +33,17 @@ public class CLI {
             "deletecompany <id>: delete a given company and all associated computers",
             "quit: exit the program");
     private static Scanner scanner = new Scanner(System.in);
-    private static Service service = (Service) new AnnotationConfigApplicationContext(
-            AppConfiguration.class, JdbcConfiguration.class).getBean("serviceBean");
+
+    private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+            AppConfiguration.class, JdbcConfiguration.class); // Only necessary to instantiate beans
+    // This needs to be an attribute so that it can be closed at the end of the program - otherwise,
+    // it would be inaccessible
+
+    private static ComputerService computerService = (ComputerService) context
+            .getBean("computerServiceBean");
+    private static CompanyService companyService = (CompanyService) context
+            .getBean("companyServiceBean");
+    private static Validator validator = (Validator) context.getBean("validatorBean");
 
     public static void main(String[] args) throws Exception {
 
@@ -95,6 +107,7 @@ public class CLI {
         // Exiting
 
         scanner.close();
+        ((ConfigurableApplicationContext) context).close(); // Closing Spring Beans context
         System.out.println("Thank you for using CDB!");
     }
 
@@ -113,7 +126,7 @@ public class CLI {
      * @throws Exception
      */
     private static void computers() {
-        for (Computer computer : service.listAllComputers()) {
+        for (Computer computer : computerService.listAllComputers()) {
             System.out.println(computer);
         }
     }
@@ -129,10 +142,10 @@ public class CLI {
 
         if (arr.length >= 2) { // if a second argument has been given
 
-            int nbEntries = service.countComputerEntries();
-            if (service.getValidator().isPageIDStringValid(nbEntries, arr[1])) {
+            int nbEntries = computerService.countComputerEntries();
+            if (validator.isPageIDStringValid(nbEntries, arr[1])) {
                 ComputerPage computerPage = new ComputerPage(nbEntries, Integer.valueOf(arr[1]));
-                List<Computer> computers = service.getPageComputers(computerPage);
+                List<Computer> computers = computerService.getPageComputers(computerPage);
                 for (Computer computer : computers) {
                     System.out.println(computer);
                 }
@@ -150,7 +163,7 @@ public class CLI {
      * @throws Exception
      */
     private static void companies() {
-        for (Company company : service.listAllCompanies()) {
+        for (Company company : companyService.listAllCompanies()) {
             System.out.println(company);
         }
     }
@@ -172,7 +185,7 @@ public class CLI {
                         "Computer ID must be a positive integer and correspond to an existing entry.");
             } else {
                 int computerID = Integer.valueOf(arr[1]);
-                System.out.println(service.getComputer(computerID));
+                System.out.println(computerService.getComputer(computerID));
             }
 
         } else {
@@ -227,7 +240,7 @@ public class CLI {
         }
         Integer companyID = companyIDString.equals("") ? null : Integer.valueOf(companyIDString);
 
-        service.addComputer(computerName, introducedDate, discontinuedDate, companyID);
+        computerService.addComputer(computerName, introducedDate, discontinuedDate, companyID);
         System.out.println("Entry added.");
     }
 
@@ -255,7 +268,7 @@ public class CLI {
 
         // Displaying current info
         System.out.println("Here is the current data on record:");
-        System.out.println(service.getComputer(computerID));
+        System.out.println(computerService.getComputer(computerID));
         System.out.println(
                 "Now, please enter the new data. Leave fields blank if you wish to remove them.");
 
@@ -302,8 +315,8 @@ public class CLI {
                 ? null
                 : Integer.valueOf(newCompanyIDString);
 
-        service.updateComputer(computerID, newComputerName, newIntroducedDate, newDiscontinuedDate,
-                newCompanyID);
+        computerService.updateComputer(computerID, newComputerName, newIntroducedDate,
+                newDiscontinuedDate, newCompanyID);
         System.out.println("Entry updated.");
 
     }
@@ -323,7 +336,7 @@ public class CLI {
                 System.out.println(
                         "Computer ID must be a positive integer and correspond to an existing entry.");
             } else {
-                service.deleteComputer(Integer.valueOf(arr[1]));
+                computerService.deleteComputer(Integer.valueOf(arr[1]));
                 System.out.println("Entry deleted.");
             }
         } else {
@@ -338,7 +351,7 @@ public class CLI {
                 System.out.println(
                         "Company ID must be a positive integer and correspond to an existing entry.");
             } else {
-                service.deleteCompany(Integer.valueOf(arr[1]));
+                companyService.deleteCompany(Integer.valueOf(arr[1]));
                 System.out.println("Company succesfully deleted.");
             }
         } else {
@@ -368,8 +381,7 @@ public class CLI {
                     + " of the computer (YYYY-MM-DD) (optional):");
 
             userInput = scanner.nextLine();
-            isDateValid = userInput.equals("")
-                    || service.getValidator().isDateStringValid(userInput);
+            isDateValid = userInput.equals("") || validator.isDateStringValid(userInput);
         }
 
         date = userInput.equals("") ? null : java.sql.Date.valueOf(userInput);
@@ -390,9 +402,9 @@ public class CLI {
 
         boolean isValid = false;
 
-        if (service.getValidator().isStringInteger(stringID)) {
+        if (validator.isStringInteger(stringID)) {
             int id = Integer.valueOf(stringID);
-            isValid = service.doesComputerEntryExist(id);
+            isValid = computerService.doesComputerEntryExist(id);
         }
 
         return isValid;
@@ -411,9 +423,9 @@ public class CLI {
 
         boolean isValid = false;
 
-        if (service.getValidator().isStringInteger(stringID)) {
+        if (validator.isStringInteger(stringID)) {
             int id = Integer.valueOf(stringID);
-            isValid = service.doesCompanyEntryExist(id);
+            isValid = companyService.doesCompanyEntryExist(id);
         }
 
         return isValid;

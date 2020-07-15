@@ -11,26 +11,35 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import config.spring.AppConfiguration;
-import config.spring.JdbcConfiguration;
-import service.Service;
+import service.CompanyService;
+import service.ComputerService;
 import validator.Validator;
 
 /**
  * @author Victor Gambier
  *
  */
+@Component
 @WebServlet(name = "CreateServlet", urlPatterns = "/addComputer")
 public class CreateServlet extends HttpServlet {
 
     private static final long serialVersionUID = 0xC2EA7EL;
-
-    private static Service service = (Service) new AnnotationConfigApplicationContext(
-            AppConfiguration.class, JdbcConfiguration.class).getBean("serviceBean");
-
     private static final Logger LOG = LoggerFactory.getLogger(CreateServlet.class);
+
+    private ComputerService computerService;
+    private CompanyService companyService;
+    private Validator validator;
+
+    @Autowired
+    public CreateServlet(ComputerService computerService, CompanyService companyService,
+            Validator validator) {
+        this.computerService = computerService;
+        this.companyService = companyService;
+        this.validator = validator;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,7 +47,7 @@ public class CreateServlet extends HttpServlet {
 
         LOG.info("Settings attributes for CreateServlet.");
 
-        request.setAttribute("companies", service.listAllCompanies());
+        request.setAttribute("companies", companyService.listAllCompanies());
 
         request.getRequestDispatcher("WEB-INF/addComputer.jsp").forward(request, response);
     }
@@ -47,7 +56,6 @@ public class CreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Validator validator = service.getValidator();
         StringBuilder str = new StringBuilder();
         boolean isEntryValid = true;
 
@@ -88,7 +96,7 @@ public class CreateServlet extends HttpServlet {
             if (companyIDString.equals("0")) { // If the user chose the "--" default option
                 companyID = null; // Needed for the Computer constructor to function as intended
             } else if (!companyIDString.equals("") && validator.isStringInteger(companyIDString)
-                    && service.doesCompanyEntryExist(Integer.valueOf(companyIDString))) {
+                    && companyService.doesCompanyEntryExist(Integer.valueOf(companyIDString))) {
                 companyID = Integer.valueOf(companyIDString);
             } else {
                 str.append("Company ID field must be empty (--) or a valid ID.\n");
@@ -102,7 +110,7 @@ public class CreateServlet extends HttpServlet {
         // Adding entry if form is valid
 
         if (str.length() == 0) { // If all fields are valid
-            service.addComputer(computerName, introduced, discontinued, companyID);
+            computerService.addComputer(computerName, introduced, discontinued, companyID);
             request.setAttribute("message", "Entry successfully added.");
         } else {
             request.setAttribute("message", str.toString());

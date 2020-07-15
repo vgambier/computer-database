@@ -10,28 +10,34 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import config.spring.AppConfiguration;
-import config.spring.JdbcConfiguration;
 import model.ComputerPage;
 import model.ModelException;
 import persistence.PersistenceException;
-import service.Service;
+import service.ComputerService;
+import validator.Validator;
 
 /**
  * @author Victor Gambier
  *
  */
+@Component
 @WebServlet(name = "DashboardServlet", urlPatterns = "/dashboard")
 public class DashboardServlet extends HttpServlet {
 
     private static final long serialVersionUID = 0xDA57B0A2DL;
-
-    private static Service service = (Service) new AnnotationConfigApplicationContext(
-            AppConfiguration.class, JdbcConfiguration.class).getBean("serviceBean");
-
     private static final Logger LOG = LoggerFactory.getLogger(DashboardServlet.class);
+
+    private ComputerService computerService;
+    private Validator validator;
+
+    @Autowired
+    public DashboardServlet(ComputerService computerService, Validator validator) {
+        this.computerService = computerService;
+        this.validator = validator;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -60,14 +66,16 @@ public class DashboardServlet extends HttpServlet {
 
         try {
 
-            int nbEntries = service.countComputerEntriesWhere(searchTerm);
+            int nbEntries = computerService.countComputerEntriesWhere(searchTerm);
 
-            int currentPage = service.getValidator().isPageIDStringValid(nbEntries,
-                    currentPageString) ? Integer.valueOf(currentPageString) : 1;
+            int currentPage = validator.isPageIDStringValid(nbEntries, currentPageString)
+                    ? Integer.valueOf(currentPageString)
+                    : 1;
             request.setAttribute("currentPage", currentPage);
 
             computerPage = new ComputerPage(nbEntries, currentPage);
-            request.setAttribute("computers", service.getPageComputers(computerPage, searchTerm, orderBy));
+            request.setAttribute("computers",
+                    computerService.getPageComputers(computerPage, searchTerm, orderBy));
             request.setAttribute("computerCount", nbEntries);
 
         } catch (ModelException e) {
