@@ -115,6 +115,8 @@ public class ComputerDAO extends DAO<Computer> {
      * @param searchTerm
      *            the search term - an entry match if it contains this string anywhere in its name
      *            or its company name
+     * @param orderBy
+     *            the field by which to sort the result set, e.g.: "id" or "name"
      * @return the corresponding list of Computer objects
      * @throws PersistenceException
      */
@@ -142,7 +144,6 @@ public class ComputerDAO extends DAO<Computer> {
         namedParameters.addValue("limit", limit);
         namedParameters.addValue("offset", offset);
         return namedParameterJdbcTemplate.query(sql, namedParameters, mapper);
-
     }
 
     @Override

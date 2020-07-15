@@ -19,7 +19,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import config.spring.AppConfiguration;
 import config.spring.JdbcConfiguration;
-import persistence.DatabaseConnector;
 import service.Service;
 
 // TODO: add more unit tests everywhere
@@ -30,7 +29,7 @@ public class ComputerPageTest extends DBTestCase {
 
         super(name);
 
-        InputStream inputStream = DatabaseConnector.class.getResourceAsStream("/.properties");
+        InputStream inputStream = ComputerPageTest.class.getResourceAsStream("/.properties");
         Properties properties = new Properties();
         properties.load(inputStream);
         inputStream.close();

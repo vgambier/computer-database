@@ -1,6 +1,5 @@
 package persistence;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
@@ -68,9 +67,6 @@ public abstract class DAO<T> {
      * @param id
      *            the id of the entry to be checked
      * @return true if and only if there is an entry
-     * @throws IOException
-     * @throws PersistenceException
-     * @throws Exception
      */
     public boolean doesEntryExist(int id) {
 

@@ -20,10 +20,12 @@ import persistence.PersistenceException;
 @ComponentScan({"persistence"})
 public class JdbcConfiguration {
 
+    private static final Logger LOG = LoggerFactory.getLogger(JdbcConfiguration.class);
+
     @Bean
     public HikariDataSource hikariDataSource() throws PersistenceException {
 
-        InputStream inputStream = DatabaseConnector.class.getResourceAsStream("/.properties");
+        InputStream inputStream = JdbcConfiguration.class.getResourceAsStream("/.properties");
         Properties properties = new Properties();
 
         try {
@@ -38,7 +40,6 @@ public class JdbcConfiguration {
         String password = properties.getProperty("PASSWORD");
 
         // TODO: add more logging
-        Logger LOG = LoggerFactory.getLogger(DatabaseConnector.class);
         LOG.info("Initializing Hikari DataSource to database:\nURL: " + databaseURL + "\nUsername: "
                 + username);
 

@@ -13,6 +13,8 @@ import persistence.ComputerDAO;
 import persistence.PersistenceException;
 import validator.Validator;
 
+// TODO: split into two Service classes
+
 @Component
 public class Service {
 

@@ -15,8 +15,7 @@ public class ComputerPage {
         // Checking the database to count the number of entries
 
         nbPages = nbEntries / maxItemsPerPage;
-        if (nbEntries % maxItemsPerPage != 0) { // Ensuring the last page exists even when it's
-                                                // full
+        if (nbEntries % maxItemsPerPage != 0) { // Ensuring the last page exists even when it's full
             nbPages++;
         }
         nbPages = Math.max(1, nbPages); // Always at least one page
