@@ -69,7 +69,7 @@ public class EditServlet extends HttpServlet {
         // have explicit error
         // messages; therefore, extracting part of this method is possible
         // the extracted method will return a boolean, but the specific error will not be regarded
-        // The extracted method should be a Validator method that take a DTO as input
+        // The extracted method should be a Validator method that takes a DTO as input
 
         Validator validator = service.getValidator();
         StringBuilder str = new StringBuilder();

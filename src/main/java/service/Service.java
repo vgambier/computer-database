@@ -76,21 +76,24 @@ public class Service {
         return computerDAO.countEntriesWhere(searchTerm);
     }
 
-    public void fill(ComputerPage computerPage) throws PersistenceException {
-        fill(computerPage, "", "computer_id");
+    public List<Computer> getPageComputers(ComputerPage computerPage) throws PersistenceException {
+        return getPageComputers(computerPage, "", "computer_id");
     }
 
-    public void fill(ComputerPage computerPage, String searchTerm, String orderBy)
-            throws PersistenceException {
+    public List<Computer> getPageComputers(ComputerPage computerPage, String searchTerm,
+            String orderBy) throws PersistenceException {
 
         int maxItemsPerPage = ComputerPage.getMaxItemsPerPage();
 
-        // Putting computers in the page
-        List<Computer> computers = computerDAO.listSomeMatching(maxItemsPerPage,
+        // Getting all computers that are in the page
+        return computerDAO.listSomeMatching(maxItemsPerPage,
                 (computerPage.getPageNumber() - 1) * maxItemsPerPage, searchTerm, orderBy);
 
-        computerPage.setComputers(computers);
+        // These query parameters work even for the last page which only has
+        // (nbEntries % MAX_ITEMS_PER_PAGE) entries, because of the way "LIMIT" works in SQL
     }
+
+    // Getters
 
     public Validator getValidator() {
         return validator;

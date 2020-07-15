@@ -8,15 +8,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="../static/css/bootstrap.min.css" rel="stylesheet"
+<link href="static/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
-<link href="../static/css/font-awesome.css" rel="stylesheet"
+<link href="static/css/font-awesome.css" rel="stylesheet"
 	media="screen">
-<link href="../static/css/main.css" rel="stylesheet" media="screen">
+<link href="static/css/main.css" rel="stylesheet" media="screen">
 
-<script src="../static/js/jquery.min.js"></script>
-<script src="../static/js/bootstrap.min.js"></script>
-<script src="../static/js/dashboard.js"></script>
+<script src="static/js/jquery.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+<script src="static/js/dashboard.js"></script>
 
 </head>
 <body>
@@ -85,7 +85,7 @@
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 
-					<c:forEach items="${computerPage.computers}" var="computer">
+					<c:forEach items="${computers}" var="computer">
 
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"

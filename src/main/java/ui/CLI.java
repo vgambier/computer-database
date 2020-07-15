@@ -128,8 +128,7 @@ public class CLI {
             int nbEntries = service.countComputerEntries();
             if (service.getValidator().isPageIDStringValid(nbEntries, arr[1])) {
                 ComputerPage computerPage = new ComputerPage(nbEntries, Integer.valueOf(arr[1]));
-                service.fill(computerPage);
-                List<Computer> computers = computerPage.getComputers();
+                List<Computer> computers = service.getPageComputers(computerPage);
                 for (Computer computer : computers) {
                     System.out.println(computer);
                 }

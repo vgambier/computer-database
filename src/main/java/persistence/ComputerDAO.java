@@ -136,8 +136,6 @@ public class ComputerDAO extends DAO<Computer> {
                 + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
                 + "WHERE computer.name LIKE :searchTerm OR company.name LIKE :searchTerm "
                 + "ORDER BY " + orderBy + " LIMIT :limit OFFSET :offset";
-        // This query works even for the last page which only has (nbEntries % MAX_ITEMS_PER_PAGE)
-        // entries
 
         MapSqlParameterSource namedParameters = new MapSqlParameterSource("searchTerm",
                 "%" + searchTerm + "%");

@@ -63,8 +63,7 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("currentPage", currentPage);
 
             computerPage = new ComputerPage(nbEntries, currentPage);
-            service.fill(computerPage, searchTerm, orderBy);
-            request.setAttribute("computerPage", computerPage);
+            request.setAttribute("computers", service.getPageComputers(computerPage, searchTerm, orderBy));
             request.setAttribute("computerCount", nbEntries);
 
         } catch (ModelException e) {

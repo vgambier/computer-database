@@ -1,14 +1,16 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * @author Victor Gambier
+ *
+ *         This class represents a page. It is, however, merely an abstraction, as it isn't meant to
+ *         store any information about any computer
+ */
 public class ComputerPage {
 
     private static int maxItemsPerPage = 50;
     private static int nbPages;
     private int pageNumber;
-    private List<Computer> computers = new ArrayList<Computer>();
 
     public ComputerPage(int nbEntries, int pageNumber) throws ModelException {
 
@@ -44,14 +46,6 @@ public class ComputerPage {
     }
 
     // Getters and setters
-
-    public List<Computer> getComputers() {
-        return computers;
-    }
-
-    public void setComputers(List<Computer> computers) {
-        this.computers = computers;
-    }
 
     public static int getNbPages() {
         return nbPages;

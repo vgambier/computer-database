@@ -13,7 +13,7 @@ public class MainController {
     public ModelAndView getTestData() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("dashboard");
-        // mv.getModel().put("data", "Welcome home man");
+        mv.getModel().put("data", "Welcome home man");
 
         return mv;
     }
