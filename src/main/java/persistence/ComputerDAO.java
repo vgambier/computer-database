@@ -29,9 +29,8 @@ public class ComputerDAO extends DAO<Computer> {
     private static final String DELETE_ENTRY_QUERY = "DELETE FROM `computer` WHERE id = :id";
 
     @Autowired
-    public ComputerDAO(DatabaseConnector databaseConnector,
-            NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        super(databaseConnector, namedParameterJdbcTemplate, ComputerMapper.getInstance());
+    public ComputerDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        super(namedParameterJdbcTemplate, ComputerMapper.getInstance());
     }
 
     /**

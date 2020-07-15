@@ -15,13 +15,10 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
  */
 public abstract class DAO<T> {
 
-    protected DatabaseConnector databaseConnector;
     protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     protected RowMapper<T> mapper;
 
-    public DAO(DatabaseConnector databaseConnector,
-            NamedParameterJdbcTemplate namedParameterJdbcTemplate, RowMapper<T> mapper) {
-        this.databaseConnector = databaseConnector;
+    public DAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate, RowMapper<T> mapper) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.mapper = mapper;
     }

@@ -20,9 +20,8 @@ public class CompanyDAO extends DAO<Company> {
     private static final String DELETE_COMPANY_MATCHING_QUERY = "DELETE FROM `company` WHERE id = :id";
 
     @Autowired
-    public CompanyDAO(DatabaseConnector databaseConnector,
-            NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        super(databaseConnector, namedParameterJdbcTemplate, CompanyMapper.getInstance());
+    public CompanyDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        super(namedParameterJdbcTemplate, CompanyMapper.getInstance());
     }
 
     @Transactional(rollbackFor = {Exception.class})

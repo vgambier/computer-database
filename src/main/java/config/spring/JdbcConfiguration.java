@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-import persistence.DatabaseConnector;
 import persistence.PersistenceException;
 
 /**
@@ -56,11 +55,6 @@ public class JdbcConfiguration {
         hikariDataSource.setMaximumPoolSize(10);
 
         return hikariDataSource;
-    }
-
-    @Bean(name = "databaseConnectorBean")
-    public DatabaseConnector databaseConnector(HikariDataSource hikariDataSource) {
-        return new DatabaseConnector(hikariDataSource);
     }
 
     @Bean(name = "namedParameterJdbcTemplateBean")
