@@ -9,7 +9,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import config.spring.AppConfiguration;
 import config.spring.JdbcConfiguration;
-import model.Company;
 import model.Computer;
 import model.ComputerPage;
 import persistence.PersistenceException;
@@ -126,9 +125,7 @@ public class CLI {
      * @throws Exception
      */
     private static void computers() {
-        for (Computer computer : computerService.listAllComputers()) {
-            System.out.println(computer);
-        }
+        computerService.listAllComputers().forEach(computer -> System.out.println(computer));
     }
 
     /**
@@ -146,9 +143,8 @@ public class CLI {
             if (validator.isPageIDStringValid(nbEntries, arr[1])) {
                 ComputerPage computerPage = new ComputerPage(nbEntries, Integer.valueOf(arr[1]));
                 List<Computer> computers = computerService.getPageComputers(computerPage);
-                for (Computer computer : computers) {
-                    System.out.println(computer);
-                }
+                computers.forEach(computer -> System.out.println(computer));
+
             }
 
         } else { // if a second argument hasn't been given
@@ -163,9 +159,7 @@ public class CLI {
      * @throws Exception
      */
     private static void companies() {
-        for (Company company : companyService.listAllCompanies()) {
-            System.out.println(company);
-        }
+        companyService.listAllCompanies().forEach(company -> System.out.println(company));
     }
 
     /**
