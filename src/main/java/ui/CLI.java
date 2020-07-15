@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import config.AppConfiguration;
-import config.JdbcConfiguration;
+import config.spring.AppConfiguration;
+import config.spring.JdbcConfiguration;
 import model.Company;
 import model.Computer;
 import model.ComputerPage;

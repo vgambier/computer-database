@@ -7,13 +7,13 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="static/css/bootstrap.min.css" rel="stylesheet"
+<link href="../static/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
-<link href="static/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="static/css/main.css" rel="stylesheet" media="screen">
-<script type="text/javascript" src="static/js/jquery.min.js"></script>
-<script type="text/javascript" src="static/js/jquery.validate.min.js"></script>
-<script type="text/javascript" src="static/js/formvalidation.js"></script>
+<link href="../static/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="../static/css/main.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="../static/js/jquery.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../static/js/formvalidation.js"></script>
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">

@@ -1,4 +1,4 @@
-package config;
+package config.spring;
 
 import java.io.IOException;
 import java.io.InputStream;

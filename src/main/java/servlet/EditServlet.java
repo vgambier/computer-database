@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import config.AppConfiguration;
-import config.JdbcConfiguration;
+import config.spring.AppConfiguration;
+import config.spring.JdbcConfiguration;
 import model.Computer;
 import service.Service;
 import validator.Validator;
@@ -44,7 +44,7 @@ public class EditServlet extends HttpServlet {
                 computerID = Integer.valueOf(computerIDString);
                 request.setAttribute("id", computerIDString);
             } else { // if no id was given, go back to the main page
-                request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+                request.getRequestDispatcher("WEB-INF/dashboard.jsp").forward(request, response);
                 return;
             }
         } catch (IOException e) {
@@ -58,7 +58,7 @@ public class EditServlet extends HttpServlet {
         request.setAttribute("computer", computer);
         request.setAttribute("companies", service.listAllCompanies());
 
-        request.getRequestDispatcher("editComputer.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/editComputer.jsp").forward(request, response);
     }
 
     @Override

@@ -8,10 +8,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="static/css/bootstrap.min.css" rel="stylesheet"
+<link href="../static/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
-<link href="static/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="static/css/main.css" rel="stylesheet" media="screen">
+<link href="../static/css/font-awesome.css" rel="stylesheet"
+	media="screen">
+<link href="../static/css/main.css" rel="stylesheet" media="screen">
+
+<script src="../static/js/jquery.min.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/dashboard.js"></script>
 
 </head>
 <body>
@@ -63,10 +68,17 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=computer_name">Computer name</a></th>
-						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=introduced">Introduced date</a></th>
-						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=discontinued">Discontinued date</a></th>
-						<th><a href="?search=${search}&currentPage=${currentPage}&orderBy=company_name">Company</a></th>
+						<th><a
+							href="?search=${search}&currentPage=${currentPage}&orderBy=computer_name">Computer
+								name</a></th>
+						<th><a
+							href="?search=${search}&currentPage=${currentPage}&orderBy=introduced">Introduced
+								date</a></th>
+						<th><a
+							href="?search=${search}&currentPage=${currentPage}&orderBy=discontinued">Discontinued
+								date</a></th>
+						<th><a
+							href="?search=${search}&currentPage=${currentPage}&orderBy=company_name">Company</a></th>
 
 					</tr>
 				</thead>
@@ -76,8 +88,7 @@
 					<c:forEach items="${computerPage.computers}" var="computer">
 
 						<tr>
-							<td class="editMode">
-							<input type="checkbox" name="cb"
+							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
 							<td><a href="editComputer?id=${computer.id}" onclick="">${computer.getName()}</a></td>
 							<td><c:out value="${computer.getIntroduced()}" /></td>
@@ -97,18 +108,18 @@
 
 			<form action="dashboard?search=${search}" method="POST">
 				<div class="btn-group btn-group-sm pull-right" role="group">
-					<input
-						type="submit" class="btn btn-default" name="action" value="10" />
 					<input type="submit" class="btn btn-default" name="action"
-						value="50" /> <input type="submit" class="btn btn-default"
-						name="action" value="100" />
+						value="10" /> <input type="submit" class="btn btn-default"
+						name="action" value="50" /> <input type="submit"
+						class="btn btn-default" name="action" value="100" />
 				</div>
 			</form>
 
 			<ul class="pagination">
 
 				<c:if test="${currentPage != 1}">
-					<li><a href="?search=${search}&currentPage=${currentPage-1}&orderBy=${orderBy}"
+					<li><a
+						href="?search=${search}&currentPage=${currentPage-1}&orderBy=${orderBy}"
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
@@ -121,17 +132,15 @@
 				</c:forEach>
 
 				<c:if test="${currentPage != nbPages}">
-					<li><a href="?search=${search}&currentPage=${currentPage+1}&orderBy=${orderBy}" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
+					<li><a
+						href="?search=${search}&currentPage=${currentPage+1}&orderBy=${orderBy}"
+						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>
 			</ul>
 		</div>
 
 	</footer>
-	<script src="static/js/jquery.min.js"></script>
-	<script src="static/js/bootstrap.min.js"></script>
-	<script src="static/js/dashboard.js"></script>
 
 </body>
 </html>

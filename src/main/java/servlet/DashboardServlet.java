@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import config.AppConfiguration;
-import config.JdbcConfiguration;
+import config.spring.AppConfiguration;
+import config.spring.JdbcConfiguration;
 import model.ComputerPage;
 import model.ModelException;
 import persistence.PersistenceException;

@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import config.AppConfiguration;
-import config.JdbcConfiguration;
+import config.spring.AppConfiguration;
+import config.spring.JdbcConfiguration;
 import service.Service;
 import validator.Validator;
 
@@ -36,7 +36,7 @@ public class CreateServlet extends HttpServlet {
 
         request.setAttribute("companies", service.listAllCompanies());
 
-        request.getRequestDispatcher("addComputer.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/addComputer.jsp").forward(request, response);
     }
 
     @Override

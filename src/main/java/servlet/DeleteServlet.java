@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import config.AppConfiguration;
-import config.JdbcConfiguration;
+import config.spring.AppConfiguration;
+import config.spring.JdbcConfiguration;
 import service.Service;
 
 @WebServlet(name = "DeleteServlet", urlPatterns = "/delete")
