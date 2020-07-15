@@ -19,6 +19,10 @@ import model.ModelException;
 import persistence.PersistenceException;
 import service.Service;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 @WebServlet(name = "DashboardServlet", urlPatterns = "/dashboard")
 public class DashboardServlet extends HttpServlet {
 

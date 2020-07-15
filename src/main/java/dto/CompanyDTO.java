@@ -1,5 +1,9 @@
 package dto;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 public class CompanyDTO {
 
     private String id;

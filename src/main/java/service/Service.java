@@ -15,6 +15,10 @@ import validator.Validator;
 
 // TODO: split into two Service classes
 
+/**
+ * @author Victor Gambier
+ *
+ */
 @Component
 public class Service {
 

@@ -14,6 +14,10 @@ import model.ComputerPage;
 import persistence.PersistenceException;
 import service.Service;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 public class CLI {
 
     private static String helpMessage = String.join("\n", "List of commands:",

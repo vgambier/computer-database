@@ -7,6 +7,12 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
+/**
+ * @author Victor Gambier
+ *
+ * @param <T>
+ *            should be an entity from the model package, e.g.: Computer, Page, etc.
+ */
 public abstract class DAO<T> {
 
     protected DatabaseConnector databaseConnector;

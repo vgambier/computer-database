@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 import mapper.ComputerMapper;
 import model.Computer;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 @Component("computerDAOBean")
 public class ComputerDAO extends DAO<Computer> {
 

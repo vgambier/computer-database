@@ -2,6 +2,10 @@ package mapper;
 
 // TODO: refactor Exception handling with best practices
 
+/**
+ * @author Victor Gambier
+ *
+ */
 public class MapperException extends Exception {
 
     private static final long serialVersionUID = 0x3ABBE2L;

@@ -12,6 +12,10 @@ import model.ModelException;
 
 // TODO: move error messages to CLI
 
+/**
+ * @author Victor Gambier
+ *
+ */
 @Component("validatorBean")
 public class Validator {
 

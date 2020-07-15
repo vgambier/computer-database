@@ -5,6 +5,10 @@ import org.springframework.stereotype.Component;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 @Component
 public class DatabaseConnector {
 

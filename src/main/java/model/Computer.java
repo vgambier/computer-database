@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * @author victor
+ * @author Victor Gambier
  *
  */
 public class Computer implements Serializable {

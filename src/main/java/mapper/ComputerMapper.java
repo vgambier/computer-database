@@ -9,6 +9,10 @@ import org.springframework.jdbc.core.RowMapper;
 
 import model.Computer;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 public class ComputerMapper implements RowMapper<Computer> {
 
     private static ComputerMapper instance = null;

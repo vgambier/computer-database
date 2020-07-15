@@ -14,6 +14,10 @@ import config.spring.AppConfiguration;
 import config.spring.JdbcConfiguration;
 import service.Service;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 @WebServlet(name = "DeleteServlet", urlPatterns = "/delete")
 public class DeleteServlet extends HttpServlet {
 

@@ -19,6 +19,10 @@ import model.Computer;
 import service.Service;
 import validator.Validator;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 @WebServlet(name = "EditServlet", urlPatterns = "/editComputer")
 public class EditServlet extends HttpServlet {
 

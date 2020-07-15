@@ -1,5 +1,9 @@
 package persistence;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 public class PersistenceException extends Exception {
 
     private static final long serialVersionUID = 0xBE2515731CEL;

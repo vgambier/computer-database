@@ -9,6 +9,10 @@ import model.Company;
 
 /* This class uses the Singleton pattern */
 
+/**
+ * @author Victor Gambier
+ *
+ */
 public class CompanyMapper implements RowMapper<Company> {
 
     private static CompanyMapper instance = null;

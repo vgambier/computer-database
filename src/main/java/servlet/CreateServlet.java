@@ -18,6 +18,10 @@ import config.spring.JdbcConfiguration;
 import service.Service;
 import validator.Validator;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 @WebServlet(name = "CreateServlet", urlPatterns = "/addComputer")
 public class CreateServlet extends HttpServlet {
 

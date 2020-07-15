@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 public class ModelException extends Exception {
 
     private static final long serialVersionUID = 0xB0DEL;

@@ -9,6 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import mapper.CompanyMapper;
 import model.Company;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 @Component("companyDAOBean")
 public class CompanyDAO extends DAO<Company> {
 

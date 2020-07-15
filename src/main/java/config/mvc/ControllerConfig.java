@@ -10,6 +10,10 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.context.support.GenericWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 public class ControllerConfig implements WebApplicationInitializer {
 
     @Override

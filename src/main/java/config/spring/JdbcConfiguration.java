@@ -16,6 +16,10 @@ import com.zaxxer.hikari.HikariDataSource;
 import persistence.DatabaseConnector;
 import persistence.PersistenceException;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 @Configuration
 @ComponentScan({"persistence"})
 public class JdbcConfiguration {

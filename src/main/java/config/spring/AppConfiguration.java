@@ -9,6 +9,10 @@ import persistence.ComputerDAO;
 import service.Service;
 import validator.Validator;
 
+/**
+ * @author Victor Gambier
+ *
+ */
 @Configuration
 @ComponentScan({"persistence, validator"})
 public class AppConfiguration {
