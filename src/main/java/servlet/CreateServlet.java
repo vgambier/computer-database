@@ -49,7 +49,7 @@ public class CreateServlet extends HttpServlet {
 
         request.setAttribute("companies", companyService.listAllCompanies());
 
-        request.getRequestDispatcher("WEB-INF/addComputer.jsp").forward(request, response);
+        request.getRequestDispatcher("addComputer.jsp").forward(request, response);
     }
 
     @Override
