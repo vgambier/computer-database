@@ -1,4 +1,4 @@
-package com.excilys.cdb.servlet;
+package com.excilys.cdb.controller;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.Validator;
@@ -23,18 +24,19 @@ import com.excilys.cdb.validator.Validator;
  *
  */
 @Controller
-@WebServlet(name = "CreateServlet", urlPatterns = "/addComputer")
-public class CreateServlet extends HttpServlet {
+@WebServlet(name = "EditServlet", urlPatterns = "/editComputer")
+public class EditServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 0xC2EA7EL;
-    private static final Logger LOG = LoggerFactory.getLogger(CreateServlet.class);
+    private static final long serialVersionUID = 0xED17L;
+
+    private static final Logger LOG = LoggerFactory.getLogger(EditServlet.class);
 
     private ComputerService computerService;
     private CompanyService companyService;
     private Validator validator;
 
     @Autowired
-    public CreateServlet(ComputerService computerService, CompanyService companyService,
+    public EditServlet(ComputerService computerService, CompanyService companyService,
             Validator validator) {
         this.computerService = computerService;
         this.companyService = companyService;
@@ -45,21 +47,59 @@ public class CreateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        LOG.info("Settings attributes for CreateServlet.");
+        LOG.info("Settings attributes for EditServlet.");
 
+        String computerIDString = request.getParameter("id");
+        int computerID;
+
+        try {
+            if (validator.isStringInteger(computerIDString)
+                    && computerService.doesComputerEntryExist(Integer.valueOf(computerIDString))) {
+                computerID = Integer.valueOf(computerIDString);
+                request.setAttribute("id", computerIDString);
+            } else { // if no id was given, go back to the main page
+                request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+                return;
+            }
+        } catch (IOException e) {
+            throw new ServletException("Couldn't set session attributes", e);
+        }
+
+        // Fill the form with existing data
+
+        Computer computer = computerService.getComputer(computerID);
+
+        request.setAttribute("computer", computer);
         request.setAttribute("companies", companyService.listAllCompanies());
 
-        request.getRequestDispatcher("addComputer.jsp").forward(request, response);
+        request.getRequestDispatcher("editComputer.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // TODO: validation is redundant with CreateServlet - back-end validation doesn't need to
+        // have explicit error
+        // messages; therefore, extracting part of this method is possible
+        // the extracted method will return a boolean, but the specific error will not be regarded
+        // The extracted method should be a Validator method that takes a DTO as input
+
         StringBuilder str = new StringBuilder();
         boolean isEntryValid = true;
 
         // Back-end validation
+
+        Integer id = null;
+        String idString = request.getParameter("id");
+
+        if (!validator.isStringInteger(idString)
+                || !computerService.doesComputerEntryExist(Integer.valueOf(idString))) {
+            str.append("Computer ID is invalid.\n");
+            isEntryValid = false;
+        } else {
+            id = Integer.parseInt(idString);
+        }
 
         String computerName = request.getParameter("computerName");
         if (computerName.equals("")) {
@@ -110,8 +150,8 @@ public class CreateServlet extends HttpServlet {
         // Adding entry if form is valid
 
         if (str.length() == 0) { // If all fields are valid
-            computerService.addComputer(computerName, introduced, discontinued, companyID);
-            request.setAttribute("message", "Entry successfully added.");
+            computerService.updateComputer(id, computerName, introduced, discontinued, companyID);
+            request.setAttribute("message", "Entry successfully edited.");
         } else {
             request.setAttribute("message", str.toString());
         }

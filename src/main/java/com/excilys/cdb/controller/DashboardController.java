@@ -1,4 +1,4 @@
-package com.excilys.cdb.servlet;
+package com.excilys.cdb.controller;
 
 import javax.servlet.ServletException;
 
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.cdb.model.ComputerPage;
 import com.excilys.cdb.model.ModelException;
+import com.excilys.cdb.persistence.PersistenceException;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.Validator;
 
@@ -23,6 +24,7 @@ import com.excilys.cdb.validator.Validator;
  *
  */
 @Controller
+@RequestMapping("/")
 public class DashboardController {
 
     private static final Logger LOG = LoggerFactory.getLogger(DashboardController.class);
@@ -36,13 +38,7 @@ public class DashboardController {
         this.validator = validator;
     }
 
-    // Allows automatic redirection to the main dashboard page when URL is "empty"
-    @RequestMapping("/")
-    public String redirectPage() {
-        return "dashboard";
-    }
-
-    @GetMapping(path = "/dashboard")
+    @GetMapping()
     protected String getMapping(
             @RequestParam(value = "currentPage", defaultValue = "1") String currentPageString,
             @RequestParam(value = "search", defaultValue = "") String searchTerm,
@@ -59,25 +55,31 @@ public class DashboardController {
                 ? Integer.valueOf(currentPageString)
                 : 1;
 
-        // TODO: uncomment
-        // request.setAttribute("currentPage", currentPage);
-
         try {
             computerPage = new ComputerPage(nbEntries, currentPage);
         } catch (ModelException e) {
-            throw new ServletException("Couldn't set session attributes", e);
+            throw new ServletException(
+                    "Couldn't set session attributes because of failed ComputerPage initialization",
+                    e);
         }
-        // request.setAttribute("computers",
-        // computerService.getPageComputers(computerPage, searchTerm, orderBy));
-        // request.setAttribute("computerCount", nbEntries);
 
-        // request.setAttribute("nbPages", ComputerPage.getNbPages());
+        try {
+            model.addAttribute("computers",
+                    computerService.getPageComputers(computerPage, searchTerm, orderBy));
+        } catch (PersistenceException e) {
+            throw new ServletException("Couldn't set 'computers' attributes", e);
+
+        }
+
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("computerCount", nbEntries);
+        model.addAttribute("nbPages", ComputerPage.getNbPages());
 
         return "dashboard";
     }
 
     // Used for changing the number of entries per page
-    @PostMapping("/dashboard")
+    @PostMapping()
     protected void updateNumberEntries(@ModelAttribute("action") String newValue) {
 
         // TODO: rename action
