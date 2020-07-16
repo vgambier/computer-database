@@ -29,10 +29,10 @@ public class DeleteController {
     }
 
     @PostMapping
-    protected String doPost(@RequestParam("selection") String selection) throws ServletException {
+    protected String deleteComputer(@RequestParam("selection") String selection)
+            throws ServletException {
 
         // Gather the list of entries to delete
-
         String[] entries = selection.split(",");
 
         // Delete the entries

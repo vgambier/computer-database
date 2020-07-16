@@ -10,8 +10,7 @@
 <!-- Bootstrap -->
 <link href="static/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
-<link href="static/css/font-awesome.css" rel="stylesheet"
-	media="screen">
+<link href="static/css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="static/css/main.css" rel="stylesheet" media="screen">
 
 <script src="static/js/jquery.min.js"></script>
@@ -22,8 +21,8 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/computer-database"> Application - Computer
-				Database </a>
+			<a class="navbar-brand" href="/computer-database"> Application -
+				Computer Database </a>
 		</div>
 	</header>
 
@@ -106,17 +105,14 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 
-			<form action="?search=${search}" method="POST">
+			<form method="POST">
 				<div class="btn-group btn-group-sm pull-right" role="group">
-				
+
 					<input type="submit" class="btn btn-default" name="nbEntries"
-						value="10" />
-						
-						<input type="submit" class="btn btn-default"
-						name="nbEntries" value="50" />
-						
-						<input type="submit"
+						value="10" /> <input type="submit" class="btn btn-default"
+						name="nbEntries" value="50" /> <input type="submit"
 						class="btn btn-default" name="nbEntries" value="100" />
+						
 				</div>
 			</form>
 

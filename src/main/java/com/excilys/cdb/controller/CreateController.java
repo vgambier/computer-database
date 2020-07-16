@@ -41,7 +41,7 @@ public class CreateController {
     }
 
     @GetMapping
-    protected String doGet(ModelMap model) {
+    protected String initForm(ModelMap model) {
 
         LOG.info("Settings attributes for CreateServlet.");
         model.addAttribute("companies", companyService.listAllCompanies());
@@ -50,7 +50,7 @@ public class CreateController {
     }
 
     @PostMapping
-    protected String postNewComputer(@RequestParam(value = "computerName") String computerName,
+    protected String addComputerFromForm(@RequestParam(value = "computerName") String computerName,
             @RequestParam(value = "introduced") String introducedString,
             @RequestParam(value = "discontinued") String discontinuedString,
             @RequestParam(value = "companyID") String companyIDString, ModelMap model)
@@ -112,7 +112,7 @@ public class CreateController {
             model.addAttribute("message", str.toString());
         }
 
-        return "redirect:/addComputer";
+        return "addComputer";
 
     }
 }

@@ -43,7 +43,7 @@ public class EditController {
     }
 
     @GetMapping
-    protected String doGet(@RequestParam(value = "id") String computerIDString, ModelMap model) {
+    protected String initForm(@RequestParam(value = "id") String computerIDString, ModelMap model) {
 
         LOG.info("Settings attributes for EditServlet.");
 
@@ -68,7 +68,7 @@ public class EditController {
     }
 
     @PostMapping
-    protected String doPost(@ModelAttribute(value = "id") String idString,
+    protected String editComputerFromForm(@ModelAttribute(value = "id") String idString,
             @RequestParam(value = "computerName") String computerName,
             @RequestParam(value = "introduced") String introducedString,
             @RequestParam(value = "discontinued") String discontinuedString,
@@ -148,7 +148,7 @@ public class EditController {
             model.addAttribute("message", str.toString());
         }
 
-        return "redirect:/editComputer";
+        return "editComputer";
 
     }
 }
