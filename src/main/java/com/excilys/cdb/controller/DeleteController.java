@@ -1,15 +1,12 @@
 package com.excilys.cdb.controller;
 
-import java.io.IOException;
-
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.Validator;
@@ -19,38 +16,27 @@ import com.excilys.cdb.validator.Validator;
  *
  */
 @Controller
-@WebServlet(name = "DeleteServlet", urlPatterns = "/delete")
-public class DeleteServlet extends HttpServlet {
-
-    private static final long serialVersionUID = 0xD31373L;
+@RequestMapping("/delete")
+public class DeleteController {
 
     private ComputerService computerService;
     private Validator validator;
 
     @Autowired
-    public DeleteServlet(ComputerService computerService, Validator validator) {
+    public DeleteController(ComputerService computerService, Validator validator) {
         this.computerService = computerService;
         this.validator = validator;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        response.sendRedirect(request.getContextPath() + "/dashboard"); // TODO + getParameter
-                                                                        // ?orderBy
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    @PostMapping
+    protected String doPost(@RequestParam("selection") String selection) throws ServletException {
 
         // Gather the list of entries to delete
 
-        String[] selection = request.getParameter("selection").split(",");
+        String[] entries = selection.split(",");
 
         // Delete the entries
-        for (String computerIDString : selection) {
+        for (String computerIDString : entries) {
 
             try {
                 if (validator.isStringInteger(computerIDString) && computerService
@@ -65,7 +51,7 @@ public class DeleteServlet extends HttpServlet {
         }
 
         // Go back to main page
-        doGet(request, response);
+        return "redirect:/";
 
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +37,7 @@ public class DashboardController {
         this.validator = validator;
     }
 
-    @GetMapping()
+    @GetMapping
     protected String getMapping(
             @RequestParam(value = "currentPage", defaultValue = "1") String currentPageString,
             @RequestParam(value = "search", defaultValue = "") String searchTerm,
@@ -78,17 +77,16 @@ public class DashboardController {
         return "dashboard";
     }
 
-    // Used for changing the number of entries per page
-    @PostMapping()
-    protected void updateNumberEntries(@ModelAttribute("action") String newValue) {
-
-        // TODO: rename action
+    // Used for changing the number of entries displayed per page
+    @PostMapping
+    protected String updateNumberEntries(@RequestParam("nbEntries") String newValue) {
 
         if (newValue != null) {
             int newNbEntriesPerPage = Integer.valueOf(newValue);
             ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
         }
 
-        // TODO getMapping(request, response);
+        return "redirect:/";
+
     }
 }

@@ -2,8 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
+
 <html>
 <head>
+
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
@@ -14,14 +16,17 @@
 <script type="text/javascript" src="static/js/jquery.min.js"></script>
 <script type="text/javascript" src="static/js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="static/js/formvalidation.js"></script>
+
 </head>
+
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer
+			<a class="navbar-brand" href="/computer-database"> Application - Computer
 				Database </a>
 		</div>
 	</header>
+	
 	<section id="main">
 		<div class="container">
 			<div class="row">
@@ -75,8 +80,8 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary">
-							or <a href="dashboard" class="btn btn-default">Cancel</a>
+							<input type="submit" value="Add" class="btn btn-primary">
+							or <a href="/computer-database" class="btn btn-default">Cancel</a>
 						</div>
 					</form>
 				</div>

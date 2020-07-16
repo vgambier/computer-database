@@ -22,7 +22,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer
+			<a class="navbar-brand" href="/computer-database"> Application - Computer
 				Database </a>
 		</div>
 	</header>
@@ -106,12 +106,17 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 
-			<form action="dashboard?search=${search}" method="POST">
+			<form action="?search=${search}" method="POST">
 				<div class="btn-group btn-group-sm pull-right" role="group">
-					<input type="submit" class="btn btn-default" name="action"
-						value="10" /> <input type="submit" class="btn btn-default"
-						name="action" value="50" /> <input type="submit"
-						class="btn btn-default" name="action" value="100" />
+				
+					<input type="submit" class="btn btn-default" name="nbEntries"
+						value="10" />
+						
+						<input type="submit" class="btn btn-default"
+						name="nbEntries" value="50" />
+						
+						<input type="submit"
+						class="btn btn-default" name="nbEntries" value="100" />
 				</div>
 			</form>
 

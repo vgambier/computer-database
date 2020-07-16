@@ -1,18 +1,19 @@
 package com.excilys.cdb.controller;
 
-import java.io.IOException;
 import java.sql.Date;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
@@ -24,60 +25,56 @@ import com.excilys.cdb.validator.Validator;
  *
  */
 @Controller
-@WebServlet(name = "EditServlet", urlPatterns = "/editComputer")
-public class EditServlet extends HttpServlet {
+@RequestMapping("/editComputer")
+public class EditController {
 
-    private static final long serialVersionUID = 0xED17L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(EditServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EditController.class);
 
     private ComputerService computerService;
     private CompanyService companyService;
     private Validator validator;
 
     @Autowired
-    public EditServlet(ComputerService computerService, CompanyService companyService,
+    public EditController(ComputerService computerService, CompanyService companyService,
             Validator validator) {
         this.computerService = computerService;
         this.companyService = companyService;
         this.validator = validator;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    @GetMapping
+    protected String doGet(@RequestParam(value = "id") String computerIDString, ModelMap model) {
 
         LOG.info("Settings attributes for EditServlet.");
 
-        String computerIDString = request.getParameter("id");
         int computerID;
 
-        try {
-            if (validator.isStringInteger(computerIDString)
-                    && computerService.doesComputerEntryExist(Integer.valueOf(computerIDString))) {
-                computerID = Integer.valueOf(computerIDString);
-                request.setAttribute("id", computerIDString);
-            } else { // if no id was given, go back to the main page
-                request.getRequestDispatcher("dashboard.jsp").forward(request, response);
-                return;
-            }
-        } catch (IOException e) {
-            throw new ServletException("Couldn't set session attributes", e);
+        if (validator.isStringInteger(computerIDString)
+                && computerService.doesComputerEntryExist(Integer.valueOf(computerIDString))) {
+            computerID = Integer.valueOf(computerIDString);
+            model.addAttribute("id", computerIDString);
+        } else { // if no id was given, go back to the main page
+            return "dashboard";
         }
 
         // Fill the form with existing data
 
         Computer computer = computerService.getComputer(computerID);
 
-        request.setAttribute("computer", computer);
-        request.setAttribute("companies", companyService.listAllCompanies());
+        model.addAttribute("computer", computer);
+        model.addAttribute("companies", companyService.listAllCompanies());
 
-        request.getRequestDispatcher("editComputer.jsp").forward(request, response);
+        return "editComputer";
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    @PostMapping
+    protected String doPost(@ModelAttribute(value = "id") String idString,
+            @RequestParam(value = "computerName") String computerName,
+            @RequestParam(value = "introduced") String introducedString,
+            @RequestParam(value = "discontinued") String discontinuedString,
+            @RequestParam(value = "companyID") String companyIDString, ModelMap model)
+
+            throws ServletException {
 
         // TODO: validation is redundant with CreateServlet - back-end validation doesn't need to
         // have explicit error
@@ -91,7 +88,6 @@ public class EditServlet extends HttpServlet {
         // Back-end validation
 
         Integer id = null;
-        String idString = request.getParameter("id");
 
         if (!validator.isStringInteger(idString)
                 || !computerService.doesComputerEntryExist(Integer.valueOf(idString))) {
@@ -101,14 +97,12 @@ public class EditServlet extends HttpServlet {
             id = Integer.parseInt(idString);
         }
 
-        String computerName = request.getParameter("computerName");
         if (computerName.equals("")) {
             str.append("Name is mandatory.\n");
             isEntryValid = false;
         }
 
         Date introduced = null;
-        String introducedString = request.getParameter("introduced");
         if (!introducedString.equals("") && validator.isDateStringValid(introducedString)) {
             introduced = java.sql.Date.valueOf(introducedString);
         } else if (!introducedString.equals("")) {
@@ -117,7 +111,6 @@ public class EditServlet extends HttpServlet {
         }
 
         Date discontinued = null;
-        String discontinuedString = request.getParameter("discontinued");
         if (!discontinuedString.equals("") && validator.isDateStringValid(discontinuedString)) {
             discontinued = java.sql.Date.valueOf(discontinuedString);
         } else if (!discontinuedString.equals("")) {
@@ -131,7 +124,6 @@ public class EditServlet extends HttpServlet {
         }
 
         Integer companyID = null;
-        String companyIDString = request.getParameter("companyID");
         try {
             if (companyIDString.equals("0")) { // If the user chose the "--" default option
                 companyID = null; // Needed for the Computer constructor to function as intended
@@ -151,12 +143,12 @@ public class EditServlet extends HttpServlet {
 
         if (str.length() == 0) { // If all fields are valid
             computerService.updateComputer(id, computerName, introduced, discontinued, companyID);
-            request.setAttribute("message", "Entry successfully edited.");
+            model.addAttribute("message", "Entry successfully edited.");
         } else {
-            request.setAttribute("message", str.toString());
+            model.addAttribute("message", str.toString());
         }
 
-        doGet(request, response);
+        return "redirect:/editComputer";
 
     }
 }
