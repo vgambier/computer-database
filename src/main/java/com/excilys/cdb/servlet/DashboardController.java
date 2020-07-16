@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.cdb.model.ComputerPage;
@@ -33,6 +34,12 @@ public class DashboardController {
     public DashboardController(ComputerService computerService, Validator validator) {
         this.computerService = computerService;
         this.validator = validator;
+    }
+
+    // Allows automatic redirection to the main dashboard page when URL is "empty"
+    @RequestMapping("/")
+    public String redirectPage() {
+        return "dashboard";
     }
 
     @GetMapping(path = "/dashboard")
