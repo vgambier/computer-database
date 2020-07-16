@@ -15,7 +15,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"config.mvc", "servlet"})
+@ComponentScan(basePackages = {"com.excilys.cdb.persistence", "com.excilys.cdb.config.spring",
+        "com.excilys.cdb.servlet", "com.excilys.cdb.service"})
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
@@ -26,7 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver bean = new InternalResourceViewResolver();
-        bean.setPrefix("/");
+        bean.setPrefix("/WEB-INF/views/");
         bean.setSuffix(".jsp");
         return bean;
     }

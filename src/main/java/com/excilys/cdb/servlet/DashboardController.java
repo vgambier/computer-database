@@ -1,19 +1,19 @@
 package com.excilys.cdb.servlet;
 
-import java.io.IOException;
-
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.cdb.model.ComputerPage;
 import com.excilys.cdb.model.ModelException;
-import com.excilys.cdb.persistence.PersistenceException;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.Validator;
 
@@ -22,74 +22,64 @@ import com.excilys.cdb.validator.Validator;
  *
  */
 @Controller
-public class DashboardServlet {
+public class DashboardController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DashboardServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DashboardController.class);
 
     private ComputerService computerService;
     private Validator validator;
 
-    @GetMapping("/dashboard")
-    protected void getMapping(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    @Autowired
+    public DashboardController(ComputerService computerService, Validator validator) {
+        this.computerService = computerService;
+        this.validator = validator;
+    }
+
+    @GetMapping(path = "/dashboard")
+    protected String getMapping(
+            @RequestParam(value = "currentPage", defaultValue = "1") String currentPageString,
+            @RequestParam(value = "search", defaultValue = "") String searchTerm,
+            @RequestParam(value = "orderBy", defaultValue = "computer_id") String orderBy,
+            ModelMap model) throws ServletException {
 
         LOG.info("Settings attributes for DashboardServlet.");
 
-        String currentPageString = request.getParameter("currentPage");
-        if (currentPageString == null) {
-            currentPageString = "1";
-        }
-        String searchTerm = request.getParameter("search");
-        String orderBy = request.getParameter("orderBy");
-
-        if (searchTerm == null) {
-            searchTerm = "";
-        }
-        request.setAttribute("search", searchTerm);
-
-        if (orderBy == null) {
-            orderBy = "computer_id";
-        }
-        request.setAttribute("orderBy", orderBy);
-
         ComputerPage computerPage;
 
+        int nbEntries = computerService.countComputerEntriesWhere(searchTerm);
+
+        int currentPage = validator.isPageIDStringValid(nbEntries, currentPageString)
+                ? Integer.valueOf(currentPageString)
+                : 1;
+
+        // TODO: uncomment
+        // request.setAttribute("currentPage", currentPage);
+
         try {
-
-            int nbEntries = computerService.countComputerEntriesWhere(searchTerm);
-
-            int currentPage = validator.isPageIDStringValid(nbEntries, currentPageString)
-                    ? Integer.valueOf(currentPageString)
-                    : 1;
-            request.setAttribute("currentPage", currentPage);
-
             computerPage = new ComputerPage(nbEntries, currentPage);
-            request.setAttribute("computers",
-                    computerService.getPageComputers(computerPage, searchTerm, orderBy));
-            request.setAttribute("computerCount", nbEntries);
-
         } catch (ModelException e) {
             throw new ServletException("Couldn't set session attributes", e);
-        } catch (PersistenceException e) {
-            throw new ServletException("Couldn't set session attributes", e);
         }
+        // request.setAttribute("computers",
+        // computerService.getPageComputers(computerPage, searchTerm, orderBy));
+        // request.setAttribute("computerCount", nbEntries);
 
-        request.setAttribute("nbPages", ComputerPage.getNbPages());
+        // request.setAttribute("nbPages", ComputerPage.getNbPages());
 
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+        return "dashboard";
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    // Used for changing the number of entries per page
+    @PostMapping("/dashboard")
+    protected void updateNumberEntries(@ModelAttribute("action") String newValue) {
 
-        // Used for changing the number of entries per page
-        String newValue = request.getParameter("action");
+        // TODO: rename action
 
         if (newValue != null) {
-            int newNbEntriesPerPage = Integer.valueOf(request.getParameter("action"));
+            int newNbEntriesPerPage = Integer.valueOf(newValue);
             ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
         }
 
-        getMapping(request, response);
+        // TODO getMapping(request, response);
     }
 }

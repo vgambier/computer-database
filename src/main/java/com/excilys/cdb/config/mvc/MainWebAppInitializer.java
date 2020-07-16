@@ -1,31 +1,29 @@
 package com.excilys.cdb.config.mvc;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.context.support.GenericWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
-// TODO https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#spring-web
 /**
  * @author Victor Gambier
  *
  */
 public class MainWebAppInitializer implements WebApplicationInitializer {
+
     @Override
-    public void onStartup(final ServletContext sc) throws ServletException {
+    public void onStartup(ServletContext servletContext) {
 
-        AnnotationConfigWebApplicationContext root = new AnnotationConfigWebApplicationContext();
+        // Load Spring web application configuration
+        AnnotationConfigWebApplicationContext ac = new AnnotationConfigWebApplicationContext();
+        ac.register(WebConfig.class);
 
-        root.scan("com.excilys");
-        sc.addListener(new ContextLoaderListener(root));
+        // Create and register the DispatcherServlet
+        DispatcherServlet servlet = new DispatcherServlet(ac);
+        ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", servlet);
+        registration.setLoadOnStartup(1);
+        registration.addMapping("/");
 
-        ServletRegistration.Dynamic appServlet = sc.addServlet("mvc",
-                new DispatcherServlet(new GenericWebApplicationContext()));
-        appServlet.setLoadOnStartup(1);
-        appServlet.addMapping("/");
     }
 }

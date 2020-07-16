@@ -11,7 +11,6 @@ import com.excilys.cdb.model.ComputerPage;
 import com.excilys.cdb.model.ModelException;
 
 // TODO: move error messages to CLI
-// TODO: should this stay a Bean?
 
 /**
  * @author Victor Gambier
