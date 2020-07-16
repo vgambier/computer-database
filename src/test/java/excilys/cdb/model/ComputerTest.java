@@ -1,10 +1,12 @@
-package model;
+package excilys.cdb.model;
 
 import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDate;
 
 import org.junit.Test;
+
+import com.excilys.cdb.model.Computer;
 
 public class ComputerTest {
 

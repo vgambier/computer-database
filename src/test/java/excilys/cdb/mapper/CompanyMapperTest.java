@@ -1,4 +1,4 @@
-package mapper;
+package excilys.cdb.mapper;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -14,7 +14,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import model.Computer;
+import com.excilys.cdb.mapper.CompanyMapper;
+import com.excilys.cdb.mapper.ComputerMapper;
+import com.excilys.cdb.model.Computer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyMapperTest {
