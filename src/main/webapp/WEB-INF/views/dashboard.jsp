@@ -28,13 +28,12 @@
 		</div>
 	</header>
 
-	<div>
-		<fmt:message key="label.changeLang" />
+    <div class="col-xs-12">		<a
+			href="?lang=en&search=${search}&currentPage=${currentPage}&orderBy=${orderBy}"><fmt:message
+				key="label.lang.en" /></a> | <a
+			href="?lang=fr&search=${search}&currentPage=${currentPage}&orderBy=${orderBy}"><fmt:message
+				key="label.lang.fr" /></a>
 	</div>
-	<ul>
-		<li><a href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
-		<li><a href="?lang=fr"><fmt:message key="label.lang.fr" /></a></li>
-	</ul>
 
 	<section id="main">
 		<div class="container">
