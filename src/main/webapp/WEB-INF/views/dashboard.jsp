@@ -80,16 +80,16 @@
 							</a>
 						</span></th>
 						<th><a
-							href="?search=${search}&currentPage=${currentPage}&orderBy=computer_name"><fmt:message
+							href="?search=${search}&orderBy=computer_name"><fmt:message
 									key="label.computerName" /> </a></th>
 						<th><a
-							href="?search=${search}&currentPage=${currentPage}&orderBy=introduced"><fmt:message
+							href="?search=${search}&orderBy=introduced"><fmt:message
 									key="label.introduced" /> </a></th>
 						<th><a
-							href="?search=${search}&currentPage=${currentPage}&orderBy=discontinued"><fmt:message
+							href="?search=${search}&orderBy=discontinued"><fmt:message
 									key="label.discontinued" /> </a></th>
 						<th><a
-							href="?search=${search}&currentPage=${currentPage}&orderBy=company_name"><fmt:message
+							href="?search=${search}&orderBy=company_name"><fmt:message
 									key="label.company" /> </a></th>
 
 					</tr>
