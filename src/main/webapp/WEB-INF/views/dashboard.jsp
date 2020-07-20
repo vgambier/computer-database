@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><fmt:message key="label.siteName" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
@@ -21,30 +22,40 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/computer-database"> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href="/computer-database"> <fmt:message
+					key="label.siteHeader" />
+			</a>
 		</div>
 	</header>
+
+	<div>
+		<fmt:message key="label.changeLang" />
+	</div>
+	<ul>
+		<li><a href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
+		<li><a href="?lang=fr"><fmt:message key="label.lang.fr" /></a></li>
+	</ul>
 
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">
-				<c:out value="${computerCount} computers found" />
+				<c:out value="${computerCount}" />
+				<fmt:message key="label.computersFound" />
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control"
+							placeholder=<fmt:message key="label.search"/> /> <input
+							type="submit" id="searchsubmit" value=<fmt:message key="label.filter"/>
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer"><fmt:message key="label.addComputer"/></a> <a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();"><fmt:message key="label.edit"/></a>
 				</div>
 			</div>
 		</div>
@@ -68,16 +79,17 @@
 							</a>
 						</span></th>
 						<th><a
-							href="?search=${search}&currentPage=${currentPage}&orderBy=computer_name">Computer
-								name</a></th>
+							href="?search=${search}&currentPage=${currentPage}&orderBy=computer_name"><fmt:message
+									key="label.computerName"/> </a></th>
 						<th><a
-							href="?search=${search}&currentPage=${currentPage}&orderBy=introduced">Introduced
-								date</a></th>
+							href="?search=${search}&currentPage=${currentPage}&orderBy=introduced"><fmt:message
+									key="label.introduced"/> </a></th>
 						<th><a
-							href="?search=${search}&currentPage=${currentPage}&orderBy=discontinued">Discontinued
-								date</a></th>
+							href="?search=${search}&currentPage=${currentPage}&orderBy=discontinued"><fmt:message
+									key="label.discontinued"/> </a></th>
 						<th><a
-							href="?search=${search}&currentPage=${currentPage}&orderBy=company_name">Company</a></th>
+							href="?search=${search}&currentPage=${currentPage}&orderBy=company_name"><fmt:message
+									key="label.company"/> </a></th>
 
 					</tr>
 				</thead>
@@ -112,7 +124,7 @@
 						value="10" /> <input type="submit" class="btn btn-default"
 						name="nbEntries" value="50" /> <input type="submit"
 						class="btn btn-default" name="nbEntries" value="100" />
-						
+
 				</div>
 			</form>
 

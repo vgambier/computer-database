@@ -9,6 +9,7 @@
 	<packaging>war</packaging>
 
 	<properties>
+	   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<!-- Dependencies versions -->
@@ -18,8 +19,8 @@
 		<slf4j-version>1.7.30</slf4j-version>
 		<logback-version>1.2.3</logback-version>
 		<dbunit-version>2.5.1</dbunit-version>
-		<javax-servlet-version-api>4.0.1</javax-servlet-version-api>
-		<javax-servlet-version-jsp>1.2</javax-servlet-version-jsp>
+		<javax-servlet-api-version>4.0.1</javax-servlet-api-version>
+		<jstl-version>1.2</jstl-version>
 		<taglibs-version>1.1.2</taglibs-version>
 		<jquery-version>3.5.1</jquery-version>
 		<jquery-validation-version>1.19.0</jquery-validation-version>
@@ -93,7 +94,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>${javax-servlet-version-api}</version>
+			<version>${javax-servlet-api-version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -101,8 +102,15 @@
 		<dependency>
 			<groupId>javax.servlet.jsp.jstl</groupId>
 			<artifactId>jstl-api</artifactId>
-			<version>${javax-servlet-version-jsp}</version>
+			<version>${jstl-version}</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/jstl/jstl -->
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstl-version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/taglibs/standard -->
