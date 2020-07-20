@@ -23,6 +23,7 @@ import com.excilys.cdb.validator.Validator;
 public class CLI {
 
     // TODO: use Optional<T> when needed in the project
+    // TODO: move hardcoded Strings to i18n properties file
 
     private static String helpMessage = String.join("\n", "List of commands:",
             "help: shows this message", "computers: shows the list of all computers",

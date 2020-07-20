@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
@@ -49,13 +49,15 @@
 						<input type="search" id="searchbox" name="search"
 							class="form-control"
 							placeholder=<fmt:message key="label.search"/> /> <input
-							type="submit" id="searchsubmit" value=<fmt:message key="label.filter"/>
-							class="btn btn-primary" />
+							type="submit" id="searchsubmit"
+							value=<fmt:message key="label.filter"/> class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer"><fmt:message key="label.addComputer"/></a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();"><fmt:message key="label.edit"/></a>
+					<a class="btn btn-success" id="addComputer" href="addComputer"><fmt:message
+							key="label.addComputer" /></a> <a class="btn btn-default"
+						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><fmt:message
+							key="label.edit" /></a>
 				</div>
 			</div>
 		</div>
@@ -80,16 +82,16 @@
 						</span></th>
 						<th><a
 							href="?search=${search}&currentPage=${currentPage}&orderBy=computer_name"><fmt:message
-									key="label.computerName"/> </a></th>
+									key="label.computerName" /> </a></th>
 						<th><a
 							href="?search=${search}&currentPage=${currentPage}&orderBy=introduced"><fmt:message
-									key="label.introduced"/> </a></th>
+									key="label.introduced" /> </a></th>
 						<th><a
 							href="?search=${search}&currentPage=${currentPage}&orderBy=discontinued"><fmt:message
-									key="label.discontinued"/> </a></th>
+									key="label.discontinued" /> </a></th>
 						<th><a
 							href="?search=${search}&currentPage=${currentPage}&orderBy=company_name"><fmt:message
-									key="label.company"/> </a></th>
+									key="label.company" /> </a></th>
 
 					</tr>
 				</thead>
