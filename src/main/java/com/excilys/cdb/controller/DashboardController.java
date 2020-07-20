@@ -73,6 +73,8 @@ public class DashboardController {
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("computerCount", nbEntries);
         model.addAttribute("nbPages", ComputerPage.getNbPages());
+        model.addAttribute("search", searchTerm);
+        model.addAttribute("orderBy", orderBy);
 
         return "dashboard";
     }
