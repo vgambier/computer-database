@@ -108,7 +108,6 @@ public class ComputerDAO extends DAO<Computer> {
      *            the id of the relevant computer
      */
     public void delete(int id) {
-
         MapSqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
         namedParameterJdbcTemplate.update(DELETE_ENTRY_QUERY, namedParameters);
     }
@@ -139,13 +138,9 @@ public class ComputerDAO extends DAO<Computer> {
             throw new PersistenceException("Invalid column name");
         }
 
-        // we force a LEFT JOIN
-        String sql = "from Computer computer left join fetch computer.company where computer.name like :searchTerm OR computer.company.name like :searchTerm ";
-
-        // TODO: if we want to sort by id, we don't need the ORDER BY clause
-        if (!orderBy.equals("computer.id")) {
-            sql += "order by " + orderBy;
-        }
+        // We force a LEFT JOIN
+        String sql = "from Computer computer left join fetch computer.company where computer.name like :searchTerm "
+                + "OR computer.company.name like :searchTerm order by " + orderBy;
 
         Session session = sessionFactory.openSession();
 
@@ -162,11 +157,9 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    protected String getCountEntriesWhereSQLStatement() {
-
-        return "SELECT COUNT(*) FROM `computer` LEFT JOIN `company` "
-                + "ON computer.company_id = company.id "
-                + "WHERE computer.name LIKE :search_term OR company.name LIKE :search_term";
+    protected String getCountEntriesWhereHQLStatement() {
+        return "select count(computer) from Computer computer left join computer.company "
+                + "where computer.name like :searchTerm OR computer.company.name like :searchTerm";
     }
 
     @Override

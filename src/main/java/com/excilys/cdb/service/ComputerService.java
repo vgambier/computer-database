@@ -57,7 +57,7 @@ public class ComputerService {
     }
 
     public List<Computer> getPageComputers(ComputerPage computerPage) throws PersistenceException {
-        return getPageComputers(computerPage, "", "computer_id");
+        return getPageComputers(computerPage, "", "computer.id");
     }
 
     public List<Computer> getPageComputers(ComputerPage computerPage, String searchTerm,

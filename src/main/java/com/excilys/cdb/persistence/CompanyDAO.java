@@ -55,8 +55,8 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    protected String getCountEntriesWhereSQLStatement() {
-        return "SELECT COUNT(*) FROM `company` WHERE name LIKE :search_term";
+    protected String getCountEntriesWhereHQLStatement() {
+        return "select count(c) from Company c where name like :search_term";
     }
 
     @Override

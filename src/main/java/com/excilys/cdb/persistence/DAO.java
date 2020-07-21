@@ -1,6 +1,8 @@
 package com.excilys.cdb.persistence;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -47,12 +49,16 @@ public abstract class DAO<T> {
      */
     public int countEntriesWhere(String searchTerm) {
 
-        String sql = getCountEntriesWhereSQLStatement();
+        Session session = sessionFactory.openSession();
 
-        SqlParameterSource namedParameters = new MapSqlParameterSource("search_term",
-                "%" + searchTerm + "%");
+        @SuppressWarnings("unchecked")
+        Query<Long> query = session.createQuery(getCountEntriesWhereHQLStatement());
+        query.setParameter("searchTerm", "%" + searchTerm + "%");
+        long count = query.uniqueResult();
 
-        return namedParameterJdbcTemplate.queryForObject(sql, namedParameters, Integer.class);
+        session.close();
+
+        return (int) count;
     }
 
     /**
@@ -73,7 +79,7 @@ public abstract class DAO<T> {
         // since the result set returned either 0 or 1 entry
     }
 
-    protected abstract String getCountEntriesWhereSQLStatement();
+    protected abstract String getCountEntriesWhereHQLStatement();
     protected abstract String getDoesEntryExistSQLStatement();
 
 }
