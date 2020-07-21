@@ -3,11 +3,12 @@ package com.excilys.cdb.persistence;
 import java.sql.Date;
 import java.util.List;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.mapper.ComputerMapper;
@@ -20,11 +21,7 @@ import com.excilys.cdb.model.Computer;
 @Component("computerDAOBean")
 public class ComputerDAO extends DAO<Computer> {
 
-    private static final String FIND_ENTRY_QUERY = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-            + "introduced, discontinued, company.name AS company_name, company_id "
-            + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
-            + "WHERE computer.id = :id ORDER BY computer_id";
-
+    private static final String FIND_ENTRY_HQL = "from Computer as computer where computer.id = :id";
     private static final String ADD_ENTRY_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (:name, :introduced, :discontinued, :company_id)";
     private static final String UPDATE_ENTRY_QUERY = "UPDATE computer SET name = :name, introduced = :introduced, discontinued = :discontinued, company_id = :company_id WHERE id = :id";
     private static final String DELETE_ENTRY_QUERY = "DELETE FROM `computer` WHERE id = :id";
@@ -44,8 +41,15 @@ public class ComputerDAO extends DAO<Computer> {
      */
     public Computer find(int id) {
 
-        SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
-        return namedParameterJdbcTemplate.query(FIND_ENTRY_QUERY, namedParameters, mapper).get(0);
+        Session session = sessionFactory.openSession();
+
+        @SuppressWarnings("unchecked")
+        Query<Computer> query = session.createQuery(FIND_ENTRY_HQL);
+        query.setParameter("id", id);
+        Computer computer = query.uniqueResult();
+
+        session.close();
+        return computer;
     }
 
     /**

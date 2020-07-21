@@ -48,8 +48,10 @@ public class CompanyDAO extends DAO<Company> {
 
         @SuppressWarnings("unchecked")
         Query<Company> query = session.createQuery(SELECT_ALL_COMPANIES_HQL);
+        List<Company> companies = query.list();
 
-        return query.list();
+        session.close();
+        return companies;
     }
 
     @Override

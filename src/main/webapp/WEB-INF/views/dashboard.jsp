@@ -105,7 +105,7 @@
 							<td><a href="editComputer?id=${computer.id}" onclick="">${computer.getName()}</a></td>
 							<td><c:out value="${computer.getIntroduced()}" /></td>
 							<td><c:out value="${computer.getDiscontinued()}" /></td>
-							<td><c:out value="${computer.getCompanyName()}" /></td>
+							<td><c:out value="${computer.company.name}" /></td>
 						</tr>
 
 					</c:forEach>

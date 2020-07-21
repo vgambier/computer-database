@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  * @author Victor Gambier
@@ -38,26 +37,28 @@ public class Computer implements Serializable {
     private LocalDate discontinued;
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = true)
+    @JoinColumn(name = "company_id")
     private Company company;
 
-    // TODO: improve model? 3 separate company attributes
-    @Transient
-    private int companyID;
-    @Transient
-    private String companyName;
+    public Computer(int id, String name, LocalDate introduced, LocalDate discontinued,
+            Company company) {
+        this.id = id;
+        this.name = name;
+        this.introduced = introduced;
+        this.discontinued = discontinued;
+        this.company = company;
+    }
 
+    public Computer() {
+    }
+
+    // TODO remove
     public Computer(int id, String name, LocalDate introduced, LocalDate discontinued,
             String companyName, int companyID) {
         this.id = id;
         this.name = name;
         this.introduced = introduced;
         this.discontinued = discontinued;
-        this.companyName = companyName;
-        this.companyID = companyID;
-    }
-
-    public Computer() {
     }
 
     public int getId() {
@@ -76,12 +77,8 @@ public class Computer implements Serializable {
         return discontinued;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public int getCompanyID() {
-        return companyID;
+    public Company getCompany() {
+        return company;
     }
 
     @Override
@@ -93,7 +90,7 @@ public class Computer implements Serializable {
         stringBuilder.append("name: ").append(name).append("\t");
         stringBuilder.append("introduced: ").append(introduced).append("\t");
         stringBuilder.append("discontinued: ").append(discontinued).append("\t");
-        stringBuilder.append("company: ").append(companyName);
+        stringBuilder.append("company: ").append(company == null ? null : company.getName());
 
         return stringBuilder.toString();
     }
@@ -102,7 +99,7 @@ public class Computer implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((companyName == null) ? 0 : companyName.hashCode());
+        result = prime * result + ((company == null) ? 0 : company.hashCode());
         result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
         result = prime * result + id;
         result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
@@ -122,11 +119,11 @@ public class Computer implements Serializable {
             return false;
         }
         Computer other = (Computer) obj;
-        if (companyName == null) {
-            if (other.companyName != null) {
+        if (company == null) {
+            if (other.company != null) {
                 return false;
             }
-        } else if (!companyName.equals(other.companyName)) {
+        } else if (!company.equals(other.company)) {
             return false;
         }
         if (discontinued == null) {

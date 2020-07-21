@@ -29,7 +29,7 @@ public class CLI {
     private static String helpMessage = String.join("\n", "List of commands:",
             "help: shows this message", "page <nb>: shows the nb-th page the computer list",
             "companies: shows the list of all companies",
-            "computerinfo <id>: shows all details pertaining to a given computer",
+            "computer <id>: shows all details pertaining to a given computer",
             "create: create a computer", "update: update the data of a given computer",
             "delete <id>: delete a given computer",
             "deletecompany <id>: delete a given company and all associated computers",
@@ -74,8 +74,8 @@ public class CLI {
                     companies();
                     break;
 
-                case "computerinfo" :
-                    computerInfo(arr);
+                case "computer" :
+                    computer(arr);
                     break;
 
                 case "create" :
@@ -152,14 +152,14 @@ public class CLI {
     }
 
     /**
-     * computerinfo command logic: shows the user the desired entry, without further prompting them.
+     * computer command logic: shows the user the desired entry, without further prompting them.
      *
      * @param arr
      *            the user input
      *
      * @throws Exception
      */
-    private static void computerInfo(String[] arr) throws Exception {
+    private static void computer(String[] arr) throws Exception {
 
         if (arr.length >= 2) {
 
