@@ -41,7 +41,7 @@ public class DashboardController {
     protected String getMapping(
             @RequestParam(value = "currentPage", defaultValue = "1") String currentPageString,
             @RequestParam(value = "search", defaultValue = "") String searchTerm,
-            @RequestParam(value = "orderBy", defaultValue = "computer_id") String orderBy,
+            @RequestParam(value = "orderBy", defaultValue = "computer.id") String orderBy,
             ModelMap model) throws ServletException {
 
         LOG.info("Settings attributes for DashboardServlet.");

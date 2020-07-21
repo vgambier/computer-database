@@ -81,6 +81,10 @@ public class Computer implements Serializable {
         return company;
     }
 
+    public String getCompanyName() {
+        return company == null ? null : company.getName();
+    }
+
     @Override
     public String toString() {
 

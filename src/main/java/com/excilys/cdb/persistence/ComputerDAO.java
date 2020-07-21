@@ -133,24 +133,32 @@ public class ComputerDAO extends DAO<Computer> {
             throws PersistenceException {
 
         // Avoid SQL injections
-        if (!orderBy.equals("computer_id") && !orderBy.equals("computer_name")
+        if (!orderBy.equals("computer.id") && !orderBy.equals("computer.name")
                 && !orderBy.equals("introduced") && !orderBy.equals("discontinued")
-                && !orderBy.equals("company_name")) {
-
+                && !orderBy.equals("computer.company.name")) {
             throw new PersistenceException("Invalid column name");
         }
 
-        String sql = "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-                + "introduced, discontinued, company.name AS company_name, company_id "
-                + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id "
-                + "WHERE computer.name LIKE :searchTerm OR company.name LIKE :searchTerm "
-                + "ORDER BY " + orderBy + " LIMIT :limit OFFSET :offset";
+        // we force a LEFT JOIN
+        String sql = "from Computer computer left join fetch computer.company where computer.name like :searchTerm OR computer.company.name like :searchTerm ";
 
-        MapSqlParameterSource namedParameters = new MapSqlParameterSource("searchTerm",
-                "%" + searchTerm + "%");
-        namedParameters.addValue("limit", limit);
-        namedParameters.addValue("offset", offset);
-        return namedParameterJdbcTemplate.query(sql, namedParameters, mapper);
+        // TODO: if we want to sort by id, we don't need the ORDER BY clause
+        if (!orderBy.equals("computer.id")) {
+            sql += "order by " + orderBy;
+        }
+
+        Session session = sessionFactory.openSession();
+
+        @SuppressWarnings("unchecked")
+        Query<Computer> query = session.createQuery(sql);
+        query.setParameter("searchTerm", "%" + searchTerm + "%");
+        query.setMaxResults(limit);
+        query.setFirstResult(offset);
+        List<Computer> computers = query.list();
+
+        session.close();
+
+        return computers;
     }
 
     @Override

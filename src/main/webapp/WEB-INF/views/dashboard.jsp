@@ -80,7 +80,7 @@
 							</a>
 						</span></th>
 						<th><a
-							href="?search=${search}&orderBy=computer_name"><fmt:message
+							href="?search=${search}&orderBy=computer.name"><fmt:message
 									key="label.computerName" /> </a></th>
 						<th><a
 							href="?search=${search}&orderBy=introduced"><fmt:message
@@ -89,7 +89,7 @@
 							href="?search=${search}&orderBy=discontinued"><fmt:message
 									key="label.discontinued" /> </a></th>
 						<th><a
-							href="?search=${search}&orderBy=company_name"><fmt:message
+							href="?search=${search}&orderBy=computer.company.name"><fmt:message
 									key="label.company" /> </a></th>
 
 					</tr>
@@ -105,7 +105,7 @@
 							<td><a href="editComputer?id=${computer.id}" onclick="">${computer.getName()}</a></td>
 							<td><c:out value="${computer.getIntroduced()}" /></td>
 							<td><c:out value="${computer.getDiscontinued()}" /></td>
-							<td><c:out value="${computer.company.name}" /></td>
+							<td><c:out value="${computer.getCompanyName()}" /></td>
 						</tr>
 
 					</c:forEach>

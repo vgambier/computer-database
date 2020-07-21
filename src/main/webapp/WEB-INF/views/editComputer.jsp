@@ -69,7 +69,7 @@
 									<c:forEach items="${companies}" var="company">
 
 										<c:choose>
-											<c:when test="${company.id == computer.companyID}">
+											<c:when test="${company.id == computer.company.id}">
 												<option selected="selected" value="${company.getId()}">${company.getName()}</option>
 											</c:when>
 											<c:otherwise>
