@@ -3,27 +3,57 @@ package com.excilys.cdb.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 /**
  * @author Victor Gambier
  *
  */
+@Entity
+@Table(name = "computer")
 public class Computer implements Serializable {
 
     private static final long serialVersionUID = -772706640304719028L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "introduced")
     private LocalDate introduced;
+
+    @Column(name = "discontinued")
     private LocalDate discontinued;
-    private String company;
-    private int companyID; // TODO: improve model?
+
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = true)
+    private Company company;
+
+    // TODO: improve model? 3 separate company attributes
+    @Transient
+    private int companyID;
+    @Transient
+    private String companyName;
 
     public Computer(int id, String name, LocalDate introduced, LocalDate discontinued,
-            String company, int companyID) {
+            String companyName, int companyID) {
         this.id = id;
         this.name = name;
         this.introduced = introduced;
         this.discontinued = discontinued;
-        this.company = company;
+        this.companyName = companyName;
         this.companyID = companyID;
     }
 
@@ -46,8 +76,8 @@ public class Computer implements Serializable {
         return discontinued;
     }
 
-    public String getCompany() {
-        return company;
+    public String getCompanyName() {
+        return companyName;
     }
 
     public int getCompanyID() {
@@ -63,7 +93,7 @@ public class Computer implements Serializable {
         stringBuilder.append("name: ").append(name).append("\t");
         stringBuilder.append("introduced: ").append(introduced).append("\t");
         stringBuilder.append("discontinued: ").append(discontinued).append("\t");
-        stringBuilder.append("company: ").append(company);
+        stringBuilder.append("company: ").append(companyName);
 
         return stringBuilder.toString();
     }
@@ -72,7 +102,7 @@ public class Computer implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((company == null) ? 0 : company.hashCode());
+        result = prime * result + ((companyName == null) ? 0 : companyName.hashCode());
         result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
         result = prime * result + id;
         result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
@@ -92,11 +122,11 @@ public class Computer implements Serializable {
             return false;
         }
         Computer other = (Computer) obj;
-        if (company == null) {
-            if (other.company != null) {
+        if (companyName == null) {
+            if (other.companyName != null) {
                 return false;
             }
-        } else if (!company.equals(other.company)) {
+        } else if (!companyName.equals(other.companyName)) {
             return false;
         }
         if (discontinued == null) {

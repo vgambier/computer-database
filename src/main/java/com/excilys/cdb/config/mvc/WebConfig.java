@@ -22,7 +22,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.excilys.cdb.persistence", "com.excilys.cdb.config.spring",
-        "com.excilys.cdb.controller", "com.excilys.cdb.service"})
+        "com.excilys.cdb.controller", "com.excilys.cdb.service",
+        "com.excilys.cdb.config.hibernate"})
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
@@ -39,7 +40,7 @@ public class WebConfig implements WebMvcConfigurer {
         return bean;
     }
 
-    /* i18n beans */
+    /* Start of i18n beans */
 
     @Bean("messageSource")
     public MessageSource messageSource() {
@@ -60,4 +61,6 @@ public class WebConfig implements WebMvcConfigurer {
         localeChangeInterceptor.setParamName("lang");
         registry.addInterceptor(localeChangeInterceptor);
     }
+
+    /* End of i18n beans */
 }

@@ -1,7 +1,6 @@
 package com.excilys.cdb.persistence;
 
-import java.util.List;
-
+import org.hibernate.SessionFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -16,10 +15,13 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 public abstract class DAO<T> {
 
     protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    protected SessionFactory sessionFactory;
     protected RowMapper<T> mapper;
 
-    public DAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate, RowMapper<T> mapper) {
+    public DAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate, SessionFactory sessionFactory,
+            RowMapper<T> mapper) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.sessionFactory = sessionFactory;
         this.mapper = mapper;
     }
 
@@ -54,17 +56,6 @@ public abstract class DAO<T> {
     }
 
     /**
-     * Returns all entries from the database as Java objects.
-     *
-     * @return the list of Java objects
-     */
-    public List<T> listAll() {
-
-        String sql = getListAllSQLStatement();
-        return namedParameterJdbcTemplate.query(sql, mapper);
-    }
-
-    /**
      * Checks if there is an entry of the given id number in the table.
      *
      * @param id
@@ -83,7 +74,6 @@ public abstract class DAO<T> {
     }
 
     protected abstract String getCountEntriesWhereSQLStatement();
-    protected abstract String getListAllSQLStatement();
     protected abstract String getDoesEntryExistSQLStatement();
 
 }

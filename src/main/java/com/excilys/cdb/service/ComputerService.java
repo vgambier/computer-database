@@ -25,10 +25,6 @@ public class ComputerService {
         this.computerDAO = computerDAO;
     }
 
-    public List<Computer> listAllComputers() {
-        return computerDAO.listAll();
-    }
-
     public Computer getComputer(int computerID) {
         return computerDAO.find(computerID);
     }

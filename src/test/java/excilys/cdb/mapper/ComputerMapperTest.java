@@ -48,7 +48,7 @@ public class ComputerMapperTest {
         Assert.assertEquals("testName", computer.getName());
         Assert.assertEquals(LocalDate.of(2020, 01, 01), computer.getIntroduced());
         Assert.assertEquals(LocalDate.of(2021, 01, 01), computer.getDiscontinued());
-        Assert.assertEquals("Samsung", computer.getCompany());
+        Assert.assertEquals("Samsung", computer.getCompanyName());
     }
 
     @SuppressWarnings("unchecked")

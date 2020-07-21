@@ -7,6 +7,7 @@ import java.util.Scanner;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.excilys.cdb.config.hibernate.HibernateConfig;
 import com.excilys.cdb.config.spring.AppConfiguration;
 import com.excilys.cdb.config.spring.JdbcConfiguration;
 import com.excilys.cdb.model.Computer;
@@ -26,8 +27,7 @@ public class CLI {
     // TODO: move hardcoded Strings to i18n properties file
 
     private static String helpMessage = String.join("\n", "List of commands:",
-            "help: shows this message", "computers: shows the list of all computers",
-            "page <nb>: shows the nb-th page the computer list",
+            "help: shows this message", "page <nb>: shows the nb-th page the computer list",
             "companies: shows the list of all companies",
             "computerinfo <id>: shows all details pertaining to a given computer",
             "create: create a computer", "update: update the data of a given computer",
@@ -40,7 +40,7 @@ public class CLI {
     // This needs to be an attribute so that it can be closed at the end of the program
     // Otherwise, it would be inaccessible
     private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-            AppConfiguration.class, JdbcConfiguration.class);
+            AppConfiguration.class, JdbcConfiguration.class, HibernateConfig.class);
 
     private static ComputerService computerService = (ComputerService) context
             .getBean("computerServiceBean");
@@ -64,10 +64,6 @@ public class CLI {
 
                 case "help" :
                     help();
-                    break;
-
-                case "computers" : // could be deprecated
-                    computers();
                     break;
 
                 case "page" :
@@ -119,17 +115,6 @@ public class CLI {
      */
     private static void help() {
         System.out.println(helpMessage);
-    }
-
-    /**
-     * computers command logic: displays the list of all computers.
-     *
-     * @throws PersistenceException
-     *
-     * @throws Exception
-     */
-    private static void computers() {
-        computerService.listAllComputers().forEach(computer -> System.out.println(computer));
     }
 
     /**

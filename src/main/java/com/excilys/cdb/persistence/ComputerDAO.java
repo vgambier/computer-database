@@ -3,6 +3,7 @@ package com.excilys.cdb.persistence;
 import java.sql.Date;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -29,8 +30,9 @@ public class ComputerDAO extends DAO<Computer> {
     private static final String DELETE_ENTRY_QUERY = "DELETE FROM `computer` WHERE id = :id";
 
     @Autowired
-    public ComputerDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        super(namedParameterJdbcTemplate, ComputerMapper.getInstance());
+    public ComputerDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+            SessionFactory sessionFactory) {
+        super(namedParameterJdbcTemplate, sessionFactory, ComputerMapper.getInstance());
     }
 
     /**
@@ -156,16 +158,7 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    protected String getListAllSQLStatement() {
-
-        return "SELECT computer.id AS computer_id, computer.name AS computer_name, "
-                + "introduced, discontinued, company.name AS company_name, company_id "
-                + "FROM `computer` LEFT JOIN `company` ON computer.company_id = company.id";
-    }
-
-    @Override
     protected String getDoesEntryExistSQLStatement() {
         return "SELECT COUNT(1) FROM `computer` WHERE id = :id";
     }
-
 }

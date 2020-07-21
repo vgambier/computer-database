@@ -61,5 +61,4 @@ public class JdbcConfiguration {
             HikariDataSource hikariDataSource) {
         return new NamedParameterJdbcTemplate(hikariDataSource);
     }
-
 }
