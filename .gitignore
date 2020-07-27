@@ -8,3 +8,4 @@
 /src/test/resources/db-setup/
 /src/main/resources/.properties
 /src/test/resources/.properties
+/logs/

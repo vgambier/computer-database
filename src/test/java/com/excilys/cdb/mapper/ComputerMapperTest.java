@@ -1,6 +1,4 @@
-package excilys.cdb.mapper;
-
-import static org.junit.Assert.assertNotNull;
+package com.excilys.cdb.mapper;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -14,21 +12,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.Computer;
+
+// Note: this test class no longer does anything useful. It is kept solely as a reference as it is currently one of only two test classes that uses Mockito
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerMapperTest {
 
     @Mock
     private ResultSet resultSet;
-
-    @Test
-    public void testGetInstance() {
-        ComputerDTOMapper computerMapper = null;
-        computerMapper = ComputerDTOMapper.getInstance();
-        assertNotNull(computerMapper);
-    }
 
     @Test
     public void testMapRowResultSet() throws SQLException {

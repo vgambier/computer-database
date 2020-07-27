@@ -1,4 +1,4 @@
 /***
- * Package used for Spring configuration. It defines beans and behaviors thereof.
+ * Package used for Spring MVC configuration.
  */
 package com.excilys.cdb.config.mvc;

@@ -1,4 +1,4 @@
-package excilys.cdb.model;
+package com.excilys.cdb.model;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,10 +17,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import com.excilys.cdb.config.hibernate.HibernateConfig;
 import com.excilys.cdb.config.spring.AppConfiguration;
 import com.excilys.cdb.config.spring.JdbcConfiguration;
-import com.excilys.cdb.model.ComputerPage;
-import com.excilys.cdb.model.ModelException;
 import com.excilys.cdb.service.ComputerService;
 
 // TODO: add more unit tests everywhere
@@ -53,11 +52,12 @@ public class ComputerPageTest extends DBTestCase {
         assertNotNull(dataSet);
 
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class,
-                JdbcConfiguration.class);
+                JdbcConfiguration.class, HibernateConfig.class);
+
         ComputerService computerService = (ComputerService) context.getBean("computerServiceBean");
 
-        double rowCount = computerService.countComputerEntries();
-        assertEquals(8.0, rowCount);
+        int rowCount = computerService.countComputerEntries();
+        assertEquals(8, rowCount);
 
         ((ConfigurableApplicationContext) context).close();
 

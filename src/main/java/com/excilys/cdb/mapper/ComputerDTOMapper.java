@@ -1,43 +1,56 @@
 package com.excilys.cdb.mapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.excilys.cdb.dto.ComputerDTO;
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.service.CompanyService;
 
 /**
  * @author Victor Gambier
  *
  */
-public class ComputerDTOMapper implements RowMapper<Computer> {
 
-    private static ComputerDTOMapper instance = null;
+@Component("computerDTOMapperBean")
+public class ComputerDTOMapper {
 
-    private ComputerDTOMapper() {
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private CompanyService companyService;
+
+    @Autowired
+    public ComputerDTOMapper(CompanyService companyService) {
+        this.companyService = companyService;
     }
 
-    public static ComputerDTOMapper getInstance() {
-        if (instance == null) {
-            instance = new ComputerDTOMapper();
-        }
-        return instance;
-    }
+    public Computer fromDTOtoModel(ComputerDTO computerDTO) {
 
-    public Computer map(ResultSet rs) throws SQLException {
+        // Fetching corresponding Company object
+        String companyIDString = computerDTO.getCompanyId();
 
-        return new Computer(rs.getInt("computer_id"), rs.getString("computer_name"),
+        Company company = companyIDString.equals("")
+                ? null
+                : companyService.getCompany(Integer.valueOf(companyIDString));
 
-                rs.getDate("introduced") == null ? null : rs.getDate("introduced").toLocalDate(),
+        return new Computer(
 
-                rs.getDate("discontinued") == null
+                Integer.parseInt(computerDTO.getId()),
+
+                computerDTO.getName(),
+
+                computerDTO.getIntroduced() == null
                         ? null
-                        : rs.getDate("discontinued").toLocalDate(),
+                        : LocalDate.parse(computerDTO.getIntroduced(), formatter),
 
-                rs.getString("company_name"),
+                computerDTO.getDiscontinued() == null
+                        ? null
+                        : LocalDate.parse(computerDTO.getDiscontinued(), formatter),
 
-                rs.getInt("company_id"));
+                company);
 
     }
 }

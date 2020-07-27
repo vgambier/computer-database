@@ -1,4 +1,4 @@
-package excilys.cdb.mapper;
+package com.excilys.cdb.mapper;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -14,9 +14,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.excilys.cdb.mapper.CompanyDTOMapper;
-import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.Computer;
+
+// Note: this test class no longer does anything useful. It is kept solely as a reference as it is currently one of only two test classes that uses Mockito
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyMapperTest {

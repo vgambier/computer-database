@@ -16,7 +16,7 @@ import com.excilys.cdb.validator.Validator;
  *         Configures the beans used for general purposes.
  */
 @Configuration
-@ComponentScan({"com.excilys.cdb.persistence, com.excilys.cdb.validator"})
+@ComponentScan({"com.excilys.cdb.persistence, com.excilys.cdb.validator", "com.excilys.cdb.mapper"})
 public class AppConfiguration {
 
     @Bean(name = "computerServiceBean")

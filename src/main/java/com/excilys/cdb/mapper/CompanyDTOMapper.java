@@ -1,10 +1,6 @@
 package com.excilys.cdb.mapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import org.springframework.jdbc.core.RowMapper;
-
+import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.model.Company;
 
 /* This class uses the Singleton pattern */
@@ -13,7 +9,7 @@ import com.excilys.cdb.model.Company;
  * @author Victor Gambier
  *
  */
-public class CompanyDTOMapper implements RowMapper<Company> {
+public class CompanyDTOMapper {
 
     private static CompanyDTOMapper instance = null;
 
@@ -27,7 +23,7 @@ public class CompanyDTOMapper implements RowMapper<Company> {
         return instance;
     }
 
-    public Company map(ResultSet rs) throws SQLException {
-        return new Company(rs.getInt("id"), rs.getString("name"));
+    public Company fromDTOtoModel(CompanyDTO companyDTO) {
+        return new Company(Integer.parseInt(companyDTO.getId()), companyDTO.getName());
     }
 }

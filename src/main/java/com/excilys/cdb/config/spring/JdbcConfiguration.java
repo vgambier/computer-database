@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.excilys.cdb.persistence.PersistenceException;
 import com.zaxxer.hikari.HikariDataSource;
@@ -19,6 +18,7 @@ import com.zaxxer.hikari.HikariDataSource;
  *
  *         Configures the beans that are used to connect to the database.
  */
+
 @Configuration
 @ComponentScan({"com.excilys.cdb.persistence"})
 public class JdbcConfiguration {
@@ -54,11 +54,5 @@ public class JdbcConfiguration {
         hikariDataSource.setMaximumPoolSize(10);
 
         return hikariDataSource;
-    }
-
-    @Bean(name = "namedParameterJdbcTemplateBean")
-    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(
-            HikariDataSource hikariDataSource) {
-        return new NamedParameterJdbcTemplate(hikariDataSource);
     }
 }

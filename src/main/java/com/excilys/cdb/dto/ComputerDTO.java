@@ -12,14 +12,14 @@ public class ComputerDTO implements Serializable {
     private String name;
     private String introduced;
     private String discontinued;
-    private String company;
+    private String companyId;
 
     public static class Builder {
         private String id;
         private String name;
         private String introduced;
         private String discontinued;
-        private String company;
+        private String companyId;
 
         public Builder withId(String id) {
             this.id = id;
@@ -41,8 +41,8 @@ public class ComputerDTO implements Serializable {
             return this;
         }
 
-        public Builder withCompany(String company) {
-            this.company = company;
+        public Builder withCompany(String companyId) {
+            this.companyId = companyId;
             return this;
         }
 
@@ -52,7 +52,7 @@ public class ComputerDTO implements Serializable {
             computerDTO.name = this.name;
             computerDTO.introduced = this.introduced;
             computerDTO.discontinued = this.discontinued;
-            computerDTO.company = this.company;
+            computerDTO.companyId = this.companyId;
             return computerDTO;
         }
     }
@@ -73,8 +73,8 @@ public class ComputerDTO implements Serializable {
         return discontinued;
     }
 
-    public String getCompany() {
-        return company;
+    public String getCompanyId() {
+        return companyId;
     }
 
     // Spring lifecycle
