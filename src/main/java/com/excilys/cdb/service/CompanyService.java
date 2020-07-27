@@ -30,8 +30,8 @@ public class CompanyService {
         return companyDAO.listAll();
     }
 
-    public void deleteCompany(Integer companyID) {
-        companyDAO.delete(companyID);
+    public void deleteCompany(Company company) {
+        companyDAO.delete(company);
     }
 
     public boolean doesCompanyEntryExist(int id) {

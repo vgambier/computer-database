@@ -11,22 +11,21 @@ import com.excilys.cdb.model.Computer;
  * @author Victor Gambier
  *
  */
-public class ComputerMapper implements RowMapper<Computer> {
+public class ComputerDTOMapper implements RowMapper<Computer> {
 
-    private static ComputerMapper instance = null;
+    private static ComputerDTOMapper instance = null;
 
-    private ComputerMapper() {
+    private ComputerDTOMapper() {
     }
 
-    public static ComputerMapper getInstance() {
+    public static ComputerDTOMapper getInstance() {
         if (instance == null) {
-            instance = new ComputerMapper();
+            instance = new ComputerDTOMapper();
         }
         return instance;
     }
 
-    @Override
-    public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public Computer map(ResultSet rs) throws SQLException {
 
         return new Computer(rs.getInt("computer_id"), rs.getString("computer_name"),
 

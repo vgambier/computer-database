@@ -14,8 +14,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.excilys.cdb.mapper.CompanyMapper;
-import com.excilys.cdb.mapper.ComputerMapper;
+import com.excilys.cdb.mapper.CompanyDTOMapper;
+import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.Computer;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -26,8 +26,8 @@ public class CompanyMapperTest {
 
     @Test
     public void testGetInstance() {
-        CompanyMapper companyMapper = null;
-        companyMapper = CompanyMapper.getInstance();
+        CompanyDTOMapper companyMapper = null;
+        companyMapper = CompanyDTOMapper.getInstance();
         assertNotNull(companyMapper);
     }
 
@@ -41,7 +41,7 @@ public class CompanyMapperTest {
         Mockito.when(resultSet.getString("company_name")).thenReturn("Samsung");
         Mockito.when(resultSet.getInt("company_id")).thenReturn(1);
 
-        Computer computer = ComputerMapper.getInstance().mapRow(resultSet, 1);
+        Computer computer = ComputerDTOMapper.getInstance().mapRow(resultSet, 1);
         Computer computer2 = new Computer(12, "testName", LocalDate.of(2020, 01, 01),
                 LocalDate.of(2021, 01, 01), "Samsung", 1);
 

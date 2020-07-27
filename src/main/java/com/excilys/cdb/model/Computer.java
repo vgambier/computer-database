@@ -15,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 /**
  * @author Victor Gambier
  *
@@ -40,6 +43,7 @@ public class Computer implements Serializable {
     private LocalDate discontinued;
 
     @ManyToOne
+    @Cascade({CascadeType.DELETE})
     @JoinColumn(name = "company_id")
     private Company company;
 
@@ -53,15 +57,6 @@ public class Computer implements Serializable {
     }
 
     public Computer() {
-    }
-
-    // TODO remove
-    public Computer(int id, String name, LocalDate introduced, LocalDate discontinued,
-            String companyName, int companyID) {
-        this.id = id;
-        this.name = name;
-        this.introduced = introduced;
-        this.discontinued = discontinued;
     }
 
     public static class Builder {
@@ -98,7 +93,7 @@ public class Computer implements Serializable {
                     ? null
                     : Instant.ofEpochMilli(discontinued.getTime()).atZone(ZoneId.systemDefault())
                             .toLocalDate();
-            
+
             this.discontinued = discontinuedLocalDate;
             return this;
         }

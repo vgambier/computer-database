@@ -348,7 +348,8 @@ public class CLI {
                 System.out.println(
                         "Company ID must be a positive integer and correspond to an existing entry.");
             } else {
-                companyService.deleteCompany(Integer.valueOf(arr[1]));
+                int companyID = Integer.valueOf(arr[1]);
+                companyService.deleteCompany(companyService.getCompany(companyID));
                 System.out.println("Company succesfully deleted.");
             }
         } else {

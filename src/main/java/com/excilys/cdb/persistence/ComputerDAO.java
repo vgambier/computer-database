@@ -6,10 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 
 /**
@@ -20,9 +18,8 @@ import com.excilys.cdb.model.Computer;
 public class ComputerDAO extends DAO<Computer> {
 
     @Autowired
-    public ComputerDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
-            SessionFactory sessionFactory) {
-        super(namedParameterJdbcTemplate, sessionFactory, ComputerMapper.getInstance());
+    public ComputerDAO(SessionFactory sessionFactory) {
+        super(sessionFactory);
     }
 
     /**

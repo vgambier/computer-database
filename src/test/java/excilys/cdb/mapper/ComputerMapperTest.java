@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.excilys.cdb.mapper.ComputerMapper;
+import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.Computer;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,8 +25,8 @@ public class ComputerMapperTest {
 
     @Test
     public void testGetInstance() {
-        ComputerMapper computerMapper = null;
-        computerMapper = ComputerMapper.getInstance();
+        ComputerDTOMapper computerMapper = null;
+        computerMapper = ComputerDTOMapper.getInstance();
         assertNotNull(computerMapper);
     }
 
@@ -41,7 +41,7 @@ public class ComputerMapperTest {
         Mockito.when(resultSet.getString("company_name")).thenReturn("Samsung");
         Mockito.when(resultSet.getInt("company_id")).thenReturn(1);
 
-        Computer computer = ComputerMapper.getInstance().mapRow(resultSet, 1);
+        Computer computer = ComputerDTOMapper.getInstance().mapRow(resultSet, 1);
 
         Assert.assertNotNull(computer);
         Assert.assertEquals(12, computer.getId());
@@ -62,7 +62,7 @@ public class ComputerMapperTest {
         Mockito.when(resultSet.getString("company_name")).thenThrow(SQLException.class);
         Mockito.when(resultSet.getString("company_id")).thenThrow(SQLException.class);
 
-        ComputerMapper.getInstance().mapRow(resultSet, 1);
+        ComputerDTOMapper.getInstance().mapRow(resultSet, 1);
 
     }
 }

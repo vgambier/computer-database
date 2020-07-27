@@ -3,8 +3,6 @@ package com.excilys.cdb.persistence;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 /**
  * @author Victor Gambier
@@ -14,15 +12,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
  */
 public abstract class DAO<T> {
 
-    protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     protected SessionFactory sessionFactory;
-    protected RowMapper<T> mapper;
 
-    public DAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate, SessionFactory sessionFactory,
-            RowMapper<T> mapper) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    public DAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-        this.mapper = mapper;
     }
 
     /**

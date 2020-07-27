@@ -13,22 +13,21 @@ import com.excilys.cdb.model.Company;
  * @author Victor Gambier
  *
  */
-public class CompanyMapper implements RowMapper<Company> {
+public class CompanyDTOMapper implements RowMapper<Company> {
 
-    private static CompanyMapper instance = null;
+    private static CompanyDTOMapper instance = null;
 
-    private CompanyMapper() {
+    private CompanyDTOMapper() {
     }
 
-    public static CompanyMapper getInstance() {
+    public static CompanyDTOMapper getInstance() {
         if (instance == null) {
-            instance = new CompanyMapper();
+            instance = new CompanyDTOMapper();
         }
         return instance;
     }
 
-    @Override
-    public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public Company map(ResultSet rs) throws SQLException {
         return new Company(rs.getInt("id"), rs.getString("name"));
     }
 }
