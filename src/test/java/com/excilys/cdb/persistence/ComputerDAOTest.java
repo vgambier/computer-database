@@ -2,6 +2,7 @@ package com.excilys.cdb.persistence;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.Properties;
 
 import org.dbunit.DBTestCase;
@@ -9,6 +10,9 @@ import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -17,6 +21,7 @@ import com.excilys.cdb.config.spring.AppConfiguration;
 import com.excilys.cdb.config.spring.JdbcConfiguration;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.ComputerDTOMapper;
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerPageTest;
 import com.excilys.cdb.service.ComputerService;
@@ -28,6 +33,7 @@ public class ComputerDAOTest extends DBTestCase {
     private ComputerDAO computerDAO;
     private ComputerDTOMapper computerDTOMapper;
     private ComputerService computerService;
+    private SessionFactory sessionFactory;
 
     public ComputerDAOTest(String name) throws IOException {
 
@@ -53,6 +59,7 @@ public class ComputerDAOTest extends DBTestCase {
         computerDAO = (ComputerDAO) context.getBean("computerDAOBean");
         computerDTOMapper = (ComputerDTOMapper) context.getBean("computerDTOMapperBean");
         computerService = (ComputerService) context.getBean("computerServiceBean");
+        sessionFactory = (SessionFactory) context.getBean("sessionFactoryBean");
 
     }
 
@@ -72,14 +79,37 @@ public class ComputerDAOTest extends DBTestCase {
     @Test
     public void testAddComputer() {
 
-        Computer newComputer = computerDTOMapper.fromDTOtoModel(new ComputerDTO.Builder()
-                .withId("50").withName("Computer50").withIntroduced("1970-10-09")
-                .withDiscontinued("2039-01-01").withCompany("5").build());
+        Computer newComputer = new Computer.Builder().withName("Computer50")
+                .withIntroduced(LocalDate.of(1970, 10, 9))
+                .withDiscontinued(LocalDate.of(2039, 01, 01))
+                .withCompany(new Company(5, "Company5")).build();
 
-        computerDAO.add(newComputer); // TODO: method works, but test fails?
+        computerDAO.add(newComputer);
 
-        assertEquals(newComputer, computerDAO.find(50));
+        // Determine max ID currently existing in database
 
+        Session session = sessionFactory.openSession();
+
+        @SuppressWarnings("unchecked")
+        Query<Integer> query = session.createQuery("select id from Computer order by id desc");
+        query.setMaxResults(1);
+        int maxId = query.uniqueResult();
+
+        session.close();
+
+        assertEquals(newComputer, computerDAO.find(maxId));
+    }
+
+    @Test
+    public void testUpdateComputer() {
+
+        Computer updatedComputer = computerDTOMapper.fromDTOtoModel(new ComputerDTO.Builder()
+                .withId("22").withName("Computer22Improved").withIntroduced("1989-05-09")
+                .withDiscontinued("2019-01-02").withCompany("1").build());
+
+        computerDAO.update(updatedComputer);
+
+        assertEquals(updatedComputer, computerDAO.find(22));
     }
 
     @Test

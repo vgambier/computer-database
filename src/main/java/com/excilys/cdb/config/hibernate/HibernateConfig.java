@@ -16,7 +16,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan("com.excilys.cdb.persistence")
 public class HibernateConfig {
 
-    @Bean
+    @Bean("sessionFactoryBean")
     public LocalSessionFactoryBean sessionFactory(HikariDataSource hikariDataSource) {
 
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();

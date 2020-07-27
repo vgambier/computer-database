@@ -29,6 +29,10 @@ public class ComputerDTOMapper {
 
     public Computer fromDTOtoModel(ComputerDTO computerDTO) {
 
+        // Fetching ID
+
+        int computerID = computerDTO.getId() == null ? -1 : Integer.parseInt(computerDTO.getId());
+
         // Fetching corresponding Company object
         String companyIDString = computerDTO.getCompanyId();
 
@@ -38,7 +42,7 @@ public class ComputerDTOMapper {
 
         return new Computer(
 
-                Integer.parseInt(computerDTO.getId()),
+                computerID,
 
                 computerDTO.getName(),
 

@@ -48,6 +48,7 @@ public class ComputerPageTest extends DBTestCase {
 
     @Test
     public void testDataLoaded() throws Exception {
+
         IDataSet dataSet = getDatabaseDataSet();
         assertNotNull(dataSet);
 
