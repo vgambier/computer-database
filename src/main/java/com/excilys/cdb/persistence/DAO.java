@@ -4,9 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 /**
  * @author Victor Gambier
@@ -35,7 +33,7 @@ public abstract class DAO<T> {
      * @throws PersistenceException
      */
     public int countEntries() {
-        return countEntriesWhere("");
+        return countEntriesMatching("");
     }
 
     /**
@@ -47,7 +45,7 @@ public abstract class DAO<T> {
      *            or its company name
      * @return the number of entries in the database
      */
-    public int countEntriesWhere(String searchTerm) {
+    public int countEntriesMatching(String searchTerm) {
 
         Session session = sessionFactory.openSession();
 
@@ -62,6 +60,26 @@ public abstract class DAO<T> {
     }
 
     /**
+     * Finds an entity in the database, and returns a corresponding Java object.
+     *
+     * @param id
+     *            the id of the entity in the database
+     * @return an entity model, with the same attributes as the entry in the database
+     */
+    public T find(int id) {
+
+        Session session = sessionFactory.openSession();
+
+        @SuppressWarnings("unchecked")
+        Query<T> query = session.createQuery(getFindEntryHQLStatement());
+        query.setParameter("id", id);
+        T model = query.uniqueResult();
+
+        session.close();
+        return model;
+    }
+
+    /**
      * Checks if there is an entry of the given id number in the table.
      *
      * @param id
@@ -70,16 +88,23 @@ public abstract class DAO<T> {
      */
     public boolean doesEntryExist(int id) {
 
-        String sql = getDoesEntryExistSQLStatement();
+        Session session = sessionFactory.openSession();
 
-        SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
+        @SuppressWarnings("unchecked")
+        Query<Long> query = session.createQuery(getDoesEntryExistHQLStatement());
+        query.setParameter("id", id);
+        long count = query.uniqueResult();
 
-        return namedParameterJdbcTemplate.queryForObject(sql, namedParameters, Integer.class) == 1;
+        session.close();
+
+        return count == 1L;
         // this is true if the query returned one entry
         // since the result set returned either 0 or 1 entry
+
     }
 
     protected abstract String getCountEntriesWhereHQLStatement();
-    protected abstract String getDoesEntryExistSQLStatement();
+    protected abstract String getDoesEntryExistHQLStatement();
+    protected abstract String getFindEntryHQLStatement();
 
 }

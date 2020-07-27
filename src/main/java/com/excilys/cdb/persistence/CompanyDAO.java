@@ -60,7 +60,13 @@ public class CompanyDAO extends DAO<Company> {
     }
 
     @Override
-    protected String getDoesEntryExistSQLStatement() {
-        return "SELECT COUNT(1) FROM `company` WHERE id = :id";
+    protected String getFindEntryHQLStatement() {
+        return "from Company as company where company.id = :id";
     }
+
+    @Override
+    protected String getDoesEntryExistHQLStatement() {
+        return "select count(1) from Company where id = :id";
+    }
+
 }

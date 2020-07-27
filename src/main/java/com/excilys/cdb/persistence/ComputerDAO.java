@@ -1,13 +1,11 @@
 package com.excilys.cdb.persistence;
 
-import java.sql.Date;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +19,6 @@ import com.excilys.cdb.model.Computer;
 @Component("computerDAOBean")
 public class ComputerDAO extends DAO<Computer> {
 
-    private static final String FIND_ENTRY_HQL = "from Computer as computer where computer.id = :id";
-    private static final String ADD_ENTRY_QUERY = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (:name, :introduced, :discontinued, :company_id)";
-    private static final String UPDATE_ENTRY_QUERY = "UPDATE computer SET name = :name, introduced = :introduced, discontinued = :discontinued, company_id = :company_id WHERE id = :id";
-    private static final String DELETE_ENTRY_QUERY = "DELETE FROM `computer` WHERE id = :id";
-
     @Autowired
     public ComputerDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
             SessionFactory sessionFactory) {
@@ -33,83 +26,46 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     /**
-     * Finds a computer in the database, and returns a corresponding Java object.
+     * Adds an entry for a new computer.
      *
-     * @param id
-     *            the id of the computer in the database
-     * @return a Computer object, with the same attributes as the computer entry in the database
+     * @param computer
+     *            a new Computer object, representing the new entry
      */
-    public Computer find(int id) {
+    public void add(Computer computer) {
 
         Session session = sessionFactory.openSession();
-
-        @SuppressWarnings("unchecked")
-        Query<Computer> query = session.createQuery(FIND_ENTRY_HQL);
-        query.setParameter("id", id);
-        Computer computer = query.uniqueResult();
-
+        session.save(computer);
         session.close();
-        return computer;
     }
 
     /**
-     * Adds an entry for a new computer.
+     * Updates the database entry for an existing computer.
      *
-     * @param computerName
-     *            the name of the new computer - cannot be null
-     * @param introducedDate
-     *            the date of introduction of the new computer - may be null
-     * @param discontinuedDate
-     *            the date of discontinuation of the new computer - may be null
-     * @param companyID
-     *            the ID of the company of the new computer - may be null
+     * @param computer
+     *            a Computer object, representing the updated entry
      */
-    public void add(String computerName, Date introducedDate, Date discontinuedDate,
-            Integer companyID) {
+    public void update(Computer computer) {
 
-        MapSqlParameterSource namedParameters = new MapSqlParameterSource("name", computerName);
-        namedParameters.addValue("introduced", introducedDate); // Possibly null
-        namedParameters.addValue("discontinued", discontinuedDate); // Possibly null
-        namedParameters.addValue("company_id", companyID); // Possibly null
-
-        namedParameterJdbcTemplate.update(ADD_ENTRY_QUERY, namedParameters);
-    }
-
-    /**
-     * Adds an entry for a new computer.
-     *
-     * @param id
-     *            the id of the existing computer
-     * @param newComputerName
-     *            the new name of the computer - cannot be null
-     * @param newIntroducedDate
-     *            the new date of introduction of the computer - may be null
-     * @param newDiscontinuedDate
-     *            the new date of discontinuation of the computer - may be null
-     * @param newCompanyID
-     *            the new ID of the company of the computer - may be null
-     */
-    public void update(int id, String newComputerName, Date newIntroducedDate,
-            Date newDiscontinuedDate, Integer newCompanyID) {
-
-        MapSqlParameterSource namedParameters = new MapSqlParameterSource("name", newComputerName);
-        namedParameters.addValue("introduced", newIntroducedDate); // Possibly null
-        namedParameters.addValue("discontinued", newDiscontinuedDate); // Possibly null
-        namedParameters.addValue("company_id", newCompanyID); // Possibly null
-        namedParameters.addValue("id", id);
-
-        namedParameterJdbcTemplate.update(UPDATE_ENTRY_QUERY, namedParameters);
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.update(computer);
+        session.getTransaction().commit();
+        session.close();
     }
 
     /**
      * Deletes the entry of the given computer.
      *
-     * @param id
-     *            the id of the relevant computer
+     * @param computer
+     *            a Computer object, representing the entry that must be deleted
      */
-    public void delete(int id) {
-        MapSqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
-        namedParameterJdbcTemplate.update(DELETE_ENTRY_QUERY, namedParameters);
+    public void delete(Computer computer) {
+
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.delete(computer);
+        session.getTransaction().commit();
+        session.close();
     }
 
     /**
@@ -128,8 +84,8 @@ public class ComputerDAO extends DAO<Computer> {
      * @return the corresponding list of Computer objects
      * @throws PersistenceException
      */
-    public List<Computer> listSomeMatching(int limit, int offset, String searchTerm, String orderBy)
-            throws PersistenceException {
+    public List<Computer> findMatchesWithinRange(int limit, int offset, String searchTerm,
+            String orderBy) throws PersistenceException {
 
         // Avoid SQL injections
         if (!orderBy.equals("computer.id") && !orderBy.equals("computer.name")
@@ -163,7 +119,12 @@ public class ComputerDAO extends DAO<Computer> {
     }
 
     @Override
-    protected String getDoesEntryExistSQLStatement() {
-        return "SELECT COUNT(1) FROM `computer` WHERE id = :id";
+    protected String getFindEntryHQLStatement() {
+        return "from Computer as computer where computer.id = :id";
+    }
+
+    @Override
+    protected String getDoesEntryExistHQLStatement() {
+        return "select count(1) from Computer where id = :id";
     }
 }

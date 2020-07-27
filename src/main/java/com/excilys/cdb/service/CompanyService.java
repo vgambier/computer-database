@@ -22,6 +22,10 @@ public class CompanyService {
         this.companyDAO = companyDAO;
     }
 
+    public Company getCompany(int companyID) {
+        return companyDAO.find(companyID);
+    }
+
     public List<Company> listAllCompanies() {
         return companyDAO.listAll();
     }

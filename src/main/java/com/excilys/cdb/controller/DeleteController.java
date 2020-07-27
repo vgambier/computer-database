@@ -43,7 +43,7 @@ public class DeleteController {
                         .doesComputerEntryExist(Integer.valueOf(computerIDString))) {
 
                     int computerID = Integer.valueOf(computerIDString);
-                    computerService.deleteComputer(computerID);
+                    computerService.deleteComputer(computerService.getComputer(computerID));
                 }
             } catch (NumberFormatException e) {
                 throw new ServletException("Couldn't delete computer", e);

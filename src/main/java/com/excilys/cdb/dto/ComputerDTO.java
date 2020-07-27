@@ -12,16 +12,14 @@ public class ComputerDTO implements Serializable {
     private String name;
     private String introduced;
     private String discontinued;
-    private String companyID;
-    private String companyName;
+    private String company;
 
     public static class Builder {
         private String id;
         private String name;
         private String introduced;
         private String discontinued;
-        private String companyID;
-        private String companyName;
+        private String company;
 
         public Builder withId(String id) {
             this.id = id;
@@ -33,23 +31,18 @@ public class ComputerDTO implements Serializable {
             return this;
         }
 
-        public Builder withIntroDate(String introduced) {
+        public Builder withIntroduced(String introduced) {
             this.introduced = introduced;
             return this;
         }
 
-        public Builder withDiscDate(String discontinued) {
+        public Builder withDiscontinued(String discontinued) {
             this.discontinued = discontinued;
             return this;
         }
 
-        public Builder withCompanyId(String companyID) {
-            this.companyID = companyID;
-            return this;
-        }
-
-        public Builder withCompanyName(String companyName) {
-            this.companyName = companyName;
+        public Builder withCompany(String company) {
+            this.company = company;
             return this;
         }
 
@@ -59,8 +52,7 @@ public class ComputerDTO implements Serializable {
             computerDTO.name = this.name;
             computerDTO.introduced = this.introduced;
             computerDTO.discontinued = this.discontinued;
-            computerDTO.companyID = this.companyID;
-            computerDTO.companyName = this.companyName;
+            computerDTO.company = this.company;
             return computerDTO;
         }
     }
@@ -81,12 +73,8 @@ public class ComputerDTO implements Serializable {
         return discontinued;
     }
 
-    public String getCompanyID() {
-        return companyID;
-    }
-
-    public String getCompanyName() {
-        return companyName;
+    public String getCompany() {
+        return company;
     }
 
     // Spring lifecycle

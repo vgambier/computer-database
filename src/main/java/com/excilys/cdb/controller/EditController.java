@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
@@ -142,7 +143,16 @@ public class EditController {
         // Adding entry if form is valid
 
         if (str.length() == 0) { // If all fields are valid
-            computerService.updateComputer(id, computerName, introduced, discontinued, companyID);
+
+            // Fetching corresponding Company object
+            Company company = companyID == null ? null : companyService.getCompany(companyID);
+
+            Computer updatedComputer = new Computer.Builder().withId(id).withName(computerName)
+                    .withIntroduced(introduced).withDiscontinued(discontinued).withCompany(company)
+                    .build();
+
+            computerService.updateComputer(updatedComputer);
+
             model.addAttribute("message", "Entry successfully edited.");
         } else {
             model.addAttribute("message", str.toString());

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.Validator;
@@ -106,7 +108,15 @@ public class CreateController {
         // Adding entry if form is valid
 
         if (str.length() == 0) { // If all fields are valid
-            computerService.addComputer(computerName, introduced, discontinued, companyID);
+
+            // Fetching corresponding Company object
+            Company company = companyID == null ? null : companyService.getCompany(companyID);
+
+            Computer addedComputer = new Computer.Builder().withName(computerName)
+                    .withIntroduced(introduced).withDiscontinued(discontinued).withCompany(company)
+                    .build();
+            computerService.addComputer(addedComputer);
+
             model.addAttribute("message", "Entry successfully added.");
         } else {
             model.addAttribute("message", str.toString());

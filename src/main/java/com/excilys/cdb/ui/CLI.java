@@ -10,6 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.excilys.cdb.config.hibernate.HibernateConfig;
 import com.excilys.cdb.config.spring.AppConfiguration;
 import com.excilys.cdb.config.spring.JdbcConfiguration;
+import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerPage;
 import com.excilys.cdb.persistence.PersistenceException;
@@ -221,9 +222,17 @@ public class CLI {
                 isCompanyIDValid = true;
             }
         }
-        Integer companyID = companyIDString.equals("") ? null : Integer.valueOf(companyIDString);
 
-        computerService.addComputer(computerName, introducedDate, discontinuedDate, companyID);
+        // Fetching corresponding Company object
+        Company company = companyIDString.equals("")
+                ? null
+                : companyService.getCompany(Integer.valueOf(companyIDString));
+
+        Computer addedComputer = new Computer.Builder().withName(computerName)
+                .withIntroduced(introducedDate).withDiscontinued(discontinuedDate)
+                .withCompany(company).build();
+
+        computerService.addComputer(addedComputer);
         System.out.println("Entry added.");
     }
 
@@ -294,12 +303,16 @@ public class CLI {
             }
         }
 
-        Integer newCompanyID = newCompanyIDString.equals("")
+        // Fetching corresponding Company object
+        Company company = newCompanyIDString.equals("")
                 ? null
-                : Integer.valueOf(newCompanyIDString);
+                : companyService.getCompany(Integer.valueOf(newCompanyIDString));
 
-        computerService.updateComputer(computerID, newComputerName, newIntroducedDate,
-                newDiscontinuedDate, newCompanyID);
+        Computer updatedComputer = new Computer.Builder().withId(computerID)
+                .withName(newComputerName).withIntroduced(newIntroducedDate)
+                .withDiscontinued(newDiscontinuedDate).withCompany(company).build();
+
+        computerService.updateComputer(updatedComputer);
         System.out.println("Entry updated.");
 
     }
@@ -319,7 +332,8 @@ public class CLI {
                 System.out.println(
                         "Computer ID must be a positive integer and correspond to an existing entry.");
             } else {
-                computerService.deleteComputer(Integer.valueOf(arr[1]));
+                int computerID = Integer.valueOf(arr[1]);
+                computerService.deleteComputer(computerService.getComputer(computerID));
                 System.out.println("Entry deleted.");
             }
         } else {

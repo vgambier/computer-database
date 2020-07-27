@@ -1,7 +1,10 @@
 package com.excilys.cdb.model;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -59,6 +62,61 @@ public class Computer implements Serializable {
         this.name = name;
         this.introduced = introduced;
         this.discontinued = discontinued;
+    }
+
+    public static class Builder {
+        private int id;
+        private String name;
+        private LocalDate introduced;
+        private LocalDate discontinued;
+        private Company company;
+
+        public Builder withId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withIntroduced(Date introduced) {
+
+            LocalDate introducedLocalDate = introduced == null
+                    ? null
+                    : Instant.ofEpochMilli(introduced.getTime()).atZone(ZoneId.systemDefault())
+                            .toLocalDate();
+
+            this.introduced = introducedLocalDate;
+            return this;
+        }
+
+        public Builder withDiscontinued(Date discontinued) {
+
+            LocalDate discontinuedLocalDate = discontinued == null
+                    ? null
+                    : Instant.ofEpochMilli(discontinued.getTime()).atZone(ZoneId.systemDefault())
+                            .toLocalDate();
+            
+            this.discontinued = discontinuedLocalDate;
+            return this;
+        }
+
+        public Builder withCompany(Company company) {
+            this.company = company;
+            return this;
+        }
+
+        public Computer build() {
+            Computer computer = new Computer();
+            computer.id = this.id;
+            computer.name = this.name;
+            computer.introduced = this.introduced;
+            computer.discontinued = this.discontinued;
+            computer.company = this.company;
+            return computer;
+        }
     }
 
     public int getId() {
