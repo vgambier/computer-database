@@ -23,7 +23,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/computer-database"> <fmt:message
+			<a class="navbar-brand" href="/webapp"> <fmt:message
 					key="label.siteHeader" />
 			</a>
 		</div>
