@@ -2,7 +2,6 @@ package com.excilys.cdb.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDate;
 import java.util.Properties;
 
 import org.dbunit.DBTestCase;
@@ -17,15 +16,18 @@ import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.excilys.cdb.config.HibernateConfig;
-import com.excilys.cdb.model.Company;
+import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.dto.ComputerDTO;
+import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.Computer;
 
 public class ComputerDAOTest extends DBTestCase {
 
     private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-            HibernateConfig.class);
+            HibernateConfig.class, ComputerDTOMapper.class);
     private ComputerDAO computerDAO;
     private SessionFactory sessionFactory;
+    private ComputerDTOMapper computerDTOMapper;
 
     public ComputerDAOTest(String name) throws IOException {
 
@@ -50,6 +52,7 @@ public class ComputerDAOTest extends DBTestCase {
 
         computerDAO = (ComputerDAO) context.getBean("computerDAOBean");
         sessionFactory = (SessionFactory) context.getBean("sessionFactoryBean");
+        computerDTOMapper = (ComputerDTOMapper) context.getBean("computerDTOMapperBean");
 
     }
 
@@ -58,10 +61,10 @@ public class ComputerDAOTest extends DBTestCase {
 
         Computer foundComputer = computerDAO.find(999);
 
-        Computer expectedComputer = new Computer.Builder().withId(999).withName("Computer999")
-                .withIntroduced(LocalDate.of(1980, 11, 11))
-                .withDiscontinued(LocalDate.of(2099, 01, 01))
-                .withCompany(new Company(5, "Company5")).build();
+        Computer expectedComputer = computerDTOMapper
+                .fromDTOtoModel((new ComputerDTO.Builder().withId("999").withName("Computer999")
+                        .withIntroduced("1980-11-11").withDiscontinued("2099-01-01")
+                        .withCompany(new CompanyDTO("5", "Company5")).build()));
 
         assertEquals(expectedComputer, foundComputer);
     }
@@ -69,10 +72,9 @@ public class ComputerDAOTest extends DBTestCase {
     @Test
     public void testAddComputer() {
 
-        Computer newComputer = new Computer.Builder().withName("Computer50")
-                .withIntroduced(LocalDate.of(1970, 10, 9))
-                .withDiscontinued(LocalDate.of(2039, 01, 01))
-                .withCompany(new Company(5, "Company5")).build();
+        Computer newComputer = computerDTOMapper.fromDTOtoModel((new ComputerDTO.Builder()
+                .withName("Computer50").withIntroduced("1970-10-09").withDiscontinued("2039-01-01")
+                .withCompany(new CompanyDTO("5", "Company5")).build()));
 
         computerDAO.add(newComputer);
 
@@ -93,10 +95,10 @@ public class ComputerDAOTest extends DBTestCase {
     @Test
     public void testUpdateComputer() {
 
-        Computer updatedComputer = new Computer.Builder().withId(22).withName("Computer22Improved")
-                .withIntroduced(LocalDate.of(1989, 05, 9))
-                .withDiscontinued(LocalDate.of(2019, 01, 02))
-                .withCompany(new Company(1, "Company1")).build();
+        Computer updatedComputer = computerDTOMapper.fromDTOtoModel(
+                (new ComputerDTO.Builder().withId("22").withName("Computer22Improved")
+                        .withIntroduced("1989-05-09").withDiscontinued("2019-01-02")
+                        .withCompany(new CompanyDTO("1", "Company1")).build()));
 
         computerDAO.update(updatedComputer);
 

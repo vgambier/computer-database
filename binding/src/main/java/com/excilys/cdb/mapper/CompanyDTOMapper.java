@@ -4,6 +4,7 @@ import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.model.Company;
 
 /* This class uses the Singleton pattern */
+// TODO: turn into a bean
 
 /**
  * @author Victor Gambier

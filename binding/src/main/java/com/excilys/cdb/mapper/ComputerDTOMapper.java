@@ -14,25 +14,15 @@ import com.excilys.cdb.model.Computer;
  */
 
 @Component("computerDTOMapperBean")
-@Deprecated // TODO: this doesn't work because of the Company type mismatch - fix once CompanyDTO is
-            // added to ComputerDTO
-// using a call to CompanyDTOMapper.fromDTOtoModel with the new companyDTO attribute as argument
 public class ComputerDTOMapper {
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public Computer fromDTOtoModel(ComputerDTO computerDTO) {
 
-        // Fetching ID
-
-        int computerID = computerDTO.getId() == null ? -1 : Integer.parseInt(computerDTO.getId());
-
-        // Fetching corresponding Company object
-        String companyIDString = computerDTO.getCompanyId();
-
         return new Computer(
 
-                computerID,
+                computerDTO.getId() == null ? -1 : Integer.parseInt(computerDTO.getId()),
 
                 computerDTO.getName(),
 
@@ -44,6 +34,6 @@ public class ComputerDTOMapper {
                         ? null
                         : LocalDate.parse(computerDTO.getDiscontinued(), formatter),
 
-                null);
+                CompanyDTOMapper.getInstance().fromDTOtoModel(computerDTO.getCompanyDTO()));
     }
 }

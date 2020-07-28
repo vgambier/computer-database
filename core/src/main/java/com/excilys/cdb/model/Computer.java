@@ -76,11 +76,6 @@ public class Computer implements Serializable {
             return this;
         }
 
-        public Builder withIntroduced(LocalDate introduced) {
-            this.introduced = introduced;
-            return this;
-        }
-
         public Builder withIntroduced(Date introduced) {
 
             LocalDate introducedLocalDate = introduced == null
@@ -89,11 +84,6 @@ public class Computer implements Serializable {
                             .toLocalDate();
 
             this.introduced = introducedLocalDate;
-            return this;
-        }
-
-        public Builder withDiscontinued(LocalDate discontinued) {
-            this.discontinued = discontinued;
             return this;
         }
 
