@@ -1,15 +1,17 @@
 /bin/
 /lib/
+/persistence/logs/
 /console/logs/
 
+// For all submodules:
 target/
 .settings/
 
 .classpath
 .project
 
-/webapp/src/main/resources/db-setup/
-/webapp/src/test/resources/db-setup/
+/persistence/src/main/resources/db-setup/
+/persistence/src/test/resources/db-setup/
 /persistence/src/main/resources/.properties
 /persistence/src/test/resources/.properties
 

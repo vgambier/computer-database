@@ -12,7 +12,7 @@ public class ComputerDTO implements Serializable {
     private String name;
     private String introduced;
     private String discontinued;
-    private String companyId;
+    private String companyId; // TODO: replace by CompanyDTO
 
     public static class Builder {
         private String id;

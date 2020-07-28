@@ -14,7 +14,9 @@ import com.excilys.cdb.model.Computer;
  */
 
 @Component("computerDTOMapperBean")
-@Deprecated // TODO: this doesn't work because of the Company type mismatch
+@Deprecated // TODO: this doesn't work because of the Company type mismatch - fix once CompanyDTO is
+            // added to ComputerDTO
+// using a call to CompanyDTOMapper.fromDTOtoModel with the new companyDTO attribute as argument
 public class ComputerDTOMapper {
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

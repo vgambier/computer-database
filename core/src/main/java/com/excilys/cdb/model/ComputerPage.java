@@ -37,6 +37,10 @@ public class ComputerPage {
      */
     private static void checkPageNumber(int pageNumber) throws ModelException {
 
+        if (pageNumber < 1) {
+            throw new ModelException("Invalid page number. Must be greater or equal than one.");
+        }
+
         if (pageNumber > nbPages) {
             StringBuilder str = new StringBuilder();
             str.append("Invalid page number. With the current database, there are only ")

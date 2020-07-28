@@ -24,7 +24,7 @@ import com.zaxxer.hikari.HikariDataSource;
 public class HibernateConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(HibernateConfig.class);
-    
+
     @Bean("hikariDataSource")
     public HikariDataSource hikariDataSource() throws PersistenceException {
 
