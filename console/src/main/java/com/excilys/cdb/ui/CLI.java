@@ -7,8 +7,9 @@ import java.util.Scanner;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.excilys.cdb.config.AppConfiguration;
+import com.excilys.cdb.config.BindingBeansConfig;
 import com.excilys.cdb.config.HibernateConfig;
+import com.excilys.cdb.config.ServiceBeansConfig;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerPage;
@@ -39,7 +40,7 @@ public class CLI {
     // This needs to be an attribute so that it can be closed at the end of the program
     // Otherwise, it would be inaccessible
     private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-            AppConfiguration.class, HibernateConfig.class);
+            ServiceBeansConfig.class, HibernateConfig.class, BindingBeansConfig.class);
 
     private static ComputerService computerService = (ComputerService) context
             .getBean("computerServiceBean");

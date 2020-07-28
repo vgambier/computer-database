@@ -8,16 +8,15 @@ import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.validator.Validator;
 
 /**
  * @author Victor Gambier
  *
- *         Configures the beans used for general purposes.
+ *         Configures the beans used for the service part of the application.
  */
 @Configuration
-@ComponentScan({"com.excilys.cdb.dao, com.excilys.cdb.validator"})
-public class AppConfiguration {
+@ComponentScan({"com.excilys.cdb.dao"})
+public class ServiceBeansConfig {
 
     @Bean(name = "computerServiceBean")
     public ComputerService computerService(ComputerDAO computerDAO) {
@@ -27,12 +26,5 @@ public class AppConfiguration {
     @Bean(name = "companyServiceBean")
     public CompanyService companyService(CompanyDAO companyDAO) {
         return new CompanyService(companyDAO);
-    }
-
-    // TODO: move this bean
-
-    @Bean(name = "validatorBean")
-    public Validator validator() {
-        return new Validator();
     }
 }

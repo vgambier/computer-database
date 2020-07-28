@@ -18,6 +18,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 /**
  * @author Victor Gambier
  *
+ *         Initializes Spring MVC
  */
 @Configuration
 @EnableWebMvc

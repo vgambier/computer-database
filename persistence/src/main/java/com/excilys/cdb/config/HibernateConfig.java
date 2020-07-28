@@ -18,6 +18,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.excilys.cdb.dao.PersistenceException;
 import com.zaxxer.hikari.HikariDataSource;
 
+/**
+ * @author Victor Gambier
+ *
+ *         This configuration class is responsible for creating and configuring sessions. A session
+ *         requires a data source
+ */
 @Configuration
 @EnableTransactionManagement
 @ComponentScan("com.excilys.cdb.dao")

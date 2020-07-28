@@ -9,6 +9,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 /**
  * @author Victor Gambier
  *
+ *         Configures the DispatcherServlet used in Spring MVC
  */
 public class MainWebAppInitializer implements WebApplicationInitializer {
 
