@@ -11,14 +11,14 @@ import org.springframework.web.servlet.DispatcherServlet;
  *
  *         Configures the DispatcherServlet used in Spring MVC
  */
-public class MainWebAppInitializer implements WebApplicationInitializer {
+public class RESTWebAppInitializer implements WebApplicationInitializer {
 
     @Override
     public void onStartup(ServletContext servletContext) {
 
         // Load Spring web application configuration
         AnnotationConfigWebApplicationContext ac = new AnnotationConfigWebApplicationContext();
-        ac.register(WebConfig.class);
+        ac.register(RESTWebConfig.class);
 
         // Create and register the DispatcherServlet
         DispatcherServlet servlet = new DispatcherServlet(ac);

@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @author Victor Gambier
  *
@@ -135,6 +137,7 @@ public class Computer implements Serializable {
         return company;
     }
 
+    @JsonIgnore
     public String getCompanyName() {
         return company == null ? null : company.getName();
     }

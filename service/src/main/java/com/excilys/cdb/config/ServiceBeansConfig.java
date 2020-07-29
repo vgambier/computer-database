@@ -15,7 +15,7 @@ import com.excilys.cdb.service.ComputerService;
  *         Configures the beans used for the service part of the application.
  */
 @Configuration
-@ComponentScan({"com.excilys.cdb.dao"})
+@ComponentScan({"com.excilys.cdb.dao", "com.excilys.cdb.controller"})
 public class ServiceBeansConfig {
 
     @Bean(name = "computerServiceBean")

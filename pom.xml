@@ -1,4 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys.cdb</groupId>
@@ -13,7 +16,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 
-		<revision>2.2.3-SNAPSHOT</revision>
+		<revision>3.0.0-SNAPSHOT</revision>
 
 		<!-- Dependencies versions -->
 
@@ -26,9 +29,11 @@
 		<jstl-version>1.2</jstl-version>
 		<hikari-version>3.4.5</hikari-version>
 		<taglibs-version>1.1.2</taglibs-version>
-		<spring-version>5.2.7.RELEASE</spring-version>
+		<spring-version>5.2.8.RELEASE</spring-version>
 		<hibernate-version>5.4.18.Final</hibernate-version>
 		<spring-security-version>5.3.3.RELEASE</spring-security-version>
+		<jackson-version>2.11.1</jackson-version>
+		<spring-rest-version>3.3.2.RELEASE</spring-rest-version>
 
 	</properties>
 
@@ -116,6 +121,8 @@
 		<module>persistence</module>
 		<module>service</module>
 		<module>webapp</module>
+		<module>webservice</module>
+		<module>computer-database</module>
 	</modules>
 
 </project>
