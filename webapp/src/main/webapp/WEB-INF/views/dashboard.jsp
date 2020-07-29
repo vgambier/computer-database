@@ -29,11 +29,18 @@
 		</div>
 	</header>
 
-    <div class="col-xs-12">		<a
+	<!--  Language selection -->
+
+	<div class="col-xs-12">
+		<a
 			href="?lang=en&search=${search}&currentPage=${currentPage}&orderBy=${orderBy}"><fmt:message
 				key="label.lang.en" /></a> | <a
 			href="?lang=fr&search=${search}&currentPage=${currentPage}&orderBy=${orderBy}"><fmt:message
 				key="label.lang.fr" /></a>
+	</div>
+
+	<div class="col-xs-12">
+		<a href="logout"><fmt:message key="label.logout" /></a>
 	</div>
 
 	<section id="main">
@@ -80,17 +87,13 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a
-							href="?search=${search}&orderBy=computer.name"><fmt:message
+						<th><a href="?search=${search}&orderBy=computer.name"><fmt:message
 									key="label.computerName" /> </a></th>
-						<th><a
-							href="?search=${search}&orderBy=introduced"><fmt:message
+						<th><a href="?search=${search}&orderBy=introduced"><fmt:message
 									key="label.introduced" /> </a></th>
-						<th><a
-							href="?search=${search}&orderBy=discontinued"><fmt:message
+						<th><a href="?search=${search}&orderBy=discontinued"><fmt:message
 									key="label.discontinued" /> </a></th>
-						<th><a
-							href="?search=${search}&orderBy=computer.company.name"><fmt:message
+						<th><a href="?search=${search}&orderBy=computer.company.name"><fmt:message
 									key="label.company" /> </a></th>
 
 					</tr>
