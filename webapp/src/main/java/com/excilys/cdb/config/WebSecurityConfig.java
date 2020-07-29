@@ -1,14 +1,16 @@
 package com.excilys.cdb.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * @author Victor Gambier
@@ -19,9 +21,36 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private HikariDataSource dataSource;
+
+    @Autowired
+    public WebSecurityConfig(HikariDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
     /**
-     * Defines which URL paths should be secured and which should not. Automatically creates a
-     * controller for the login view.
+     * Defining queries to perform database authentication.
+     */
+    @Autowired
+    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+
+        auth.jdbcAuthentication().dataSource(dataSource)
+                .usersByUsernameQuery(
+                        "select username, password, enabled from users where username = ?")
+                .authoritiesByUsernameQuery(
+                        "select username, role from user_roles where username = ?");
+    }
+
+    /**
+     * Defines the password hashing algorithm.
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
+    }
+
+    /**
+     * Defines which URL paths should be secured and which should not.
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -39,19 +68,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout().permitAll()
 
                 .and().csrf().disable(); // Needed so that POST forms don't throw a 403 error
-    }
-
-    /**
-     * Sets up an in-memory user store with a single user.
-     */
-    @Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password")
-                .roles("USER").build();
-        UserDetails admin = User.withDefaultPasswordEncoder().username("admin").password("password")
-                .roles("ADMIN").build();
-
-        return new InMemoryUserDetailsManager(user, admin);
     }
 }
