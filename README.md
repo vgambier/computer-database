@@ -60,12 +60,11 @@ See [the project's instructions](https://github.com/excilys/training-java) for m
 * Added custom error pages
 * Added i18n (Web-UI is now available in French)
 
-### Sprint 6 (v3.0.0?)
+### Sprint 6 (v3.0.0)
 
 * Now using Hibernate (HQL) to make database requests
 * Split the maven app into 6 different modules
 * Authentification via Spring Security
-* ...
 
 ## Instructions
 Prior to running, it is necessary to configure the database access. To do that, in `src/main/resources`, please rename `.properties.default` to `.properties`, then edit the file to include the relevant information. The same goes for `src/test/resources/.properties.default`, although that should connect to a separate, DBUnit database for testing purposes only.
