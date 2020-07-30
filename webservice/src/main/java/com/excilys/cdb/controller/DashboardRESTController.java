@@ -12,6 +12,10 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerPage;
 import com.excilys.cdb.model.ModelException;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.validator.Validator;
+
+import exception.ComputerNotFoundException;
+import exception.PageNotFoundException;
 
 /**
  * @author Victor Gambier
@@ -21,28 +25,44 @@ import com.excilys.cdb.service.ComputerService;
 public class DashboardRESTController {
 
     private ComputerService computerService;
+    private Validator validator;
 
     @Autowired
-    public DashboardRESTController(ComputerService computerService) {
+    public DashboardRESTController(ComputerService computerService, Validator validator) {
         this.computerService = computerService;
+        this.validator = validator;
     }
 
     @GetMapping("/computer/{id}")
-    public Computer read(@PathVariable String id) {
-        return computerService.getComputer(Integer.valueOf(id));
+    public Computer read(@PathVariable String id) throws ComputerNotFoundException {
+
+        if (validator.isStringInteger(id)
+                && computerService.doesComputerEntryExist(Integer.valueOf(id))) {
+            return computerService.getComputer(Integer.valueOf(id));
+        }
+        throw new ComputerNotFoundException();
     }
 
-    // TODO: validation, error page
     @GetMapping("/page/{id}")
     public List<Computer> getComputerPageJSON(@PathVariable String id)
-            throws PersistenceException, ModelException {
+            throws PersistenceException, ModelException, PageNotFoundException {
 
         int nbComputers = computerService.countComputerEntries();
-        List<Computer> computers = computerService
-                .getPageComputers(new ComputerPage(nbComputers, Integer.valueOf(id)));
 
-        return computers;
+        if (validator.isPageIDStringValid(nbComputers, id)) {
+            List<Computer> computers = computerService
+                    .getPageComputers(new ComputerPage(nbComputers, Integer.valueOf(id)));
+
+            return computers;
+        }
+        throw new PageNotFoundException();
+
     }
 
-    // TODO: add all remaining controller functionalities
+    // TODO: add search feature
+
+    // TODO: add orderBy feature + validation
+
+    // TODO: add number of entries per page feature
+
 }

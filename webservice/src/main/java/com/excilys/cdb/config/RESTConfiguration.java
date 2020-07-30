@@ -7,6 +7,8 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
+import exception.CustomGlobalExceptionHandler;
+
 /**
  * @author Victor Gambier
  *
@@ -24,5 +26,10 @@ public class RESTConfiguration {
     @Bean
     public ViewResolver viewResolver() {
         return new BeanNameViewResolver();
+    }
+
+    @Bean
+    public CustomGlobalExceptionHandler responseEntityExceptionHandler() {
+        return new CustomGlobalExceptionHandler();
     }
 }

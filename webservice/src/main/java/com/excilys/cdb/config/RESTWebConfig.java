@@ -13,8 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.excilys.cdb.dao", "com.excilys.cdb.config",
-        "com.excilys.cdb.controller", "com.excilys.cdb.service"})
+@ComponentScan(basePackages = {"com.excilys.cdb.config", "com.excilys.cdb.controller",
+        "com.excilys.cdb.service", "com.excilys.cdb.exception"})
 public class RESTWebConfig implements WebMvcConfigurer {
 
     @Override
