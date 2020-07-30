@@ -33,22 +33,18 @@ public class Validator {
      * @param pageID
      *            the id of the company entry we want to check, as a String
      * @return true if and only if the input corresponds to a page in the pagination system
-     * @throws NumberFormatException
      */
-    public boolean isPageIDStringValid(int nbEntries, String pageID) throws NumberFormatException {
+    public boolean isPageIDStringValid(int nbEntries, String pageID) {
 
         boolean isPageNumberOk = true;
 
         if (!isStringInteger(pageID) || Integer.parseInt(pageID) < 1) {
-            System.out.println("Page number must be an non-zero positive integer!");
             isPageNumberOk = false;
         } else {
             try {
                 new ComputerPage(nbEntries, Integer.valueOf(pageID));
-                isPageNumberOk = true; // previous line didn't throw an
-                                       // exception, so it must be ok
+                // if this line doesn't throw an exception, the page number must be valid
             } catch (@SuppressWarnings("unused") ModelException e) {
-                System.out.println("Error: page number is too high.");
                 isPageNumberOk = false;
             }
         }

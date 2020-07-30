@@ -33,12 +33,14 @@ public class DashboardRESTController {
         this.validator = validator;
     }
 
-    @GetMapping("/computer/{id}")
-    public Computer read(@PathVariable String id) throws ComputerNotFoundException {
+    @GetMapping("/computer/{stringID}")
+    public Computer read(@PathVariable String stringID) throws ComputerNotFoundException {
 
-        if (validator.isStringInteger(id)
-                && computerService.doesComputerEntryExist(Integer.valueOf(id))) {
-            return computerService.getComputer(Integer.valueOf(id));
+        if (validator.isStringInteger(stringID)) {
+            int id = Integer.valueOf(stringID);
+            if (computerService.doesComputerEntryExist(id)) {
+                return computerService.getComputer(id);
+            }
         }
         throw new ComputerNotFoundException();
     }

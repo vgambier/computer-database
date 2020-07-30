@@ -133,7 +133,9 @@ public class CLI {
                 ComputerPage computerPage = new ComputerPage(nbEntries, Integer.valueOf(arr[1]));
                 List<Computer> computers = computerService.getPageComputers(computerPage);
                 computers.forEach(computer -> System.out.println(computer));
-
+            } else {
+                System.out.println(
+                        "Invalid page number: must a positive integer lesser than the maximum number of pages.");
             }
 
         } else { // if a second argument hasn't been given

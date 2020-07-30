@@ -1,7 +1,5 @@
 package com.excilys.cdb.controller;
 
-import javax.servlet.ServletException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +27,7 @@ public class DeleteController {
     }
 
     @PostMapping
-    protected String deleteComputer(@RequestParam("selection") String selection)
-            throws ServletException {
+    protected String deleteComputer(@RequestParam("selection") String selection) {
 
         // Gather the list of entries to delete
         String[] entries = selection.split(",");
@@ -38,15 +35,11 @@ public class DeleteController {
         // Delete the entries
         for (String computerIDString : entries) {
 
-            try {
-                if (validator.isStringInteger(computerIDString) && computerService
-                        .doesComputerEntryExist(Integer.valueOf(computerIDString))) {
+            if (validator.isStringInteger(computerIDString)
+                    && computerService.doesComputerEntryExist(Integer.valueOf(computerIDString))) {
 
-                    int computerID = Integer.valueOf(computerIDString);
-                    computerService.deleteComputer(computerService.getComputer(computerID));
-                }
-            } catch (NumberFormatException e) {
-                throw new ServletException("Couldn't delete computer", e);
+                int computerID = Integer.valueOf(computerIDString);
+                computerService.deleteComputer(computerService.getComputer(computerID));
             }
         }
 

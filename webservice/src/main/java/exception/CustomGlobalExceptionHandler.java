@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.excilys.cdb.controller.DashboardRESTController;
-
 /**
  * @author Victor Gambier
  *
@@ -18,7 +16,7 @@ import com.excilys.cdb.controller.DashboardRESTController;
  *         the status code. This applies to all REST Controllers.
  */
 
-@ControllerAdvice(basePackageClasses = DashboardRESTController.class)
+@ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ComputerNotFoundException.class)
