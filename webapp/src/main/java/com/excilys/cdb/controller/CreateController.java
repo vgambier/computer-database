@@ -56,7 +56,7 @@ public class CreateController {
             @RequestParam(value = "introduced") String introducedString,
             @RequestParam(value = "discontinued") String discontinuedString,
             @RequestParam(value = "companyID") String companyIDString, ModelMap model)
-            throws ServletException {
+             {
 
         StringBuilder str = new StringBuilder();
         boolean isEntryValid = true;
@@ -86,23 +86,19 @@ public class CreateController {
 
         if (isEntryValid && introduced != null && discontinued != null
                 && discontinued.before(introduced)) {
-            str.append("The date of discontinuation must be after the date of introduction.");
+            str.append("The date of discontinuation must be after the date of introduction.\n");
         }
 
         Integer companyID = null;
-        try {
-            if (companyIDString.equals("0")) { // If the user chose the "--" default option
-                companyID = null; // Needed for the Computer constructor to function as intended
-            } else if (!companyIDString.equals("") && validator.isStringInteger(companyIDString)
-                    && companyService.doesCompanyEntryExist(Integer.valueOf(companyIDString))) {
-                companyID = Integer.valueOf(companyIDString);
-            } else {
-                str.append("Company ID field must be empty (--) or a valid ID.\n");
-                // Here, "empty" means the "--" choice of id 0
-                isEntryValid = false;
-            }
-        } catch (NumberFormatException e) {
-            throw new ServletException("Couldn't check company ID validity!", e);
+        if (companyIDString.equals("0")) { // If the user chose the "--" default option
+            companyID = null; // Needed for the Computer constructor to function as intended
+        } else if (!companyIDString.equals("") && validator.isStringInteger(companyIDString)
+                && companyService.doesCompanyEntryExist(Integer.valueOf(companyIDString))) {
+            companyID = Integer.valueOf(companyIDString);
+        } else {
+            str.append("Company ID field must be empty (--) or a valid ID.\n");
+            // Here, "empty" means the "--" choice of id 0
+            isEntryValid = false;
         }
 
         // Adding entry if form is valid

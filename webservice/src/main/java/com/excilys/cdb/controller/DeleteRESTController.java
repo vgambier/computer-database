@@ -45,6 +45,7 @@ public class DeleteRESTController {
             if (computerService.doesComputerEntryExist(id)) {
                 Computer deletedComputer = computerService.getComputer(id);
                 computerService.deleteComputer(deletedComputer);
+
             } else {
                 error = "ID must correspond to an existing entry";
             }

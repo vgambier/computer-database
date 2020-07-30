@@ -343,7 +343,7 @@ public class CLI {
         }
     }
 
-    private static void deletecompany(String[] arr) throws NumberFormatException {
+    private static void deletecompany(String[] arr) {
         if (arr.length >= 2) {
             if (!isCompanyIDStringValid(arr[1])) {
                 System.out.println(

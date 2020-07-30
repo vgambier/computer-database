@@ -19,6 +19,6 @@ public class EditRESTController {
         this.computerService = computerService;
     }
 
-    // TODO: add create computer feature, with displaying of existing data and validation
+    // TODO: add create computer feature, with validation
 
 }
