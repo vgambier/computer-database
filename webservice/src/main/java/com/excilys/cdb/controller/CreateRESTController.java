@@ -36,7 +36,7 @@ public class CreateRESTController {
 
     // TODO: Empty fields are currently not supported
 
-    @GetMapping("/addcomputer/name/{nameString}/introduced/{introducedString}/discontinued/{discontinuedString}/company/{companyIDString}")
+    @GetMapping("/addcomputer/{nameString}/{introducedString}/{discontinuedString}/{companyIDString}")
     public void addComputerJSON(@PathVariable String nameString,
             @PathVariable String introducedString, @PathVariable String discontinuedString,
             @PathVariable String companyIDString) throws InvalidNewEntryException {

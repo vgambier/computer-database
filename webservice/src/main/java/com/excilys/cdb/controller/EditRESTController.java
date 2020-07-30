@@ -36,7 +36,7 @@ public class EditRESTController {
 
     // TODO: Empty fields are currently not supported
 
-    @GetMapping("/editcomputer/id/{idString}/name/{nameString}/introduced/{introducedString}/discontinued/{discontinuedString}/company/{companyIDString}")
+    @GetMapping("/editcomputer/{idString}/{nameString}/{introducedString}/{discontinuedString}/{companyIDString}")
     public void editComputerJSON(@PathVariable String idString, @PathVariable String nameString,
             @PathVariable String introducedString, @PathVariable String discontinuedString,
             @PathVariable String companyIDString) throws InvalidNewEntryException {
