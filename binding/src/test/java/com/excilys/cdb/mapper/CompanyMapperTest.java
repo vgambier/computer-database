@@ -1,32 +1,20 @@
 package com.excilys.cdb.mapper;
 
-import static org.junit.Assert.assertNotNull;
-
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
 // Note: this test class no longer does anything useful. It is kept solely as a reference as it is currently one of only two test classes that uses Mockito
 //TODO: make a different Mockito test and delete this one
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class CompanyMapperTest {
 
     @Mock
     private ResultSet resultSet;
-
-    @Test
-    public void testGetInstance() {
-        CompanyDTOMapper companyMapper = null;
-        companyMapper = CompanyDTOMapper.getInstance();
-        assertNotNull(companyMapper);
-    }
 
     // @Test
     public void testToModelResultSet() throws SQLException {

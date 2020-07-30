@@ -18,13 +18,14 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.excilys.cdb.config.HibernateConfig;
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
+import com.excilys.cdb.mapper.CompanyDTOMapper;
 import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.Computer;
 
 public class ComputerDAOTest extends DBTestCase {
 
     private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-            HibernateConfig.class, ComputerDTOMapper.class);
+            HibernateConfig.class, ComputerDTOMapper.class, CompanyDTOMapper.class);
     private ComputerDAO computerDAO;
     private SessionFactory sessionFactory;
     private ComputerDTOMapper computerDTOMapper;
