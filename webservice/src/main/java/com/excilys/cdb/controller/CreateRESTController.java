@@ -34,8 +34,6 @@ public class CreateRESTController {
         this.validator = validator;
     }
 
-    // TODO: Empty fields are currently not supported
-
     @GetMapping("/addcomputer/{nameString}/{introducedString}/{discontinuedString}/{companyIDString}")
     public void addComputerJSON(@PathVariable String nameString,
             @PathVariable String introducedString, @PathVariable String discontinuedString,

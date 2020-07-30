@@ -81,11 +81,17 @@ public class DashboardController {
 
     // Used for changing the number of entries displayed per page
     @PostMapping
-    protected String updateNumberEntries(@RequestParam("nbEntries") String newValue) {
+    protected String updateNumberEntries(@RequestParam("nbEntries") String newValue)
+            throws ServletException {
 
         if (newValue != null) {
             int newNbEntriesPerPage = Integer.valueOf(newValue);
-            ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
+            try {
+                ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
+            } catch (ModelException e) {
+                throw new ServletException(
+                        "Cannot set the number of entries to an integer lesser than 1", e);
+            }
         }
 
         return "redirect:/";

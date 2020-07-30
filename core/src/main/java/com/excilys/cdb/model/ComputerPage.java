@@ -63,7 +63,10 @@ public class ComputerPage {
         return maxItemsPerPage;
     }
 
-    public static void setMaxItemsPerPage(int maxItemsPerPage) {
+    public static void setMaxItemsPerPage(int maxItemsPerPage) throws ModelException {
+        if (maxItemsPerPage < 1) {
+            throw new ModelException("There must be at least 1 item per page.");
+        }
         ComputerPage.maxItemsPerPage = maxItemsPerPage;
     }
 }

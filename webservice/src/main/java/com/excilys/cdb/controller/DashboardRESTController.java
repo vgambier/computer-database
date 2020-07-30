@@ -63,7 +63,7 @@ public class DashboardRESTController {
             searchTerm = "";
         }
         if (orderBy == null) {
-            searchTerm = "computer.id";
+            orderBy = "computer.id";
         }
 
         // Updating number of entries per page

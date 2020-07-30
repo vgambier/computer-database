@@ -34,8 +34,6 @@ public class EditRESTController {
         this.validator = validator;
     }
 
-    // TODO: Empty fields are currently not supported
-
     @GetMapping("/editcomputer/{idString}/{nameString}/{introducedString}/{discontinuedString}/{companyIDString}")
     public void editComputerJSON(@PathVariable String idString, @PathVariable String nameString,
             @PathVariable String introducedString, @PathVariable String discontinuedString,

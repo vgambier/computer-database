@@ -2,8 +2,6 @@ package com.excilys.cdb.controller;
 
 import java.sql.Date;
 
-import javax.servlet.ServletException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +53,7 @@ public class CreateController {
     protected String addComputerFromForm(@RequestParam(value = "computerName") String computerName,
             @RequestParam(value = "introduced") String introducedString,
             @RequestParam(value = "discontinued") String discontinuedString,
-            @RequestParam(value = "companyID") String companyIDString, ModelMap model)
-             {
+            @RequestParam(value = "companyID") String companyIDString, ModelMap model) {
 
         StringBuilder str = new StringBuilder();
         boolean isEntryValid = true;
