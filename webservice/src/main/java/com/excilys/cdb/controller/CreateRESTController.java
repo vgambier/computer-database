@@ -69,7 +69,7 @@ public class CreateRESTController {
         }
 
         Integer companyID = null;
-        if (companyIDString.equals("0")) { // If the user chose the "--" default option
+        if (companyIDString.equals("0")) {
             companyID = null; // Needed for the Computer constructor to function as intended
         } else if (!companyIDString.equals("") && validator.isStringInteger(companyIDString)
                 && companyService.doesCompanyEntryExist(Integer.valueOf(companyIDString))) {
