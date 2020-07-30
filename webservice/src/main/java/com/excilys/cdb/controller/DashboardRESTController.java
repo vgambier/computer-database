@@ -42,8 +42,9 @@ public class DashboardRESTController {
             if (computerService.doesComputerEntryExist(id)) {
                 return computerService.getComputer(id);
             }
+            throw new ComputerNotFoundException("ID must correspond to an existing entry");
         }
-        throw new ComputerNotFoundException();
+        throw new ComputerNotFoundException("ID must be an integer");
     }
 
     @GetMapping("/page/{id}")
@@ -53,9 +54,8 @@ public class DashboardRESTController {
         int nbComputers = computerService.countComputerEntries();
 
         if (validator.isPageIDStringValid(nbComputers, id)) {
-            List<Computer> computers = computerService
-                    .getPageComputers(new ComputerPage(nbComputers, Integer.valueOf(id)));
-
+            ComputerPage computerPage = new ComputerPage(nbComputers, Integer.valueOf(id));
+            List<Computer> computers = computerService.getPageComputers(computerPage);
             return computers;
         }
         throw new PageNotFoundException();

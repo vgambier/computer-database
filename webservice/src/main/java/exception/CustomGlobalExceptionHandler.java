@@ -20,10 +20,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ComputerNotFoundException.class)
-    public ResponseEntity<Object> handleNoComputerFoundException() {
+    public ResponseEntity<Object> handleNoComputerFoundException(Exception e) {
 
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("error", "Invalid computer ID");
+        body.put("error", "Invalid computer ID (" + e.getMessage() + ")");
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 

@@ -36,18 +36,25 @@ public class DeleteRESTController {
     @GetMapping("/deletecomputer/{stringID}")
     public void deleteComputer(@PathVariable String stringID) throws ComputerNotFoundException {
 
-        boolean found = false;
+        String error = "";
 
         if (validator.isStringInteger(stringID)) {
+
             int id = Integer.valueOf(stringID);
+
             if (computerService.doesComputerEntryExist(id)) {
                 Computer deletedComputer = computerService.getComputer(id);
                 computerService.deleteComputer(deletedComputer);
-                found = true;
+            } else {
+                error = "ID must correspond to an existing entry";
             }
+
+        } else {
+            error = "ID must be an integer";
         }
-        if (!found) {
-            throw new ComputerNotFoundException();
+
+        if (!"".equals(error)) { // If the ID is invalid
+            throw new ComputerNotFoundException(error);
         }
     }
 
