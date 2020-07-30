@@ -122,7 +122,6 @@
 		<module>service</module>
 		<module>webapp</module>
 		<module>webservice</module>
-		<module>computer-database</module>
 	</modules>
 
 </project>
