@@ -47,25 +47,42 @@ public class DashboardRESTController {
         throw new ComputerNotFoundException("ID must be an integer");
     }
 
-    @GetMapping("/page/{id}")
-    public List<Computer> getComputerPageJSON(@PathVariable String id)
+    @GetMapping(value = {"/page/{id}", "/page/{id}/{searchTerm}/{orderBy}/{nbEntries}"})
+    public List<Computer> getComputerPageJSON(@PathVariable String id,
+            @PathVariable(required = false) String searchTerm,
+            @PathVariable(required = false) String orderBy,
+            @PathVariable(required = false) String nbEntries)
             throws PersistenceException, ModelException, PageNotFoundException {
 
-        int nbComputers = computerService.countComputerEntries();
+        // Default values for optional parameters
 
+        if (nbEntries == null) {
+            nbEntries = "25";
+        }
+        if (searchTerm == null) {
+            searchTerm = "";
+        }
+        if (orderBy == null) {
+            searchTerm = "computer.id";
+        }
+
+        // Updating number of entries per page
+
+        if (validator.isStringInteger(nbEntries)) {
+            int newNbEntriesPerPage = Integer.valueOf(nbEntries);
+            ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
+        }
+
+        // Gathering list of computers in the page
+
+        int nbComputers = computerService.countComputerEntries();
         if (validator.isPageIDStringValid(nbComputers, id)) {
             ComputerPage computerPage = new ComputerPage(nbComputers, Integer.valueOf(id));
-            List<Computer> computers = computerService.getPageComputers(computerPage);
+            List<Computer> computers = computerService.getPageComputers(computerPage, searchTerm,
+                    orderBy);
             return computers;
         }
         throw new PageNotFoundException();
 
     }
-
-    // TODO: add search feature
-
-    // TODO: add orderBy feature + validation
-
-    // TODO: add number of entries per page feature
-
 }
