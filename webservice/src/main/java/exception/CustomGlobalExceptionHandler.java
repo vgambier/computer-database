@@ -27,6 +27,14 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(CompanyNotFoundException.class)
+    public ResponseEntity<Object> handleNoCompanyFoundException() {
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("error", "Invalid company ID");
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(PageNotFoundException.class)
     public ResponseEntity<Object> handleNoPageFoundException() {
 
@@ -34,5 +42,4 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put("error", "Invalid page ID");
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
-
 }

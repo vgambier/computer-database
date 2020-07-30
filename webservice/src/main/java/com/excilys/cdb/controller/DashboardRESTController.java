@@ -34,7 +34,8 @@ public class DashboardRESTController {
     }
 
     @GetMapping("/computer/{stringID}")
-    public Computer read(@PathVariable String stringID) throws ComputerNotFoundException {
+    public Computer getComputerJSON(@PathVariable String stringID)
+            throws ComputerNotFoundException {
 
         if (validator.isStringInteger(stringID)) {
             int id = Integer.valueOf(stringID);
