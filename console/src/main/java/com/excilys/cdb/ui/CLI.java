@@ -379,8 +379,14 @@ public class CLI {
             System.out.println("Please enter the date of " + string
                     + " of the computer (YYYY-MM-DD) (optional):");
 
+            // Input is valid if it is empty or correct
             userInput = scanner.nextLine();
-            isDateValid = userInput.equals("") || validator.isDateStringValid(userInput);
+
+            if (!userInput.equals("") && !validator.isDateStringValid(userInput)) {
+                System.out.println("Wrong date format!");
+            } else {
+                isDateValid = true;
+            }
         }
 
         date = userInput.equals("") ? null : java.sql.Date.valueOf(userInput);

@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 import com.excilys.cdb.model.ComputerPage;
 import com.excilys.cdb.model.ModelException;
 
-// TODO: move error messages to CLI
-
 /**
  * @author Victor Gambier
  *
@@ -67,7 +65,6 @@ public class Validator {
         try {
             formatter.parse(date); // throws a ParseException if the input is not properly formatted
         } catch (@SuppressWarnings("unused") ParseException e) {
-            System.out.println("Wrong format!");
             isDateValid = false;
         }
 
