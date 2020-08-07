@@ -8,6 +8,8 @@ import com.excilys.cdb.dao.CompanyDAO;
 import com.excilys.cdb.dao.ComputerDAO;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
+import com.excilys.cdb.validator.BindingValidator;
+import com.excilys.cdb.validator.ServiceValidator;
 
 /**
  * @author Victor Gambier
@@ -26,5 +28,11 @@ public class ServiceBeansConfig {
     @Bean(name = "companyServiceBean")
     public CompanyService companyService(CompanyDAO companyDAO) {
         return new CompanyService(companyDAO);
+    }
+
+    @Bean(name = "serviceValidatorBean")
+    public ServiceValidator serviceValidator(BindingValidator bindingValidator,
+            ComputerService computerService, CompanyService companyService) {
+        return new ServiceValidator(bindingValidator, computerService, companyService);
     }
 }

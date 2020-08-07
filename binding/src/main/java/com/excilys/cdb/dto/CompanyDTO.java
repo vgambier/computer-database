@@ -9,9 +9,27 @@ public class CompanyDTO {
     private String id;
     private String name;
 
-    public CompanyDTO(String id, String name) {
-        this.id = id;
-        this.name = name;
+    public static class Builder {
+        private String id;
+        private String name;
+
+        public Builder withId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public CompanyDTO build() {
+            CompanyDTO companyDTO = new CompanyDTO();
+            companyDTO.id = this.id;
+            companyDTO.name = this.name;
+            return companyDTO;
+        }
+
     }
 
     public String getId() {

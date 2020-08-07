@@ -2,9 +2,6 @@ package com.excilys.cdb.dto;
 
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 public class ComputerDTO implements Serializable {
 
     private static final long serialVersionUID = 991867017251654576L;
@@ -76,17 +73,4 @@ public class ComputerDTO implements Serializable {
     public CompanyDTO getCompanyDTO() {
         return companyDTO;
     }
-
-    // Spring lifecycle
-
-    @PostConstruct
-    public void customInit() {
-        System.out.println("Method customInit() invoked...");
-    }
-
-    @PreDestroy
-    public void customDestroy() {
-        System.out.println("Method customDestroy() invoked...");
-    }
-
 }

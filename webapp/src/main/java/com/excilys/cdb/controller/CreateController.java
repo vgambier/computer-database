@@ -16,7 +16,7 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.validator.Validator;
+import com.excilys.cdb.validator.BindingValidator;
 
 /**
  * @author Victor Gambier
@@ -30,11 +30,11 @@ public class CreateController {
 
     private ComputerService computerService;
     private CompanyService companyService;
-    private Validator validator;
+    private BindingValidator validator;
 
     @Autowired
     public CreateController(ComputerService computerService, CompanyService companyService,
-            Validator validator) {
+            BindingValidator validator) {
         this.computerService = computerService;
         this.companyService = companyService;
         this.validator = validator;
@@ -54,6 +54,8 @@ public class CreateController {
             @RequestParam(value = "introduced") String introducedString,
             @RequestParam(value = "discontinued") String discontinuedString,
             @RequestParam(value = "companyID") String companyIDString, ModelMap model) {
+
+        // TODO: use factorized version. ID ?
 
         StringBuilder str = new StringBuilder();
         boolean isEntryValid = true;

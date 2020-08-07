@@ -9,7 +9,7 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.validator.Validator;
+import com.excilys.cdb.validator.BindingValidator;
 
 import exception.CompanyNotFoundException;
 import exception.ComputerNotFoundException;
@@ -23,10 +23,10 @@ public class DeleteRESTController {
 
     private ComputerService computerService;
     private CompanyService companyService;
-    private Validator validator;
+    private BindingValidator validator;
 
     @Autowired
-    public DeleteRESTController(ComputerService computerService, Validator validator,
+    public DeleteRESTController(ComputerService computerService, BindingValidator validator,
             CompanyService companyService) {
         this.computerService = computerService;
         this.companyService = companyService;

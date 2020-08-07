@@ -14,13 +14,13 @@ import com.excilys.cdb.model.ModelException;
  * @author Victor Gambier
  *
  */
-@Component("validatorBean")
-public class Validator {
+@Component("bindingValidatorBean")
+public class BindingValidator {
 
     private static DateFormat formatter;
 
     @Autowired
-    public Validator() {
+    public BindingValidator() {
         formatter = new SimpleDateFormat("yyyy-MM-dd");
         formatter.setLenient(false); // allows stricter format check
     }
@@ -91,5 +91,4 @@ public class Validator {
 
         return isValid;
     }
-
 }

@@ -3,7 +3,7 @@ package com.excilys.cdb.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.excilys.cdb.validator.Validator;
+import com.excilys.cdb.validator.BindingValidator;
 
 /**
  * @author Victor Gambier
@@ -14,7 +14,7 @@ import com.excilys.cdb.validator.Validator;
 public class BindingBeansConfig {
 
     @Bean(name = "validatorBean")
-    public Validator validator() {
-        return new Validator();
+    public BindingValidator validator() {
+        return new BindingValidator();
     }
 }
