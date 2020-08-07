@@ -66,7 +66,7 @@ See [the project's instructions](https://github.com/excilys/training-java) for m
 * Split the maven app into 6 different modules
 * Authentification via Spring Security
 
-### Sprint 7
+### Sprint 7 (v3.1.0)
 
 * Added a webservice using Jackson and Spring REST that serves as an API to access and manipulate the database
 
