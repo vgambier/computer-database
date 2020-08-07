@@ -15,3 +15,13 @@ target/
 /persistence/src/main/resources/.properties
 /persistence/src/test/resources/.properties
 
+##############################
+## IntelliJ
+##############################
+out/
+.idea/
+.idea_modules/
+*.iml
+*.ipr
+*.iws
+

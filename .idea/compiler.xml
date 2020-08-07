@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="webapp" />
+        <module name="console" />
+        <module name="core" />
+        <module name="service" />
+        <module name="persistence" />
+        <module name="binding" />
+        <module name="webservice" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="binding" target="1.8" />
+      <module name="computer-database" target="1.8" />
+      <module name="console" target="1.8" />
+      <module name="core" target="1.8" />
+      <module name="persistence" target="1.8" />
+      <module name="service" target="1.8" />
+      <module name="webapp" target="1.8" />
+      <module name="webservice" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
