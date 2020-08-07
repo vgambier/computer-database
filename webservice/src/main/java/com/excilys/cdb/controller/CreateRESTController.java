@@ -39,6 +39,8 @@ public class CreateRESTController {
             @PathVariable String introducedString, @PathVariable String discontinuedString,
             @PathVariable String companyIDString) throws InvalidNewEntryException {
 
+        // TODO: use the factorized validator
+
         // Back-end validation
 
         if (nameString.equals("")) {

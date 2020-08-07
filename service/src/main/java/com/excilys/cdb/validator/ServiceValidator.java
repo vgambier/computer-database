@@ -46,8 +46,9 @@ public class ServiceValidator {
 
         // ID check
         String idString = computerDTO.getId();
-        if (!bindingValidator.isStringInteger(idString)
-                || !computerService.doesComputerEntryExist(Integer.valueOf(idString))) {
+        // if the idString is null, the DTO is valid (useful for adding entries)
+        if (idString != null && (!bindingValidator.isStringInteger(idString)
+                || !computerService.doesComputerEntryExist(Integer.valueOf(idString)))) {
             errorMessages.add("Computer ID is invalid.");
         }
 

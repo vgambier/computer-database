@@ -30,7 +30,7 @@ public class ComputerDTOMapper {
 
         return new Computer(
 
-                computerDTO.getId() == null ? -1 : Integer.parseInt(computerDTO.getId()),
+                computerDTO.getId() == null ? 0 : Integer.parseInt(computerDTO.getId()),
 
                 computerDTO.getName(),
 

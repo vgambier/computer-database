@@ -41,17 +41,17 @@ public class EditController {
 
     @Autowired
     public EditController(ComputerService computerService, CompanyService companyService,
-            BindingValidator validator, ServiceValidator serviceValidator) {
+            BindingValidator bindingValidator, ServiceValidator serviceValidator) {
         this.computerService = computerService;
         this.companyService = companyService;
-        this.bindingValidator = validator;
+        this.bindingValidator = bindingValidator;
         this.serviceValidator = serviceValidator;
     }
 
     @GetMapping
     protected String initForm(@RequestParam(value = "id") String computerIDString, ModelMap model) {
 
-        LOG.info("Settings attributes for EditServlet.");
+        LOG.info("Setting attributes for EditController.");
 
         int computerID;
 

@@ -44,7 +44,7 @@ public class DashboardController {
             @RequestParam(value = "orderBy", defaultValue = "computer.id") String orderBy,
             ModelMap model) throws ServletException {
 
-        LOG.info("Settings attributes for DashboardServlet.");
+        LOG.info("Setting attributes for DashboardController.");
 
         ComputerPage computerPage;
 
