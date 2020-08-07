@@ -29,7 +29,6 @@ public class CompanyDTO {
             companyDTO.name = this.name;
             return companyDTO;
         }
-
     }
 
     public String getId() {

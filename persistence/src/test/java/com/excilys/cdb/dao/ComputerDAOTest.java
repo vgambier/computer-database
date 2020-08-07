@@ -62,10 +62,11 @@ public class ComputerDAOTest extends DBTestCase {
 
         Computer foundComputer = computerDAO.find(999);
 
-        Computer expectedComputer = computerDTOMapper
-                .fromDTOtoModel((new ComputerDTO.Builder().withId("999").withName("Computer999")
-                        .withIntroduced("1980-11-11").withDiscontinued("2099-01-01")
-                        .withCompany(new CompanyDTO("5", "Company5")).build()));
+        CompanyDTO companyDTO = new CompanyDTO.Builder().withId("5").withName("Company5").build();
+
+        Computer expectedComputer = computerDTOMapper.fromDTOtoModel(new ComputerDTO.Builder()
+                .withId("999").withName("Computer999").withIntroduced("1980-11-11")
+                .withDiscontinued("2099-01-01").withCompany(companyDTO).build());
 
         assertEquals(expectedComputer, foundComputer);
     }
@@ -73,9 +74,11 @@ public class ComputerDAOTest extends DBTestCase {
     @Test
     public void testAddComputer() {
 
-        Computer newComputer = computerDTOMapper.fromDTOtoModel((new ComputerDTO.Builder()
-                .withName("Computer50").withIntroduced("1970-10-09").withDiscontinued("2039-01-01")
-                .withCompany(new CompanyDTO("5", "Company5")).build()));
+        CompanyDTO companyDTO = new CompanyDTO.Builder().withId("5").withName("Company5").build();
+
+        Computer newComputer = computerDTOMapper.fromDTOtoModel(
+                (new ComputerDTO.Builder().withName("Computer50").withIntroduced("1970-10-09")
+                        .withDiscontinued("2039-01-01").withCompany(companyDTO).build()));
 
         computerDAO.add(newComputer);
 
@@ -96,10 +99,11 @@ public class ComputerDAOTest extends DBTestCase {
     @Test
     public void testUpdateComputer() {
 
-        Computer updatedComputer = computerDTOMapper.fromDTOtoModel(
-                (new ComputerDTO.Builder().withId("22").withName("Computer22Improved")
-                        .withIntroduced("1989-05-09").withDiscontinued("2019-01-02")
-                        .withCompany(new CompanyDTO("1", "Company1")).build()));
+        CompanyDTO companyDTO = new CompanyDTO.Builder().withId("1").withName("Company1").build();
+
+        Computer updatedComputer = computerDTOMapper.fromDTOtoModel((new ComputerDTO.Builder()
+                .withId("22").withName("Computer22Improved").withIntroduced("1989-05-09")
+                .withDiscontinued("2019-01-02").withCompany(companyDTO).build()));
 
         computerDAO.update(updatedComputer);
 
