@@ -48,7 +48,7 @@ public class HibernateConfig {
         String username = properties.getProperty("USERNAME");
         String password = properties.getProperty("PASSWORD");
 
-        // TODO: add more logging
+        // TODO: add more logging everywhere
         LOG.info("Initializing Hikari DataSource to database:\nURL: " + databaseURL + "\nUsername: "
                 + username);
 

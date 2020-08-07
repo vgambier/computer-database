@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.validator.Validator;
+import com.excilys.cdb.validator.BindingValidator;
 
 /**
  * @author Victor Gambier
@@ -18,10 +18,10 @@ import com.excilys.cdb.validator.Validator;
 public class DeleteController {
 
     private ComputerService computerService;
-    private Validator validator;
+    private BindingValidator validator;
 
     @Autowired
-    public DeleteController(ComputerService computerService, Validator validator) {
+    public DeleteController(ComputerService computerService, BindingValidator validator) {
         this.computerService = computerService;
         this.validator = validator;
     }

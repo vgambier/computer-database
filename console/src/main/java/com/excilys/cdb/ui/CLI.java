@@ -15,7 +15,7 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerPage;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.validator.Validator;
+import com.excilys.cdb.validator.BindingValidator;
 
 /**
  * @author Victor Gambier
@@ -46,7 +46,7 @@ public class CLI {
             .getBean("computerServiceBean");
     private static CompanyService companyService = (CompanyService) context
             .getBean("companyServiceBean");
-    private static Validator validator = (Validator) context.getBean("validatorBean");
+    private static BindingValidator validator = (BindingValidator) context.getBean("validatorBean");
 
     public static void main(String[] args) throws Exception {
 
@@ -343,6 +343,13 @@ public class CLI {
         }
     }
 
+    /**
+     * deletecompany command logic: deletes the corresponding entry to the database, as well as all
+     * related computer entries, without further prompting the user.
+     *
+     * @param arr
+     *            the user input
+     */
     private static void deletecompany(String[] arr) {
         if (arr.length >= 2) {
             if (!isCompanyIDStringValid(arr[1])) {
@@ -379,8 +386,14 @@ public class CLI {
             System.out.println("Please enter the date of " + string
                     + " of the computer (YYYY-MM-DD) (optional):");
 
+            // Input is valid if it is empty or correct
             userInput = scanner.nextLine();
-            isDateValid = userInput.equals("") || validator.isDateStringValid(userInput);
+
+            if (!userInput.equals("") && !validator.isDateStringValid(userInput)) {
+                System.out.println("Wrong date format!");
+            } else {
+                isDateValid = true;
+            }
         }
 
         date = userInput.equals("") ? null : java.sql.Date.valueOf(userInput);
@@ -388,6 +401,7 @@ public class CLI {
         return date;
     }
 
+    // TODO: why aren't these methods used in Controllers? and why aren't they in validator?
     /**
      * Checks if a given String is a valid computer ID, using isStringInteger() and
      * service.doesComputerEntryExist().

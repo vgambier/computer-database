@@ -3,7 +3,7 @@
 /persistence/logs/
 /console/logs/
 
-// For all submodules:
+# For all submodules:
 target/
 .settings/
 

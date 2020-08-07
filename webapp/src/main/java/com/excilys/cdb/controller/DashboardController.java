@@ -16,7 +16,7 @@ import com.excilys.cdb.dao.PersistenceException;
 import com.excilys.cdb.model.ComputerPage;
 import com.excilys.cdb.model.ModelException;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.validator.Validator;
+import com.excilys.cdb.validator.BindingValidator;
 
 /**
  * @author Victor Gambier
@@ -29,10 +29,10 @@ public class DashboardController {
     private static final Logger LOG = LoggerFactory.getLogger(DashboardController.class);
 
     private ComputerService computerService;
-    private Validator validator;
+    private BindingValidator validator;
 
     @Autowired
-    public DashboardController(ComputerService computerService, Validator validator) {
+    public DashboardController(ComputerService computerService, BindingValidator validator) {
         this.computerService = computerService;
         this.validator = validator;
     }
@@ -44,7 +44,7 @@ public class DashboardController {
             @RequestParam(value = "orderBy", defaultValue = "computer.id") String orderBy,
             ModelMap model) throws ServletException {
 
-        LOG.info("Settings attributes for DashboardServlet.");
+        LOG.info("Setting attributes for DashboardController.");
 
         ComputerPage computerPage;
 

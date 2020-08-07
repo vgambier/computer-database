@@ -13,7 +13,7 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerPage;
 import com.excilys.cdb.model.ModelException;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.validator.Validator;
+import com.excilys.cdb.validator.BindingValidator;
 
 import exception.ComputerNotFoundException;
 import exception.PageNotFoundException;
@@ -27,10 +27,10 @@ import exception.PageNotFoundException;
 public class DashboardRESTController {
 
     private ComputerService computerService;
-    private Validator validator;
+    private BindingValidator validator;
 
     @Autowired
-    public DashboardRESTController(ComputerService computerService, Validator validator) {
+    public DashboardRESTController(ComputerService computerService, BindingValidator validator) {
         this.computerService = computerService;
         this.validator = validator;
     }

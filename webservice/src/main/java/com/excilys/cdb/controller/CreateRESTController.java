@@ -11,7 +11,7 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.validator.Validator;
+import com.excilys.cdb.validator.BindingValidator;
 
 import exception.InvalidNewEntryException;
 
@@ -24,10 +24,10 @@ public class CreateRESTController {
 
     private ComputerService computerService;
     private CompanyService companyService;
-    private Validator validator;
+    private BindingValidator validator;
 
     @Autowired
-    public CreateRESTController(ComputerService computerService, Validator validator,
+    public CreateRESTController(ComputerService computerService, BindingValidator validator,
             CompanyService companyService) {
         this.computerService = computerService;
         this.companyService = companyService;
@@ -38,6 +38,8 @@ public class CreateRESTController {
     public void addComputerJSON(@PathVariable String nameString,
             @PathVariable String introducedString, @PathVariable String discontinuedString,
             @PathVariable String companyIDString) throws InvalidNewEntryException {
+
+        // TODO: use the factorized validator
 
         // Back-end validation
 

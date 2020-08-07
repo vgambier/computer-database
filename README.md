@@ -66,6 +66,10 @@ See [the project's instructions](https://github.com/excilys/training-java) for m
 * Split the maven app into 6 different modules
 * Authentification via Spring Security
 
+### Sprint 7 (v3.1.0)
+
+* Added a webservice using Jackson and Spring REST that serves as an API to access and manipulate the database
+
 ## Instructions
 Prior to running, it is necessary to configure the database access. To do that, in `src/main/resources`, please rename `.properties.default` to `.properties`, then edit the file to include the relevant information. The same goes for `src/test/resources/.properties.default`, although that should connect to a separate, DBUnit database for testing purposes only.
 
