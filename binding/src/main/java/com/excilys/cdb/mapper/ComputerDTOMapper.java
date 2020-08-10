@@ -42,6 +42,6 @@ public class ComputerDTOMapper {
                         ? null
                         : LocalDate.parse(computerDTO.getDiscontinued(), formatter),
 
-                companyDTOMapper.fromDTOtoModel(computerDTO.getCompanyDTO()));
+                companyDTOMapper.fromDTOtoModel(computerDTO.getCompany()));
     }
 }

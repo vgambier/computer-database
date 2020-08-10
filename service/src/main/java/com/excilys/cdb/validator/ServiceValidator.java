@@ -91,7 +91,7 @@ public class ServiceValidator {
         }
 
         // Company ID check
-        String companyIDString = computerDTO.getCompanyDTO().getId();
+        String companyIDString = computerDTO.getCompany().getId();
 
         // The input string is valid if a) it equals "0" OR if b) it's an integer that corresponds
         // to a database entry. It is invalid if neither condition is met.

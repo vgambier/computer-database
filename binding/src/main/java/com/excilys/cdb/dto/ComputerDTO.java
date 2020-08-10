@@ -9,7 +9,7 @@ public class ComputerDTO implements Serializable {
     private String name;
     private String introduced;
     private String discontinued;
-    private CompanyDTO companyDTO;
+    private CompanyDTO company;
 
     public static class Builder {
         private String id;
@@ -49,7 +49,7 @@ public class ComputerDTO implements Serializable {
             computerDTO.name = this.name;
             computerDTO.introduced = this.introduced;
             computerDTO.discontinued = this.discontinued;
-            computerDTO.companyDTO = this.companyDTO;
+            computerDTO.company = this.companyDTO;
             return computerDTO;
         }
     }
@@ -70,7 +70,8 @@ public class ComputerDTO implements Serializable {
         return discontinued;
     }
 
-    public CompanyDTO getCompanyDTO() {
-        return companyDTO;
+    public CompanyDTO getCompany() {
+        return company;
     }
+
 }
