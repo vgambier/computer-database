@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.cdb.mapper.CompanyDTOMapper;
+import com.excilys.cdb.mapper.ComputerDTOMapper;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -357,7 +359,7 @@ public class CLI {
                         "Company ID must be a positive integer and correspond to an existing entry.");
             } else {
                 int companyID = Integer.valueOf(arr[1]);
-                companyService.deleteCompany(companyService.getCompany(companyID));
+                companyService.deleteCompany(CompanyDTOMapper.fromDTOtoModel(companyService.getCompany(companyID)));;
                 System.out.println("Company succesfully deleted.");
             }
         } else {

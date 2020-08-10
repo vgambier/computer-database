@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.excilys.cdb.mapper.CompanyDTOMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,7 @@ public class CreateController {
                     : Integer.valueOf(companyIDString);
 
             // Fetching corresponding Company object
-            Company company = companyID == null ? null : companyService.getCompany(companyID);
+            Company company = companyID == null ? null : CompanyDTOMapper.fromDTOtoModel(companyService.getCompany(companyID));;
 
             Computer addedComputer = new Computer.Builder().withName(computerName)
                     .withIntroduced(introduced).withDiscontinued(discontinued).withCompany(company)

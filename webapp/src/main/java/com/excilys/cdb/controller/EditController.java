@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.excilys.cdb.mapper.CompanyDTOMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,8 +89,7 @@ public class EditController {
 
         // Back-end validation
 
-        if (errorMessages.isEmpty()) { // No error messages means the DTO is valid, so we can update
-                                       // the computer
+        if (errorMessages.isEmpty()) { // No error messages means the DTO is valid, so we can update the computer
 
             Integer id = Integer.parseInt(idString);
             Date introduced = "".equals(introducedString) ? null : Date.valueOf(introducedString);
@@ -101,7 +101,7 @@ public class EditController {
                     : Integer.valueOf(companyIDString);
 
             // Fetching corresponding Company object
-            Company company = companyID == null ? null : companyService.getCompany(companyID);
+            Company company = companyID == null ? null : CompanyDTOMapper.fromDTOtoModel(companyService.getCompany(companyID));;
 
             Computer updatedComputer = new Computer.Builder().withId(id).withName(computerName)
                     .withIntroduced(introduced).withDiscontinued(discontinued).withCompany(company)

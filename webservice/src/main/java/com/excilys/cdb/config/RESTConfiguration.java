@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import exception.CustomGlobalExceptionHandler;
+import com.excilys.cdb.exception.CustomGlobalExceptionHandler;
 
 /**
  * @author Victor Gambier

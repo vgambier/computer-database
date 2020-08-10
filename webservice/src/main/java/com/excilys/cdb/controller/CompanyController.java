@@ -1,9 +1,11 @@
 package com.excilys.cdb.controller;
 
+import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.mapper.CompanyDTOMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.validator.BindingValidator;
-import exception.CompanyNotFoundException;
+import com.excilys.cdb.exception.CompanyNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,37 @@ public class CompanyController {
         this.validator = validator;
     }
 
+
+    @GetMapping("/{stringID}")
+    public CompanyDTO getCompanyJSON(@PathVariable String stringID) throws CompanyNotFoundException {
+
+        if (validator.isStringInteger(stringID)) {
+            int id = Integer.valueOf(stringID);
+            if (companyService.doesCompanyEntryExist(id)) {
+                return companyService.getCompany(id);
+
+            } else {
+                throw new CompanyNotFoundException();
+            }
+        }
+        else {
+            throw new CompanyNotFoundException();
+        }
+    }
+
+    @GetMapping()
+    public List<CompanyDTO> getCompanies() {
+
+       return companyService.listAllCompanies();
+        }
+
+    @GetMapping("/count")
+    public int countCompanies() {
+
+        return companyService.countCompanies();  //TODO: ?????????????????
+    }
+
+
     @DeleteMapping("/{stringID}")
     public void deleteCompany(@PathVariable String stringID) throws CompanyNotFoundException {
 
@@ -32,7 +65,7 @@ public class CompanyController {
         if (validator.isStringInteger(stringID)) {
             int id = Integer.valueOf(stringID);
             if (companyService.doesCompanyEntryExist(id)) {
-                Company deletedCompany = companyService.getCompany(id);
+                Company deletedCompany = CompanyDTOMapper.fromDTOtoModel(companyService.getCompany(id));
                 companyService.deleteCompany(deletedCompany);
                 found = true;
             }
@@ -42,10 +75,4 @@ public class CompanyController {
         }
     }
 
-    @GetMapping()
-    public List<Company> getAllCompanies() {
-
-       return companyService.listAllCompanies();
-        }
-
-    }
+}

@@ -41,7 +41,7 @@ public class BindingValidator {
         } else {
             try {
                 new ComputerPage(nbEntries, Integer.valueOf(pageID));
-                // if this line doesn't throw an exception, the page number must be valid
+                // if this line doesn't throw an com.excilys.cdb.exception, the page number must be valid
             } catch (@SuppressWarnings("unused") ModelException e) {
                 isPageNumberOk = false;
             }

@@ -122,7 +122,7 @@ public class ComputerDAOTest extends DBTestCase {
     @Override
     protected IDataSet getDataSet() throws Exception {
         return new FlatXmlDataSetBuilder()
-                .build(ComputerDAOTest.class.getResourceAsStream("/db-setup/dataset.xml"));
+                .build(ComputerDAOTest.class.getResourceAsStream("/dataset.xml"));
     }
 
     protected QueryDataSet getDatabaseDataSet() throws Exception {

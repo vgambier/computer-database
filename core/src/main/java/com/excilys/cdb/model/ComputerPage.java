@@ -15,7 +15,6 @@ public class ComputerPage {
     public ComputerPage(int nbEntries, int pageNumber) throws ModelException {
 
         // Checking the database to count the number of entries
-
         nbPages = nbEntries / maxItemsPerPage;
         if (nbEntries % maxItemsPerPage != 0) { // Ensuring the last page exists even when it's full
             nbPages++;

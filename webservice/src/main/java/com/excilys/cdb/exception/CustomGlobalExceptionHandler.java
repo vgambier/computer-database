@@ -1,4 +1,4 @@
-package exception;
+package com.excilys.cdb.exception;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 /**
  * @author Victor Gambier
  *
- *         Using this class, we let Spring BasicErrorController handle the exception by overriding
+ *         Using this class, we let Spring BasicErrorController handle the com.excilys.cdb.exception by overriding
  *         the status code. This applies to all REST Controllers.
  */
 

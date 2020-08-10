@@ -17,7 +17,7 @@ import com.excilys.cdb.validator.ServiceValidator;
  *         Configures the beans used for the service part of the application.
  */
 @Configuration
-@ComponentScan({"com.excilys.cdb.dao", "com.excilys.cdb.controller"})
+@ComponentScan({"com.excilys.cdb.dao"})
 public class ServiceBeansConfig {
 
     @Bean(name = "computerServiceBean")

@@ -1,4 +1,4 @@
-package exception;
+package com.excilys.cdb.exception;
 
 /**
  * @author Victor Gambier
