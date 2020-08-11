@@ -20,7 +20,7 @@ import java.sql.Date;
 import java.util.List;
 
 @CrossOrigin
-@RequestMapping("/computers")
+@RequestMapping("/api/computers")
 @RestController
 public class ComputerController {
 

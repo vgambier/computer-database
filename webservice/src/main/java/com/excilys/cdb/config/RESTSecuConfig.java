@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
@@ -35,6 +36,7 @@ public class RESTSecuConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+//        return new JdbcUserDetailsManager(dataSource);
         return auth.jdbcAuthentication().dataSource(dataSource)
                 .usersByUsernameQuery(
                         "select username, password, enabled from users where username = ?")
@@ -64,9 +66,10 @@ public class RESTSecuConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/computers/**").hasAnyRole("ADMIN", "USER")
-                .antMatchers(HttpMethod.GET, "/companies/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/computers/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers(HttpMethod.GET, "/api/companies/**").hasAnyRole("ADMIN")
                 .and()
                 .exceptionHandling().authenticationEntryPoint(this.jwtAuthenticationEntryPoint)
                 .and()
