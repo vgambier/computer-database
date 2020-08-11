@@ -1,6 +1,7 @@
 package com.excilys.cdb.config;
 
 import com.excilys.cdb.mapper.CompanyDTOMapper;
+import com.excilys.cdb.mapper.ComputerDTOMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +24,8 @@ public class ServiceBeansConfig {
 
 
     @Bean(name = "computerServiceBean")
-    public ComputerService computerService(ComputerDAO computerDAO) {
-        return new ComputerService(computerDAO);
+    public ComputerService computerService(ComputerDAO computerDAO, ComputerDTOMapper computerDTOMapper) {
+        return new ComputerService(computerDAO, computerDTOMapper);
     }
 
     @Bean(name = "companyServiceBean")

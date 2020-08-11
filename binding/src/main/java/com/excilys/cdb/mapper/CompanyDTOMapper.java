@@ -13,7 +13,12 @@ import com.excilys.cdb.model.Company;
 public class CompanyDTOMapper {
 
     public CompanyDTO fromModeltoDTO(Company company) {
-        return new CompanyDTO.Builder().withId(String.valueOf(company.getId())).withName(company.getName()).build();
+        if (company != null) {
+            return new CompanyDTO.Builder().withId(String.valueOf(company.getId())).withName(company.getName()).build();
+        }
+        else {
+            return new CompanyDTO.Builder().withId(null).withName(null).build();
+        }
     }
 
     public Company fromDTOtoModel(CompanyDTO companyDTO) {
