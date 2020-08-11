@@ -21,6 +21,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
     private HikariDataSource dataSource;
 
     @Autowired

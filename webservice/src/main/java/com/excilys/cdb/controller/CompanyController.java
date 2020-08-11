@@ -3,7 +3,7 @@ package com.excilys.cdb.controller;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.validator.BindingValidator;
-import exception.CompanyNotFoundException;
+import com.excilys.cdb.exception.CompanyNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

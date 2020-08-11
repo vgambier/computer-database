@@ -10,9 +10,9 @@ import com.excilys.cdb.model.ModelException;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.BindingValidator;
-import exception.ComputerNotFoundException;
-import exception.InvalidNewEntryException;
-import exception.PageNotFoundException;
+import com.excilys.cdb.exception.ComputerNotFoundException;
+import com.excilys.cdb.exception.InvalidNewEntryException;
+import com.excilys.cdb.exception.PageNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

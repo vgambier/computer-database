@@ -3,6 +3,8 @@ package com.excilys.cdb.config;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.DispatcherServlet;
  *
  *         Configures the DispatcherServlet used in Spring MVC
  */
+@Configuration
 public class RESTWebAppInitializer implements WebApplicationInitializer {
 
     @Override
@@ -18,7 +21,7 @@ public class RESTWebAppInitializer implements WebApplicationInitializer {
 
         // Load Spring web application configuration
         AnnotationConfigWebApplicationContext ac = new AnnotationConfigWebApplicationContext();
-        ac.register(RESTWebConfig.class);
+        ac.register(RESTConfiguration.class, RESTSecuConfig.class);
 
         // Create and register the DispatcherServlet
         DispatcherServlet servlet = new DispatcherServlet(ac);
@@ -26,4 +29,6 @@ public class RESTWebAppInitializer implements WebApplicationInitializer {
         registration.setLoadOnStartup(1);
         registration.addMapping("/");
     }
+
+
 }
