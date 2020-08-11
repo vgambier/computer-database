@@ -1,5 +1,7 @@
-package com.excilys.cdb.config;
+package com.excilys.cdb.config.jwt;
 
+import com.excilys.cdb.config.jwt.dto.JwtRequest;
+import com.excilys.cdb.config.jwt.dto.JwtResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,5 +1,7 @@
 package com.excilys.cdb.config;
 
+import com.excilys.cdb.config.jwt.JwtAuthenticationEntryPoint;
+import com.excilys.cdb.config.jwt.JwtRequestFilter;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -36,19 +37,11 @@ public class RESTSecuConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-//        return new JdbcUserDetailsManager(dataSource);
-        return auth.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery(
-                        "select username, password, enabled from users where username = ?")
-                .authoritiesByUsernameQuery(
-                        "select username, authority from authorities where username = ?").getUserDetailsService();
+        return new JdbcUserDetailsManager(dataSource);
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        // configure AuthenticationManager so that it knows from where to load
-        // user for matching credentials
-        // Use BCryptPasswordEncoder
         auth.userDetailsService(configAuthentication(auth)).passwordEncoder(passwordEncoder());
     }
 

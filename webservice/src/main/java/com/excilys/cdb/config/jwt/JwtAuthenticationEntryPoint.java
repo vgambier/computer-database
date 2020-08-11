@@ -1,4 +1,4 @@
-package com.excilys.cdb.config;
+package com.excilys.cdb.config.jwt;
 
 import java.io.IOException;
 import java.io.Serializable;

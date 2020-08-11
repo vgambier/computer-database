@@ -1,4 +1,4 @@
-package com.excilys.cdb.config;
+package com.excilys.cdb.config.jwt;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -29,7 +29,6 @@ public class JwtRequestFilter<JwtUserDetailsService> extends OncePerRequestFilte
         String username = null;
         String jwtToken = null;
 
-        System.out.println("XXXXXXXXXXXXXXXXXXXXX DO FILTER XXXXXXXXXXXXXXXXXXXXX");
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
