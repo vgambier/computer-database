@@ -18,12 +18,14 @@ public class CompanyController {
 
     private CompanyService companyService;
     private BindingValidator validator;
+    private CompanyDTOMapper companyDTOMapper;
 
     @Autowired
-    public CompanyController(CompanyService companyService,  BindingValidator validator
+    public CompanyController(CompanyService companyService,  BindingValidator validator, CompanyDTOMapper companyDTOMapper
                              ) {
         this.companyService = companyService;
         this.validator = validator;
+        this.companyDTOMapper=companyDTOMapper;
     }
 
 
@@ -65,7 +67,7 @@ public class CompanyController {
         if (validator.isStringInteger(stringID)) {
             int id = Integer.valueOf(stringID);
             if (companyService.doesCompanyEntryExist(id)) {
-                Company deletedCompany = CompanyDTOMapper.fromDTOtoModel(companyService.getCompany(id));
+                Company deletedCompany = companyDTOMapper.fromDTOtoModel(companyService.getCompany(id));
                 companyService.deleteCompany(deletedCompany);
                 found = true;
             }

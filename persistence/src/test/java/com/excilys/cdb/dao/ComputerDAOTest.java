@@ -2,6 +2,7 @@ package com.excilys.cdb.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 import org.dbunit.DBTestCase;
@@ -18,14 +19,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.excilys.cdb.config.HibernateConfig;
 import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
-import com.excilys.cdb.mapper.CompanyDTOMapper;
 import com.excilys.cdb.mapper.ComputerDTOMapper;
 import com.excilys.cdb.model.Computer;
 
 public class ComputerDAOTest extends DBTestCase {
 
     private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-            HibernateConfig.class, ComputerDTOMapper.class, CompanyDTOMapper.class);
+            HibernateConfig.class, ComputerDTOMapper.class);
     private ComputerDAO computerDAO;
     private SessionFactory sessionFactory;
     private ComputerDTOMapper computerDTOMapper;
@@ -111,12 +111,44 @@ public class ComputerDAOTest extends DBTestCase {
     }
 
     @Test
+    public void testDeleteComputer() {
+        assertEquals(10, computerDAO.countEntries());
+        Computer toBeDeleted=computerDAO.find(3);
+        computerDAO.delete(toBeDeleted);
+        assertEquals(9,computerDAO.countEntries());
+        assertNull(computerDAO.find(3));
+    }
+
+    @Test
+    public void testFindMatchesWithinRange() throws PersistenceException {
+        int limit=20;
+        int offset=0;
+        String searchTerm="mac";
+        String orderBy="introduced";
+        List<Computer> actual=computerDAO.findMatchesWithinRange(limit, offset,searchTerm,orderBy);
+        assertEquals(2,actual.size());
+    }
+
+    @Test (expected= PersistenceException.class)
+    public void testFindMatchesThrowsException() {
+        int limit=20;
+        int offset=0;
+        String searchTerm="mac";
+        String orderBy="lol";
+        try {
+            List<Computer> oops=computerDAO.findMatchesWithinRange(limit, offset, searchTerm, orderBy);
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void testDataLoaded() throws Exception {
         IDataSet dataSet = getDatabaseDataSet();
         assertNotNull(dataSet);
 
         int rowCount = computerDAO.countEntries();
-        assertEquals(8, rowCount);
+        assertEquals(10, rowCount);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.excilys.cdb.controller;
 
 import com.excilys.cdb.dao.PersistenceException;
+import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.dto.RestDTO;
 import com.excilys.cdb.mapper.CompanyDTOMapper;
@@ -28,12 +29,14 @@ public class ComputerController {
     private ComputerService computerService;
     private CompanyService companyService;
     private BindingValidator validator;
+    private CompanyDTOMapper companyDTOMapper;
 
     @Autowired
-    public ComputerController(ComputerService computerService, CompanyService companyService, BindingValidator validator) {
+    public ComputerController(ComputerService computerService, CompanyService companyService, BindingValidator validator,CompanyDTOMapper companyDTOMapper) {
         this.computerService = computerService;
         this.companyService = companyService;
         this.validator = validator;
+        this.companyDTOMapper = companyDTOMapper;
     }
 
 
@@ -133,7 +136,7 @@ public List<Computer> getComputerPageJSON(@PathVariable String id,
     public void addComputerJSON(@RequestBody ComputerDTO computerDto) throws InvalidNewEntryException {
 
         // Back-end validation
-        if (computerDto.getName().equals("")) {
+        if (computerDto.getName()==null || computerDto.getName().equals("")) {
             throw new InvalidNewEntryException("Name is mandatory.");
         }
 
@@ -232,7 +235,7 @@ public List<Computer> getComputerPageJSON(@PathVariable String id,
         }
         // Adding entry if form is valid
         // Fetching corresponding Company object
-        return companyID == null ? null : CompanyDTOMapper.fromDTOtoModel(companyService.getCompany(companyID));
+        return companyID == null ? null : companyDTOMapper.fromDTOtoModel(companyService.getCompany(companyID));
     }
 
     private Date validateDate(Date introduced, String introduced2, String s) throws InvalidNewEntryException {

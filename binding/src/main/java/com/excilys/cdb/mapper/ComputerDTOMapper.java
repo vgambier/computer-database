@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.dto.ComputerDTO;
@@ -13,12 +14,11 @@ import com.excilys.cdb.model.Computer;
  * @author Victor Gambier
  *
  */
-
+@ComponentScan({"com.excilys.cdb.mapper"})
 @Component("computerDTOMapperBean")
 public class ComputerDTOMapper {
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
     private CompanyDTOMapper companyDTOMapper;
 
     @Autowired

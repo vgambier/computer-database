@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.mapper.CompanyDTOMapper;
 import com.excilys.cdb.mapper.ComputerDTOMapper;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -18,6 +19,7 @@ import com.excilys.cdb.model.ComputerPage;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.BindingValidator;
+import com.excilys.cdb.dao.PersistenceException;
 
 /**
  * @author Victor Gambier
@@ -42,13 +44,16 @@ public class CLI {
     // This needs to be an attribute so that it can be closed at the end of the program
     // Otherwise, it would be inaccessible
     private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-            ServiceBeansConfig.class, HibernateConfig.class, BindingBeansConfig.class);
+            ServiceBeansConfig.class, HibernateConfig.class, BindingBeansConfig.class,CompanyDTOMapper.class);
 
     private static ComputerService computerService = (ComputerService) context
             .getBean("computerServiceBean");
     private static CompanyService companyService = (CompanyService) context
             .getBean("companyServiceBean");
     private static BindingValidator validator = (BindingValidator) context.getBean("validatorBean");
+
+    private static CompanyDTOMapper companyDtoMapper = (CompanyDTOMapper) context
+            .getBean("companyDTOMapperBean");
 
     public static void main(String[] args) throws Exception {
 
@@ -227,13 +232,13 @@ public class CLI {
         }
 
         // Fetching corresponding Company object
-        Company company = companyIDString.equals("")
+        CompanyDTO company = companyIDString.equals("")
                 ? null
                 : companyService.getCompany(Integer.valueOf(companyIDString));
 
         Computer addedComputer = new Computer.Builder().withName(computerName)
                 .withIntroduced(introducedDate).withDiscontinued(discontinuedDate)
-                .withCompany(company).build();
+                .withCompany(companyDtoMapper.fromDTOtoModel(company)).build();
 
         computerService.addComputer(addedComputer);
         System.out.println("Entry added.");
@@ -307,13 +312,13 @@ public class CLI {
         }
 
         // Fetching corresponding Company object
-        Company company = newCompanyIDString.equals("")
+        CompanyDTO company = newCompanyIDString.equals("")
                 ? null
                 : companyService.getCompany(Integer.valueOf(newCompanyIDString));
 
         Computer updatedComputer = new Computer.Builder().withId(computerID)
                 .withName(newComputerName).withIntroduced(newIntroducedDate)
-                .withDiscontinued(newDiscontinuedDate).withCompany(company).build();
+                .withDiscontinued(newDiscontinuedDate).withCompany(companyDtoMapper.fromDTOtoModel(company)).build();
 
         computerService.updateComputer(updatedComputer);
         System.out.println("Entry updated.");
@@ -359,7 +364,7 @@ public class CLI {
                         "Company ID must be a positive integer and correspond to an existing entry.");
             } else {
                 int companyID = Integer.valueOf(arr[1]);
-                companyService.deleteCompany(CompanyDTOMapper.fromDTOtoModel(companyService.getCompany(companyID)));;
+                companyService.deleteCompany(companyDtoMapper.fromDTOtoModel(companyService.getCompany(companyID)));;
                 System.out.println("Company succesfully deleted.");
             }
         } else {

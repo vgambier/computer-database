@@ -9,14 +9,14 @@ import com.excilys.cdb.model.Company;
  * @author Victor Gambier
  *
  */
-//@Component("companyDTOMapperBean")
+@Component("companyDTOMapperBean")
 public class CompanyDTOMapper {
 
-    public static CompanyDTO fromModeltoDTO(Company company) {
+    public CompanyDTO fromModeltoDTO(Company company) {
         return new CompanyDTO.Builder().withId(String.valueOf(company.getId())).withName(company.getName()).build();
     }
 
-    public static Company fromDTOtoModel(CompanyDTO companyDTO) {
+    public Company fromDTOtoModel(CompanyDTO companyDTO) {
         return new Company(Integer.parseInt(companyDTO.getId()), companyDTO.getName());
     }
 }

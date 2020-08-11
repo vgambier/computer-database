@@ -36,13 +36,15 @@ public class CreateController {
     private ComputerService computerService;
     private CompanyService companyService;
     private ServiceValidator serviceValidator;
+    private CompanyDTOMapper companyDTOMapper;
 
     @Autowired
     public CreateController(ComputerService computerService, CompanyService companyService,
-            ServiceValidator serviceValidator) {
+            ServiceValidator serviceValidator, CompanyDTOMapper companyDTOMapper) {
         this.computerService = computerService;
         this.companyService = companyService;
         this.serviceValidator = serviceValidator;
+        this.companyDTOMapper = companyDTOMapper;
     }
 
     @GetMapping
@@ -80,7 +82,7 @@ public class CreateController {
                     : Integer.valueOf(companyIDString);
 
             // Fetching corresponding Company object
-            Company company = companyID == null ? null : CompanyDTOMapper.fromDTOtoModel(companyService.getCompany(companyID));;
+            Company company = companyID == null ? null : companyDTOMapper.fromDTOtoModel(companyService.getCompany(companyID));;
 
             Computer addedComputer = new Computer.Builder().withName(computerName)
                     .withIntroduced(introduced).withDiscontinued(discontinued).withCompany(company)

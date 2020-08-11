@@ -39,14 +39,16 @@ public class EditController {
     private CompanyService companyService;
     private BindingValidator bindingValidator;
     private ServiceValidator serviceValidator;
+    private CompanyDTOMapper companyDTOMapper;
 
     @Autowired
     public EditController(ComputerService computerService, CompanyService companyService,
-            BindingValidator bindingValidator, ServiceValidator serviceValidator) {
+            BindingValidator bindingValidator, ServiceValidator serviceValidator,CompanyDTOMapper companyDTOMapper) {
         this.computerService = computerService;
         this.companyService = companyService;
         this.bindingValidator = bindingValidator;
         this.serviceValidator = serviceValidator;
+        this.companyDTOMapper = companyDTOMapper;
     }
 
     @GetMapping
@@ -101,7 +103,7 @@ public class EditController {
                     : Integer.valueOf(companyIDString);
 
             // Fetching corresponding Company object
-            Company company = companyID == null ? null : CompanyDTOMapper.fromDTOtoModel(companyService.getCompany(companyID));;
+            Company company = companyID == null ? null : companyDTOMapper.fromDTOtoModel(companyService.getCompany(companyID));;
 
             Computer updatedComputer = new Computer.Builder().withId(id).withName(computerName)
                     .withIntroduced(introduced).withDiscontinued(discontinued).withCompany(company)

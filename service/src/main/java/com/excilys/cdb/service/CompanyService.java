@@ -19,19 +19,23 @@ import com.excilys.cdb.model.Company;
 public class CompanyService {
 
     private CompanyDAO companyDAO;
+    private CompanyDTOMapper companyDTOMapper;
 
     @Autowired
-    public CompanyService(CompanyDAO companyDAO) {
+    public CompanyService(CompanyDAO companyDAO,CompanyDTOMapper companyDTOMapper) {
         this.companyDAO = companyDAO;
+        this.companyDTOMapper=companyDTOMapper;
     }
 
+
+
     public CompanyDTO getCompany(int companyID) {
-        return CompanyDTOMapper.fromModeltoDTO(companyDAO.find(companyID));
+        return companyDTOMapper.fromModeltoDTO(companyDAO.find(companyID));
     }
 
     public List<CompanyDTO> listAllCompanies() {
         List <Company> temp=companyDAO.listAll();
-        List <CompanyDTO> companies = temp.stream().map(company -> CompanyDTOMapper.fromModeltoDTO(company)).collect(Collectors.toList());
+        List <CompanyDTO> companies = temp.stream().map(company -> companyDTOMapper.fromModeltoDTO(company)).collect(Collectors.toList());
         return companies;
     }
 
