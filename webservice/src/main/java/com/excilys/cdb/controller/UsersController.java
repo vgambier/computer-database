@@ -37,4 +37,10 @@ public class UsersController {
         jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userName)).disabled(true).build());
     }
 
+    @PutMapping()
+    public void manageRole (@PathVariable String userName, String... roles){
+        jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userName)).authorities(roles).build());
+    }
+
+
 }
