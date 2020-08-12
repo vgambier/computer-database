@@ -49,7 +49,7 @@ public class ComputerDTOMapper {
     }
 
     public ComputerDTO fromModeltoDTO(Computer computer) {
-        return new ComputerDTO.Builder().withName(computer.getCompanyName()).withId(String.valueOf(computer.getId()))
+        return new ComputerDTO.Builder().withName(computer.getName()).withId(String.valueOf(computer.getId()))
                 .withIntroduced(localToString(computer.getIntroduced()))
                 .withDiscontinued(localToString((computer.getDiscontinued())))
                 .withCompany(companyDTOMapper.fromModeltoDTO(computer.getCompany())).build();

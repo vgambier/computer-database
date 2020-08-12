@@ -129,7 +129,6 @@ public class ComputerDAOTest extends DBTestCase {
         assertEquals(2,actual.size());
     }
 
-    @Test (expected= PersistenceException.class)
     public void testFindMatchesThrowsException() {
         int limit=20;
         int offset=0;
