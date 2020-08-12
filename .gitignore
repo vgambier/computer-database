@@ -10,10 +10,7 @@ target/
 .classpath
 .project
 
-/persistence/src/main/resources/db-setup/
-/persistence/src/test/resources/db-setup/
-/persistence/src/main/resources/.properties
-/persistence/src/test/resources/.properties
+*.properties
 
 ##############################
 ## IntelliJ
