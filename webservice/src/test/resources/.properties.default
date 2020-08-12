@@ -1,0 +1,4 @@
+jdbcUrl=jdbc:/*DATABASE URL HERE*/
+dataSource.user=/*USER NAME HERE*/
+dataSource.password=/*USER PASSWORD HERE*/
+driverClassName=/*DRIVER CLASSNAME HERE*/
