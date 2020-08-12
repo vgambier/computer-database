@@ -49,7 +49,6 @@ public class Company implements Serializable {
     public String toString() {
 
         StringBuilder stringBuilder = new StringBuilder();
-
         stringBuilder.append("id: ").append(id).append("\t");
         stringBuilder.append("name: ").append(name);
 

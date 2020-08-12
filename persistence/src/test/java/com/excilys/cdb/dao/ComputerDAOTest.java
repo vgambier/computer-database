@@ -131,7 +131,7 @@ public class ComputerDAOTest extends DBTestCase {
         int offset=0;
         String searchTerm="mac";
         String orderBy="lol";
-        List<Computer> oops = computerDAO.findMatchesWithinRange(limit, offset, searchTerm, orderBy);
+        computerDAO.findMatchesWithinRange(limit, offset, searchTerm, orderBy);
     }
 
     @Test

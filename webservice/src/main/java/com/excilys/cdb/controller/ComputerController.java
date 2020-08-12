@@ -94,7 +94,7 @@ public class ComputerController {
     }
 */
 @GetMapping(value = {"/page/{id}", "/page/{id}/{searchTerm}/{orderBy}/{nbEntries}"})
-public List<Computer> getComputerPageJSON(@PathVariable String id,
+public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
                                           @PathVariable(required = false) String searchTerm,
                                           @PathVariable(required = false) String orderBy,
                                           @PathVariable(required = false) String nbEntries)
@@ -124,7 +124,7 @@ public List<Computer> getComputerPageJSON(@PathVariable String id,
     int nbComputers = computerService.countComputerEntries();
     if (validator.isPageIDStringValid(nbComputers, id)) {
         ComputerPage computerPage = new ComputerPage(nbComputers, Integer.valueOf(id));
-        List<Computer> computers = computerService.getPageComputers(computerPage, searchTerm,
+        List<ComputerDTO> computers = computerService.getPageComputers(computerPage, searchTerm,
                 orderBy);
         return computers;
     }

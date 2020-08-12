@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.CompanyDTOMapper;
 import com.excilys.cdb.mapper.ComputerDTOMapper;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -138,7 +139,7 @@ public class CLI {
             int nbEntries = computerService.countComputerEntries();
             if (validator.isPageIDStringValid(nbEntries, arr[1])) {
                 ComputerPage computerPage = new ComputerPage(nbEntries, Integer.valueOf(arr[1]));
-                List<Computer> computers = computerService.getPageComputers(computerPage);
+                List<ComputerDTO> computers = computerService.getPageComputers(computerPage);
                 computers.forEach(computer -> System.out.println(computer));
             } else {
                 System.out.println(
