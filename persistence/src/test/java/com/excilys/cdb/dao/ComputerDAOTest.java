@@ -1,60 +1,56 @@
 package com.excilys.cdb.dao;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Properties;
-
+import com.excilys.cdb.config.HibernateConfig;
+import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.dto.ComputerDTO;
+import com.excilys.cdb.mapper.ComputerDTOMapper;
+import com.excilys.cdb.model.Computer;
+import com.zaxxer.hikari.HikariDataSource;
 import org.dbunit.DBTestCase;
-import org.dbunit.PropertiesBasedJdbcDatabaseTester;
+import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.excilys.cdb.config.HibernateConfig;
-import com.excilys.cdb.dto.CompanyDTO;
-import com.excilys.cdb.dto.ComputerDTO;
-import com.excilys.cdb.mapper.ComputerDTOMapper;
-import com.excilys.cdb.model.Computer;
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.util.List;
 
+@ContextConfiguration(classes = {HibernateConfig.class,ComputerDTOMapper.class})
+@RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerDAOTest extends DBTestCase {
 
-    private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-            HibernateConfig.class, ComputerDTOMapper.class);
+    @Autowired
     private ComputerDAO computerDAO;
+    @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
     private ComputerDTOMapper computerDTOMapper;
+    @Autowired
+    private HikariDataSource hikariDataSource;
 
-    public ComputerDAOTest(String name) throws IOException {
 
-        super(name);
+    @Override
+    protected IDataSet getDataSet() throws Exception {
+        try(FileInputStream fileInputStream = new FileInputStream("src/test/resources/dataset.xml")){
+            return new FlatXmlDataSetBuilder().build(fileInputStream);
+        }
+    }
 
-        InputStream inputStream = ComputerDAOTest.class.getResourceAsStream("/.properties");
-        Properties properties = new Properties();
-        properties.load(inputStream);
-        inputStream.close();
-
-        String databaseURL = properties.getProperty("DATABASE_URL");
-        String username = properties.getProperty("USERNAME");
-        String password = properties.getProperty("PASSWORD");
-
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS,
-                "com.mysql.cj.jdbc.Driver");
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, databaseURL);
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, username);
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, password);
-
-        // Beans
-
-        computerDAO = (ComputerDAO) context.getBean("computerDAOBean");
-        sessionFactory = (SessionFactory) context.getBean("sessionFactoryBean");
-        computerDTOMapper = (ComputerDTOMapper) context.getBean("computerDTOMapperBean");
-
+    @Before
+    public void setUp() throws Exception {
+        try(Connection connection = hikariDataSource.getConnection()){
+            getSetUpOperation().execute(new DatabaseConnection(connection), getDataSet());
+        }
     }
 
     @Test
@@ -129,17 +125,13 @@ public class ComputerDAOTest extends DBTestCase {
         assertEquals(2,actual.size());
     }
 
-    @Test (expected= PersistenceException.class)
-    public void testFindMatchesThrowsException() {
+    @Test(expected = PersistenceException.class)
+    public void testFindMatchesThrowsException() throws PersistenceException {
         int limit=20;
         int offset=0;
         String searchTerm="mac";
         String orderBy="lol";
-        try {
-            List<Computer> oops=computerDAO.findMatchesWithinRange(limit, offset, searchTerm, orderBy);
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-        }
+        List<Computer> oops = computerDAO.findMatchesWithinRange(limit, offset, searchTerm, orderBy);
     }
 
     @Test
@@ -151,15 +143,15 @@ public class ComputerDAOTest extends DBTestCase {
         assertEquals(10, rowCount);
     }
 
-    @Override
-    protected IDataSet getDataSet() throws Exception {
-        return new FlatXmlDataSetBuilder()
-                .build(ComputerDAOTest.class.getResourceAsStream("/dataset.xml"));
-    }
 
-    protected QueryDataSet getDatabaseDataSet() throws Exception {
-        QueryDataSet loadedDataSet = new QueryDataSet(getConnection());
-        loadedDataSet.addTable("company");
-        return loadedDataSet;
+
+    private QueryDataSet getDatabaseDataSet() throws Exception {
+        try(Connection connection = hikariDataSource.getConnection()){
+            QueryDataSet loadedDataSet = new QueryDataSet(new DatabaseConnection(connection));
+            loadedDataSet.addTable("company");
+            return loadedDataSet;
+        }
+
+
     }
 }

@@ -1,9 +1,8 @@
 package com.excilys.cdb.config;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
+import com.excilys.cdb.dao.PersistenceException;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import com.excilys.cdb.dao.PersistenceException;
-import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * @author Victor Gambier
@@ -33,33 +29,9 @@ public class HibernateConfig {
 
     @Bean("hikariDataSource")
     public HikariDataSource hikariDataSource() throws PersistenceException {
-
-        InputStream inputStream = HibernateConfig.class.getResourceAsStream("/.properties");
-        Properties properties = new Properties();
-
-        try {
-            properties.load(inputStream);
-            inputStream.close();
-        } catch (IOException e) {
-            throw new PersistenceException("Couldn't find the database login .properties file.", e);
-        }
-
-        String databaseURL = properties.getProperty("DATABASE_URL");
-        String username = properties.getProperty("USERNAME");
-        String password = properties.getProperty("PASSWORD");
-
-        // TODO: add more logging everywhere
-        LOG.info("Initializing Hikari DataSource to database:\nURL: " + databaseURL + "\nUsername: "
-                + username);
-
-        HikariDataSource hikariDataSource = new HikariDataSource();
-        hikariDataSource.setJdbcUrl(databaseURL);
-        hikariDataSource.setUsername(username);
-        hikariDataSource.setPassword(password);
-        hikariDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        hikariDataSource.setMaximumPoolSize(10);
-
-        return hikariDataSource;
+        HikariConfig hikariConfig = new HikariConfig("/.properties");
+        hikariConfig.setMaximumPoolSize(10);
+        return new HikariDataSource(hikariConfig);
     }
 
     @Bean("sessionFactoryBean")

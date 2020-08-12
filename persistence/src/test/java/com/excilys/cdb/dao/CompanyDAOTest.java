@@ -2,47 +2,47 @@ package com.excilys.cdb.dao;
 
 import com.excilys.cdb.config.HibernateConfig;
 import com.excilys.cdb.model.Company;
+import com.zaxxer.hikari.HikariDataSource;
 import org.dbunit.DBTestCase;
-import org.dbunit.PropertiesBasedJdbcDatabaseTester;
+import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.io.FileInputStream;
+import java.sql.Connection;
 
+
+@ContextConfiguration(classes = {HibernateConfig.class})
+@RunWith(SpringJUnit4ClassRunner.class)
 public class CompanyDAOTest extends DBTestCase {
 
-
-    private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-            HibernateConfig.class);
+    @Autowired
     private CompanyDAO companyDAO;
 
-    public CompanyDAOTest(String name) throws IOException {
+    @Autowired
+    private HikariDataSource hikariDataSource;
 
-        super(name);
-
-        InputStream inputStream = CompanyDAOTest.class.getResourceAsStream("/.properties");
-        Properties properties = new Properties();
-        properties.load(inputStream);
-        inputStream.close();
-
-        String databaseURL = properties.getProperty("DATABASE_URL");
-        String username = properties.getProperty("USERNAME");
-        String password = properties.getProperty("PASSWORD");
-
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS,
-                "com.mysql.cj.jdbc.Driver");
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, databaseURL);
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, username);
-        System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, password);
-
-        // Beans
-        companyDAO = (CompanyDAO) context.getBean("companyDAOBean");
-
+    @Override
+    protected IDataSet getDataSet() throws Exception {
+        try(FileInputStream fileInputStream = new FileInputStream("src/test/resources/dataset.xml")){
+            return new FlatXmlDataSetBuilder().build(fileInputStream);
+        }
     }
+
+
+    @Before
+    public void setUp() throws Exception {
+        try(Connection connection = hikariDataSource.getConnection()){
+            getSetUpOperation().execute(new DatabaseConnection(connection), getDataSet());
+        }
+    }
+
 
     @Test
     public void testDelete() {
@@ -58,10 +58,6 @@ public class CompanyDAOTest extends DBTestCase {
         assertEquals(6,companyDAO.listAll().size());
     }
 
-    @Override
-    protected IDataSet getDataSet() throws Exception {
-        return new FlatXmlDataSetBuilder()
-                .build(CompanyDAOTest.class.getResourceAsStream("/dataset.xml"));
-    }
+
 
 }
