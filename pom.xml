@@ -25,7 +25,7 @@
 		<junit-version>4.13</junit-version>
 		<dbunit-version>2.5.1</dbunit-version>
 		<mockito-version>1.10.19</mockito-version>
-		<slf4j-version>1.7.30</slf4j-version>
+		<logback.Version>1.2.3</logback.Version>
 
 		<javax-servlet-api-version>4.0.1</javax-servlet-api-version>
 		<jstl-version>1.2</jstl-version>
@@ -41,9 +41,6 @@
 
 	<dependencies>
 
-		<!-- Dependencies shared by all sub-modules -->
-
-		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -51,15 +48,14 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!--LOGGER-->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j-version}</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.Version}</version>
 		</dependency>
 
 		<!-- webapp dependencies for the .jsp files -->
-
-		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl-api -->
 		<dependency>
 			<groupId>javax.servlet.jsp.jstl</groupId>
 			<artifactId>jstl-api</artifactId>
@@ -67,7 +63,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/taglibs/standard -->
 		<dependency>
 			<groupId>taglibs</groupId>
 			<artifactId>standard</artifactId>
