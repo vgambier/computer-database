@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/users")
-public class AddUser {
+public class UsersController {
 
     @Autowired
     JdbcUserDetailsManager jdbcUserDetailsManager;
