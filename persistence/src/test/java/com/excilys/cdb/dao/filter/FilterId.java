@@ -1,4 +1,4 @@
-package filter;
+package com.excilys.cdb.dao.filter;
 
 
 import org.dbunit.dataset.Column;
