@@ -1,8 +1,7 @@
 package com.excilys.cdb.controller;
 
-import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.UserDTO;
-import com.excilys.cdb.exception.CompanyNotFoundException;
+import com.excilys.cdb.dto.UserUpdateRoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,8 +37,8 @@ public class UsersController {
     }
 
     @PutMapping()
-    public void manageRole (@PathVariable String userName, String... roles){
-        jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userName)).authorities(roles).build());
+    public void manageRole (@RequestBody UserUpdateRoleDTO userUpdateRoleDTO){
+        jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userUpdateRoleDTO.getUserName())).authorities(userUpdateRoleDTO.getRoles()).build());
     }
 
 
