@@ -93,7 +93,7 @@ public class ComputerController {
 
     }
 */
-@GetMapping(value = {"/page/{id}", "/page/{id}/{searchTerm}/{orderBy}/{nbEntries}"})
+@GetMapping(value = {"/page/{id}/{nbEntries}","/page/{id}", "/page/{id}/{nbEntries}/{searchTerm}/{orderBy}"})
 public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
                                           @PathVariable(required = false) String searchTerm,
                                           @PathVariable(required = false) String orderBy,
@@ -223,6 +223,16 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
         return introduced;
     }
 
+    private Date validateDate(Date introduced, String introduced2, String s) throws InvalidNewEntryException {
+        if (introduced2!=null && !("").equals(introduced2) && validator.isDateStringValid(introduced2)) {
+            introduced = Date.valueOf(introduced2);
+        } else if ( introduced2!=null && !("").equals(introduced2)) {
+            throw new InvalidNewEntryException(
+                    s);
+        }
+        return introduced;
+    }
+
     private Company validateCompany(@RequestBody ComputerDTO computerDto) throws InvalidNewEntryException {
         Integer companyID = null;
         if (computerDto.getCompany().getId().equals("0")) {
@@ -238,13 +248,5 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
         return companyID == null ? null : companyDTOMapper.fromDTOtoModel(companyService.getCompany(companyID));
     }
 
-    private Date validateDate(Date introduced, String introduced2, String s) throws InvalidNewEntryException {
-        if (!introduced2.equals("") && validator.isDateStringValid(introduced2)) {
-            introduced = Date.valueOf(introduced2);
-        } else if (!introduced2.equals("")) {
-            throw new InvalidNewEntryException(
-                    s);
-        }
-        return introduced;
-    }
+
 }
