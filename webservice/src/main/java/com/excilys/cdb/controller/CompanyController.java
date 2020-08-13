@@ -55,7 +55,7 @@ public class CompanyController {
     @GetMapping("/count")
     public int countCompanies() {
 
-        return companyService.countCompanies();  //TODO: ?????????????????
+        return companyService.countCompanies();
     }
 
 
