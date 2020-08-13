@@ -2,25 +2,31 @@ package com.excilys.cdb.dao;
 
 import com.excilys.cdb.config.HibernateConfig;
 import com.excilys.cdb.model.Company;
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DbUnitConfiguration;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.zaxxer.hikari.HikariDataSource;
-import org.dbunit.DBTestCase;
-import org.dbunit.database.DatabaseConnection;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.io.FileInputStream;
-import java.sql.Connection;
+import static org.junit.Assert.assertEquals;
 
 
 @ContextConfiguration(classes = {HibernateConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class CompanyDAOTest extends DBTestCase {
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
+        DbUnitTestExecutionListener.class ,
+        TransactionalTestExecutionListener.class})
+@DbUnitConfiguration(databaseConnection = "hikariDataSource")
+@DatabaseSetup("/dataset.xml")
+public class CompanyDAOTest  {
 
     @Autowired
     private CompanyDAO companyDAO;
@@ -28,29 +34,12 @@ public class CompanyDAOTest extends DBTestCase {
     @Autowired
     private HikariDataSource hikariDataSource;
 
-    @Override
-    protected IDataSet getDataSet() throws Exception {
-        try(FileInputStream fileInputStream = new FileInputStream("src/test/resources/dataset.xml")){
-            return new FlatXmlDataSetBuilder().build(fileInputStream);
-        }
-    }
-
-
-    @Before
-    public void setUp() throws Exception {
-        try(Connection connection = hikariDataSource.getConnection()){
-            getSetUpOperation().execute(new DatabaseConnection(connection), getDataSet());
-        }
-    }
-
 
     @Test
+    @ExpectedDatabase(value = "/CompanyDAOTest/testDelete.xml", table = "company" )
     public void testDelete() {
-        assertEquals(6, companyDAO.countEntries());
         Company toBeDeleted=companyDAO.find(6);
         companyDAO.delete(toBeDeleted);
-        assertEquals(companyDAO.countEntries(),5);
-        assertNull(companyDAO.find(6));
     }
 
     @Test
