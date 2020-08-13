@@ -31,7 +31,7 @@ public class HibernateConfig {
 
     @Bean("hikariDataSource")
     public HikariDataSource hikariDataSource() throws PersistenceException {
-        HikariConfig hikariConfig = new HikariConfig("/.properties");
+        HikariConfig hikariConfig = new HikariConfig("/hikariDataSource.properties");
         hikariConfig.setMaximumPoolSize(10);
         return new HikariDataSource(hikariConfig);
     }
