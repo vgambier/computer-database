@@ -71,9 +71,11 @@ See [the project's instructions](https://github.com/excilys/training-java) for m
 * Added a webservice using Jackson and Spring REST that serves as an API to access and manipulate the database
 
 ## Instructions
-Prior to running, it is necessary to configure the database access. To do that, in `src/main/resources`, please rename `.properties.default` to `.properties`, then edit the file to include the relevant information. The same goes for `src/test/resources/.properties.default`, although that should connect to a separate, DBUnit database for testing purposes only.
+Prior to running, it is necessary to configure the database access. To do that, in `persistence/src/main/resources`, please rename `hikariDataSource.properties.default` to `hikariDataSource.properties`, then edit the file to include the relevant information. *
 
-It is also necessary to have an actual database with the following tables: computer, company, users, user_roles.
+The same goes for `persistence/src/test/resources/hikariDataSource.properties.default` and  `werbservice/src/test/resources/hikariDataSource.properties.default` , although that should connect to a separate, DBUnit database for testing purposes only.
+
+It is also necessary to have an actual database with the following tables: computer, company, users, authorities.
 
 ## Author
 Victor Gambier
