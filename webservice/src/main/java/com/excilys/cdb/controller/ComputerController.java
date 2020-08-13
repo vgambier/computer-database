@@ -1,9 +1,10 @@
 package com.excilys.cdb.controller;
 
 import com.excilys.cdb.dao.PersistenceException;
-import com.excilys.cdb.dto.CompanyDTO;
 import com.excilys.cdb.dto.ComputerDTO;
-import com.excilys.cdb.dto.RestDTO;
+import com.excilys.cdb.exception.ComputerNotFoundException;
+import com.excilys.cdb.exception.InvalidNewEntryException;
+import com.excilys.cdb.exception.PageNotFoundException;
 import com.excilys.cdb.mapper.CompanyDTOMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
@@ -12,9 +13,6 @@ import com.excilys.cdb.model.ModelException;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.BindingValidator;
-import com.excilys.cdb.exception.ComputerNotFoundException;
-import com.excilys.cdb.exception.InvalidNewEntryException;
-import com.excilys.cdb.exception.PageNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -235,9 +233,9 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
 
     private Company validateCompany(@RequestBody ComputerDTO computerDto) throws InvalidNewEntryException {
         Integer companyID = null;
-        if (computerDto.getCompany().getId().equals("0")) {
+        if (computerDto.getCompany().getId()==null || computerDto.getCompany().getId().equals("0")) {
             companyID = null; // Needed for the Computer constructor to function as intended
-        } else if (!computerDto.getCompany().getId().equals("") && validator.isStringInteger(computerDto.getCompany().getId())
+        } else if (!("").equals(computerDto.getCompany().getId()) && validator.isStringInteger(computerDto.getCompany().getId())
                 && companyService.doesCompanyEntryExist(Integer.valueOf(computerDto.getCompany().getId()))) {
             companyID = Integer.valueOf(computerDto.getCompany().getId());
         } else {
