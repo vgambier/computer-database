@@ -62,6 +62,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.github.springtestdbunit</groupId>
+			<artifactId>spring-test-dbunit</artifactId>
+			<version>${spring-test-dbunit}</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 </project>

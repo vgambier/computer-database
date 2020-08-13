@@ -1,0 +1,10 @@
+<!DOCTYPE dataset SYSTEM "src/test/resources/dataset.dtd">
+<dataset>
+
+    <company id="1" name="Company1"/>
+    <company id="2" name="Company2"/>
+    <company id="4" name="Company4"/>
+    <company id="5" name="Company5"/>
+    <company id="9" name="TestmAcTest"/>
+
+</dataset>

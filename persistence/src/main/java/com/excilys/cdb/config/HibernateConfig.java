@@ -14,6 +14,8 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.sql.DataSource;
+
 /**
  * @author Victor Gambier
  *
@@ -53,5 +55,6 @@ public class HibernateConfig {
 
         return txManager;
     }
+
 
 }

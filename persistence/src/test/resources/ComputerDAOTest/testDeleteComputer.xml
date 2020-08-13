@@ -1,21 +1,11 @@
 <!DOCTYPE dataset SYSTEM "src/test/resources/dataset.dtd">
 <dataset>
-    <company id="1" name="Company1"/>
-    <company id="2" name="Company2"/>
-    <company id="4" name="Company4"/>
-    <company id="5" name="Company5"/>
-    <company id="6" name="Thinking Machines"/>
-    <company id="9" name="TestmAcTest"/>
 
     <computer id="1"
               name="Computer1"
               introduced="2010-10-10"
               discontinued="2010-10-12"
               company_id="1"/>
-    <computer id="3"
-              name="Computer3"
-              introduced="1989-12-05"
-              discontinued="2010-10-12" />
     <computer id="15"
               name="Computer15"
               introduced="1999-09-06"
