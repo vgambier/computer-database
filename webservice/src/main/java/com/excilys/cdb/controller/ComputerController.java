@@ -24,10 +24,10 @@ import java.util.List;
 @RestController
 public class ComputerController {
 
-    private ComputerService computerService;
-    private CompanyService companyService;
-    private BindingValidator validator;
-    private CompanyDTOMapper companyDTOMapper;
+    private final ComputerService computerService;
+    private final CompanyService companyService;
+    private final BindingValidator validator;
+    private final CompanyDTOMapper companyDTOMapper;
 
     @Autowired
     public ComputerController(ComputerService computerService, CompanyService companyService, BindingValidator validator,CompanyDTOMapper companyDTOMapper) {
@@ -49,7 +49,7 @@ public class ComputerController {
             throws ComputerNotFoundException {
 
         if (validator.isStringInteger(stringID)) {
-            int id = Integer.valueOf(stringID);
+            int id = Integer.parseInt(stringID);
             if (computerService.doesComputerEntryExist(id)) {
                 return computerService.getComputer(id);
             }
@@ -81,7 +81,7 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
     // Updating number of entries per page
 
     if (validator.isStringInteger(nbEntries)) {
-        int newNbEntriesPerPage = Integer.valueOf(nbEntries);
+        int newNbEntriesPerPage = Integer.parseInt(nbEntries);
         ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
     }
 
@@ -89,10 +89,8 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
 
     int nbComputers = computerService.countComputerEntries();
     if (validator.isPageIDStringValid(nbComputers, id)) {
-        ComputerPage computerPage = new ComputerPage(nbComputers, Integer.valueOf(id));
-        List<ComputerDTO> computers = computerService.getPageComputers(computerPage, searchTerm,
-                orderBy);
-        return computers;
+        ComputerPage computerPage = new ComputerPage(nbComputers, Integer.parseInt(id));
+        return computerService.getPageComputers(computerPage, searchTerm, orderBy);
     }
     throw new PageNotFoundException();
 
@@ -127,7 +125,7 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
         String error = "";
 
         if (validator.isStringInteger(stringID)) {
-            int id = Integer.valueOf(stringID);
+            int id = Integer.parseInt(stringID);
 
             if (computerService.doesComputerEntryExist(id)) {
                 Computer deletedComputer = computerService.getComputer(id);
@@ -149,7 +147,7 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
         // Back-end validation
         Integer id = null;
         if (validator.isStringInteger(computerDto.getId())
-                && computerService.doesComputerEntryExist(Integer.valueOf(computerDto.getId()))) {
+                && computerService.doesComputerEntryExist(Integer.parseInt(computerDto.getId()))) {
             id = Integer.parseInt(computerDto.getId());
         } else {
             throw new InvalidNewEntryException("Computer ID is invalid.");
@@ -199,7 +197,7 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
         if (computerDto.getCompany().getId()==null || computerDto.getCompany().getId().equals("0")) {
             companyID = null; // Needed for the Computer constructor to function as intended
         } else if (!("").equals(computerDto.getCompany().getId()) && validator.isStringInteger(computerDto.getCompany().getId())
-                && companyService.doesCompanyEntryExist(Integer.valueOf(computerDto.getCompany().getId()))) {
+                && companyService.doesCompanyEntryExist(Integer.parseInt(computerDto.getCompany().getId()))) {
             companyID = Integer.valueOf(computerDto.getCompany().getId());
         } else {
             throw new InvalidNewEntryException("Company ID field must be 0 or a valid ID.\n");

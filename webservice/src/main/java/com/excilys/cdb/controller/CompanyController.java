@@ -16,9 +16,9 @@ import java.util.List;
 @RestController
 public class CompanyController {
 
-    private CompanyService companyService;
-    private BindingValidator validator;
-    private CompanyDTOMapper companyDTOMapper;
+    private final CompanyService companyService;
+    private final BindingValidator validator;
+    private final CompanyDTOMapper companyDTOMapper;
 
     @Autowired
     public CompanyController(CompanyService companyService,  BindingValidator validator, CompanyDTOMapper companyDTOMapper
@@ -33,7 +33,7 @@ public class CompanyController {
     public CompanyDTO getCompanyJSON(@PathVariable String stringID) throws CompanyNotFoundException {
 
         if (validator.isStringInteger(stringID)) {
-            int id = Integer.valueOf(stringID);
+            int id = Integer.parseInt(stringID);
             if (companyService.doesCompanyEntryExist(id)) {
                 return companyService.getCompany(id);
 
@@ -65,7 +65,7 @@ public class CompanyController {
         boolean found = false;
 
         if (validator.isStringInteger(stringID)) {
-            int id = Integer.valueOf(stringID);
+            int id = Integer.parseInt(stringID);
             if (companyService.doesCompanyEntryExist(id)) {
                 Company deletedCompany = companyDTOMapper.fromDTOtoModel(companyService.getCompany(id));
                 companyService.deleteCompany(deletedCompany);

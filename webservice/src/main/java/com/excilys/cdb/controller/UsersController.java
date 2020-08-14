@@ -8,19 +8,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @CrossOrigin
 @RestController
 @RequestMapping("/api/users")
 public class UsersController {
 
-    @Autowired
-    JdbcUserDetailsManager jdbcUserDetailsManager;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final JdbcUserDetailsManager jdbcUserDetailsManager;
+    private final PasswordEncoder passwordEncoder;
 
-
+    @Autowired
+    public UsersController (JdbcUserDetailsManager jdbcUserDetailsManager, PasswordEncoder passwordEncoder){
+        this.jdbcUserDetailsManager = jdbcUserDetailsManager;
+        this.passwordEncoder = passwordEncoder;
+    }
     /*@GetMapping()
     public List <UserDTO> getUsers() {
     }*/
