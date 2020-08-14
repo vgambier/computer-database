@@ -57,41 +57,9 @@ public class ComputerController {
         }
         throw new ComputerNotFoundException("ID must be an integer");
     }
-/*
-    @GetMapping()
-    public List<Computer> getComputerPageJSON(@RequestBody RestDTO restDto)
-            throws PersistenceException, ModelException, PageNotFoundException {
 
-        // Default values for optional parameters
-        if (restDto.getNbEntries() == null) {
-            restDto.setNbEntries("25");
-        }
-        if (restDto.getSearchTerm() == null) {
-            restDto.setSearchTerm("");
-        }
-        if (restDto.getOrderBy() == null) {
-            restDto.setOrderBy("computer.id");
-        }
 
-        // Updating number of entries per page
-        if (validator.isStringInteger(restDto.getNbEntries())) {
-            int newNbEntriesPerPage = Integer.valueOf(restDto.getNbEntries());
-            ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
-        }
-
-        // Gathering list of computers in the page
-        int nbComputers = computerService.countComputerEntries();
-        if (validator.isPageIDStringValid(nbComputers, restDto.getId())) {
-            ComputerPage computerPage = new ComputerPage(nbComputers, Integer.valueOf(restDto.getId()));
-            List<Computer> computers = computerService.getPageComputers(computerPage, restDto.getSearchTerm(),
-                    restDto.getOrderBy());
-            return computers;
-        }
-        throw new PageNotFoundException();
-
-    }
-*/
-@GetMapping(value = {"/page/{id}/{nbEntries}","/page/{id}", "/page/{id}/{nbEntries}/{searchTerm}/{orderBy}"})
+@GetMapping(value = {"/page/{id}","/page/{id}/{nbEntries}","/page/{id}/{nbEntries}/{orderBy}","/page/{id}/{nbEntries}/{orderBy}/{searchTerm}"})
 public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
                                           @PathVariable(required = false) String searchTerm,
                                           @PathVariable(required = false) String orderBy,
@@ -159,21 +127,17 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
         String error = "";
 
         if (validator.isStringInteger(stringID)) {
-
             int id = Integer.valueOf(stringID);
 
             if (computerService.doesComputerEntryExist(id)) {
                 Computer deletedComputer = computerService.getComputer(id);
                 computerService.deleteComputer(deletedComputer);
-
             } else {
                 error = "ID must correspond to an existing entry";
             }
-
         } else {
             error = "ID must be an integer";
         }
-
         if (!"".equals(error)) { // If the ID is invalid
             throw new ComputerNotFoundException(error);
         }
@@ -215,18 +179,17 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
 
 
 
-    private Date validateDate(String introduced2, String s) throws InvalidNewEntryException {
+    private Date validateDate(String intro, String s) throws InvalidNewEntryException {
         Date introduced = null;
-        introduced = validateDate(introduced, introduced2, s);
+        introduced = validateDate(introduced, intro, s);
         return introduced;
     }
 
-    private Date validateDate(Date introduced, String introduced2, String s) throws InvalidNewEntryException {
-        if (introduced2!=null && !("").equals(introduced2) && validator.isDateStringValid(introduced2)) {
-            introduced = Date.valueOf(introduced2);
-        } else if ( introduced2!=null && !("").equals(introduced2)) {
-            throw new InvalidNewEntryException(
-                    s);
+    private Date validateDate(Date introduced, String intro, String s) throws InvalidNewEntryException {
+        if (intro!=null && !("").equals(intro) && validator.isDateStringValid(intro)) {
+            introduced = Date.valueOf(intro);
+        } else if ( intro!=null && !("").equals(intro)) {
+            throw new InvalidNewEntryException(s);
         }
         return introduced;
     }
