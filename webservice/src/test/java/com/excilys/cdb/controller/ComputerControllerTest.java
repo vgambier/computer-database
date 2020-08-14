@@ -6,37 +6,35 @@ import com.excilys.cdb.config.RESTWebAppInitializer;
 import com.excilys.cdb.exception.ComputerNotFoundException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
-import com.zaxxer.hikari.HikariDataSource;
-import org.dbunit.DBTestCase;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.io.FileInputStream;
 import java.time.LocalDate;
+
+import static org.junit.Assert.assertEquals;
 
 @ContextConfiguration(classes = {RESTWebAppInitializer.class, HibernateConfig.class, RESTConfiguration.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-public class ComputerControllerTest extends DBTestCase {
-
-    @Autowired
-    private HikariDataSource hikariDataSource;
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
+        DbUnitTestExecutionListener.class ,
+        TransactionalTestExecutionListener.class})
+@DbUnitConfiguration(databaseConnection = "hikariDataSource")
+@DatabaseSetup("/dataset.xml")
+public class ComputerControllerTest {
 
     @Autowired
     private ComputerController computerController;
-
-    @Override
-    protected IDataSet getDataSet() throws Exception {
-        try(FileInputStream fileInputStream = new FileInputStream("src/test/resources/dataset.xml")){
-            return new FlatXmlDataSetBuilder().build(fileInputStream);
-        }
-    }
 
     @Test
     public void test_get_computer_1 () throws ComputerNotFoundException {
