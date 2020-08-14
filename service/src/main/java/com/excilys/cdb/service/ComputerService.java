@@ -34,8 +34,9 @@ public class ComputerService {
         return computerDAO.find(computerID);
     }
 
-    public void addComputer(Computer computer) {
-        computerDAO.add(computer);
+    public String addComputer(Computer computer) {
+        Computer temp=computerDAO.add(computer);
+        return String.valueOf(temp.getId());
     }
 
     public void updateComputer(Computer computer) {
