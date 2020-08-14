@@ -99,7 +99,7 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
 }
 
     @PostMapping()
-    public void addComputerJSON(@RequestBody ComputerDTO computerDto) throws InvalidNewEntryException {
+    public String addComputerJSON(@RequestBody ComputerDTO computerDto) throws InvalidNewEntryException {
 
         // Back-end validation
         if (computerDto.getName()==null || computerDto.getName().equals("")) {
@@ -117,7 +117,7 @@ public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
         Computer addedComputer = new Computer.Builder().withName(computerDto.getName())
                 .withIntroduced(introduced).withDiscontinued(discontinued).withCompany(company)
                 .build();
-        computerService.addComputer(addedComputer);
+        return computerService.addComputer(addedComputer);
     }
 
 

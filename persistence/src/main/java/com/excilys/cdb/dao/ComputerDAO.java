@@ -28,11 +28,17 @@ public class ComputerDAO extends DAO<Computer> {
      * @param computer
      *            a new Computer object, representing the new entry
      */
-    public void add(Computer computer) {
+    public Computer add(Computer computer) {
 
         Session session = sessionFactory.openSession();
         session.save(computer);
+        String sql = "from Computer computer left join fetch computer.company where computer.id=(SELECT max(computer.id) FROM computer)";
+        Query<Computer> query = session.createQuery(sql);
+        Computer addedComputer = query.getSingleResult();
         session.close();
+        return addedComputer;
+
+
     }
 
     /**
