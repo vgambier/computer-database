@@ -1,7 +1,10 @@
 package com.excilys.cdb.config;
 
+import com.excilys.cdb.dao.UserDAO;
 import com.excilys.cdb.mapper.CompanyDTOMapper;
 import com.excilys.cdb.mapper.ComputerDTOMapper;
+import com.excilys.cdb.mapper.UserDTOMapper;
+import com.excilys.cdb.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -33,9 +36,16 @@ public class ServiceBeansConfig {
         return new CompanyService(companyDAO,companyDTOMapper);
     }
 
+    @Bean(name = "userServiceBean")
+    public UserService userService(UserDAO userDAO, UserDTOMapper userDTOMapper) {
+        return new UserService(userDAO, userDTOMapper);
+    }
+
     @Bean(name = "serviceValidatorBean")
     public ServiceValidator serviceValidator(BindingValidator bindingValidator,
             ComputerService computerService, CompanyService companyService) {
         return new ServiceValidator(bindingValidator, computerService, companyService);
     }
+
+
 }

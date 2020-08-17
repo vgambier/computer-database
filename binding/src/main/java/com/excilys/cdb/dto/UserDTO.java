@@ -3,6 +3,8 @@ package com.excilys.cdb.dto;
 public class UserDTO {
     private String username;
     private String password;
+    private String enabled;
+
 
     public String getUsername() {
         return username;
@@ -18,5 +20,13 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(String enabled) {
+        this.enabled = enabled;
     }
 }

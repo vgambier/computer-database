@@ -28,7 +28,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
         TransactionalTestExecutionListener.class})
 @DbUnitConfiguration(databaseConnection = "hikariDataSource")
 @DatabaseSetup("/dataset.xml")
-public class UsersControllerTest {
+public class UserControllerTest {
 
     @Autowired
     private UsersController usersController;

@@ -1,12 +1,17 @@
 package com.excilys.cdb.controller;
 
+import com.excilys.cdb.dto.AuthorityDTO;
 import com.excilys.cdb.dto.UserDTO;
 import com.excilys.cdb.dto.UserUpdateRoleDTO;
+import com.excilys.cdb.service.AuthorityService;
+import com.excilys.cdb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -15,15 +20,29 @@ public class UsersController {
 
     private final JdbcUserDetailsManager jdbcUserDetailsManager;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final AuthorityService authorityService;
 
     @Autowired
-    public UsersController (JdbcUserDetailsManager jdbcUserDetailsManager, PasswordEncoder passwordEncoder){
+    public UsersController (JdbcUserDetailsManager jdbcUserDetailsManager,
+                            PasswordEncoder passwordEncoder,
+                            UserService userService,
+                            AuthorityService authorityService){
         this.jdbcUserDetailsManager = jdbcUserDetailsManager;
         this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
+        this.authorityService = authorityService;
     }
-    /*@GetMapping()
-    public List <UserDTO> getUsers() {
-    }*/
+
+    @GetMapping("/users")
+    public List<UserDTO> getUsers() {
+        return userService.listAll();
+    }
+
+    @GetMapping("/authorities")
+    public List<AuthorityDTO> getAuthorities (){
+        return  authorityService.listAll();
+    }
 
     @PostMapping("/addUser")
     public void createUser (  @RequestBody UserDTO userDTO ) {
