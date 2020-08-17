@@ -1,7 +1,6 @@
 package com.excilys.cdb.dao;
 
 import com.excilys.cdb.model.Authority;
-import com.excilys.cdb.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;

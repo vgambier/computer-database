@@ -2,6 +2,7 @@ package com.excilys.cdb.controller;
 
 import com.excilys.cdb.dto.AuthorityDTO;
 import com.excilys.cdb.dto.UserDTO;
+import com.excilys.cdb.dto.UserNoPaDTO;
 import com.excilys.cdb.dto.UserUpdateRoleDTO;
 import com.excilys.cdb.service.AuthorityService;
 import com.excilys.cdb.service.UserService;
@@ -42,6 +43,11 @@ public class UsersController {
     @GetMapping("/authorities")
     public List<AuthorityDTO> getAuthorities (){
         return  authorityService.listAll();
+    }
+
+    @GetMapping
+    public List<UserNoPaDTO> getUser (){
+        return userService.listAll2();
     }
 
     @PostMapping("/addUser")
