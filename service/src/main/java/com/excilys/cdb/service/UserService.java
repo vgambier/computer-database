@@ -1,14 +1,19 @@
 package com.excilys.cdb.service;
 
 import com.excilys.cdb.dao.UserDAO;
+import com.excilys.cdb.dto.AddUserDTO;
 import com.excilys.cdb.dto.UserDTO;
 import com.excilys.cdb.dto.UserNoPaDTO;
+import com.excilys.cdb.dto.UserUpdateRoleDTO;
 import com.excilys.cdb.mapper.UserDTOMapper;
+import com.excilys.cdb.model.Authority;
 import com.excilys.cdb.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service("userServiceBean")
@@ -35,6 +40,10 @@ public class UserService {
         User u2 = userList.get(1);
         List<UserNoPaDTO> userNoPaDTOList = userList.stream().map(user -> userDTOMapper.userToUserNoPaDTO(user)).collect(Collectors.toList());
         return userNoPaDTOList;
+    }
+
+    public void add (AddUserDTO addUserDTO){
+        userDAO.add(addUserDTO.getUsername(),addUserDTO.getPassword());
     }
 
 

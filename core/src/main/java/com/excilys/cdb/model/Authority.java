@@ -8,6 +8,7 @@ import javax.persistence.*;
 public class Authority {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -16,6 +17,13 @@ public class Authority {
 
     @Column(name = "authority")
     private String authority;
+
+    public Authority () {}
+
+    public Authority (String username, String authority){
+        this.user = username;
+        this.authority = authority;
+    }
 
     public String getUser() {
         return user;

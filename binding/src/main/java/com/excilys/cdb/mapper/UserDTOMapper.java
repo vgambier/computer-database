@@ -31,7 +31,7 @@ public class UserDTOMapper {
         UserNoPaDTO result = new UserNoPaDTO();
         result.setUsername(user.getUsername());
         result.setEnabled(user.getEnabled());
-        result.setAuthorityList(user.getAuthorityList().stream().map(authority -> authorityDTOMapper.authorityToDTO(authority).getAuthority()).collect(Collectors.toList()));
+        result.setAuthorityList(user.getAuthoritySet().stream().map(authority -> authorityDTOMapper.authorityToDTO(authority).getAuthority()).collect(Collectors.toList()));
         return result;
     }
 }

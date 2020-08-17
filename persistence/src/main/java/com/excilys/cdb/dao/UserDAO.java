@@ -3,33 +3,50 @@ package com.excilys.cdb.dao;
 import com.excilys.cdb.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Component("userDAOBean")
+@Repository("userDAOBean")
 public class UserDAO  {
 
     private static final String SELECT_ALL_USERS_HQL = "FROM User";
-    private SessionFactory sessionFactory;
+    private final static String GET_USER_BY_USERNAME = "FROM User WHERE username=:username";
+
+    private final SessionFactory sessionFactory;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserDAO(SessionFactory sessionFactory) {
+    public UserDAO(SessionFactory sessionFactory, PasswordEncoder passwordEncoder) {
         this.sessionFactory = sessionFactory;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> listAll() {
 
         Session session = sessionFactory.openSession();
 
-        @SuppressWarnings("unchecked")
-        Query<User> query = session.createQuery(SELECT_ALL_USERS_HQL);
-        List<User> users = query.list();
+        TypedQuery<User> query = session.createQuery(SELECT_ALL_USERS_HQL,User.class);
+        List<User> users = query.getResultList();
 
         session.close();
         return users;
     }
+
+    @Transactional
+    public void add (String username, String password){
+        User newUser = new User(username,passwordEncoder.encode(password));
+        Session session = sessionFactory.openSession();
+        Transaction t = session.beginTransaction();
+        session.save(newUser);
+        t.commit();
+        session.close();
+    }
+
 
 }

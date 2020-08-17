@@ -1,12 +1,14 @@
 package com.excilys.cdb.model;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username") )
 public class User implements Serializable {
 
     @Id
@@ -23,16 +25,27 @@ public class User implements Serializable {
     @Column(name = "enabled")
     private String enabled;
 
-
     @JoinTable(name = "authority",
             joinColumns = {
-                @JoinColumn(name = "users_id")
+                @JoinColumn(name = "users_id",
+                        referencedColumnName = "id"),
+
             },
             inverseJoinColumns = {
-                @JoinColumn(name = "authorities_id")
+                @JoinColumn(name = "authorities_id",
+                        referencedColumnName = "id")
             })
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Authority> authorityList = new HashSet<Authority>();
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Authority> authoritySet = new HashSet<Authority>();
+
+    public User () {}
+
+    public User (String username, String password){
+        this.username = username;
+        this.password = password;
+        this.enabled = "0";
+        this.authoritySet = Collections.singleton(new Authority(username,"ROLE_USER"));
+    }
 
     public String getUsername() {
         return username;
@@ -58,12 +71,12 @@ public class User implements Serializable {
         this.enabled = enabled;
     }
 
-    public Set<Authority> getAuthorityList() {
-        return authorityList;
+    public Set<Authority> getAuthoritySet() {
+        return authoritySet;
     }
 
-    public void setAuthorityList(Set<Authority> authorityList) {
-        this.authorityList = authorityList;
+    public void setAuthoritySet(Set<Authority> authoritySet) {
+        this.authoritySet = authoritySet;
     }
 
     @Override
@@ -76,7 +89,7 @@ public class User implements Serializable {
         if (username != null ? !username.equals(user.username) : user.username != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (enabled != null ? !enabled.equals(user.enabled) : user.enabled != null) return false;
-        return authorityList != null ? authorityList.equals(user.authorityList) : user.authorityList == null;
+        return authoritySet != null ? authoritySet.equals(user.authoritySet) : user.authoritySet == null;
     }
 
     @Override
@@ -84,7 +97,7 @@ public class User implements Serializable {
         int result = username != null ? username.hashCode() : 0;
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
-        result = 31 * result + (authorityList != null ? authorityList.hashCode() : 0);
+        result = 31 * result + (authoritySet != null ? authoritySet.hashCode() : 0);
         return result;
     }
 }

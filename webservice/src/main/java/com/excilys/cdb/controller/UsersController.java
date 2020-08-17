@@ -1,9 +1,6 @@
 package com.excilys.cdb.controller;
 
-import com.excilys.cdb.dto.AuthorityDTO;
-import com.excilys.cdb.dto.UserDTO;
-import com.excilys.cdb.dto.UserNoPaDTO;
-import com.excilys.cdb.dto.UserUpdateRoleDTO;
+import com.excilys.cdb.dto.*;
 import com.excilys.cdb.service.AuthorityService;
 import com.excilys.cdb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +54,12 @@ public class UsersController {
 
     }
 
+    @PostMapping("/addUserV2")
+    public void createUserV2 (@RequestBody AddUserDTO addUserDTO) {
+        userService.add(addUserDTO);
+
+    }
+
     @PostMapping("/enableUser/{userName}")
     public void enableUser (@PathVariable String userName){
         jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userName)).disabled(false).build());
@@ -71,6 +74,5 @@ public class UsersController {
     public void manageRole (@RequestBody UserUpdateRoleDTO userUpdateRoleDTO){
         jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userUpdateRoleDTO.getUserName())).authorities(userUpdateRoleDTO.getRoles()).build());
     }
-
 
 }
