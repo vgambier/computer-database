@@ -40,11 +40,11 @@ public class User implements Serializable {
 
     public User () {}
 
-    public User (String username, String password){
+    public User (String username, String password, Set<Authority> authority){
         this.username = username;
         this.password = password;
         this.enabled = "0";
-        this.authoritySet = Collections.singleton(new Authority(username,"ROLE_USER"));
+        this.authoritySet = authority;
     }
 
     public String getUsername() {

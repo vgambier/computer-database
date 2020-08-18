@@ -12,7 +12,7 @@ public class Authority {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "authority")
+    @Column(name = "authority", unique = true)
     private String authority;
 
     public Authority () {}

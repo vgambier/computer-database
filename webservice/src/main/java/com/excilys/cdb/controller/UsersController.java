@@ -34,22 +34,13 @@ public class UsersController {
         return userService.listAll();
     }
 
-    @GetMapping("/authorities")
+     @GetMapping("/authorities")
     public List<AuthorityDTO> getAuthorities (){
         return  authorityService.listAll();
     }
 
-
-
-//    @PostMapping("/addUser")
-//    public void createUser (  @RequestBody UserDTO userDTO ) {
-//        jdbcUserDetailsManager.createUser(User.builder().username(userDTO.getUsername())
-//                .password(passwordEncoder.encode(userDTO.getPassword())).disabled(true).authorities("ROLE_USER").build());
-//
-//    }
-
-    @PostMapping("/addUserV2")
-    public void createUserV2 (@RequestBody AddUserDTO addUserDTO) {
+    @PostMapping("/addUser")
+    public void addUser (@RequestBody AddUserDTO addUserDTO) {
         userService.add(addUserDTO);
     }
 

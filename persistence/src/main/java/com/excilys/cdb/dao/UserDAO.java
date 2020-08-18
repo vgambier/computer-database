@@ -1,5 +1,6 @@
 package com.excilys.cdb.dao;
 
+import com.excilys.cdb.model.Authority;
 import com.excilys.cdb.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
 
 @Repository("userDAOBean")
@@ -20,11 +22,13 @@ public class UserDAO {
 
     private final SessionFactory sessionFactory;
     private final PasswordEncoder passwordEncoder;
+    private final AuthorityDAO authorityDAO;
 
     @Autowired
-    public UserDAO(SessionFactory sessionFactory, PasswordEncoder passwordEncoder) {
+    public UserDAO(SessionFactory sessionFactory, PasswordEncoder passwordEncoder, AuthorityDAO authorityDAO) {
         this.sessionFactory = sessionFactory;
         this.passwordEncoder = passwordEncoder;
+        this.authorityDAO = authorityDAO;
     }
 
 
@@ -50,7 +54,8 @@ public class UserDAO {
 
     @Transactional
     public void add (String username, String password){
-        User newUser = new User(username,passwordEncoder.encode(password));
+        Authority authority = authorityDAO.getAuthority("ROLE_USER");
+        User newUser = new User(username,passwordEncoder.encode(password), Collections.singleton(authority));
         Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
         session.save(newUser);
