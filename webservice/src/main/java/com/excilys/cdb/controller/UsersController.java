@@ -1,12 +1,12 @@
 package com.excilys.cdb.controller;
 
-import com.excilys.cdb.dto.*;
+import com.excilys.cdb.dto.AddUserDTO;
+import com.excilys.cdb.dto.AuthorityDTO;
+import com.excilys.cdb.dto.UserNoPaDTO;
 import com.excilys.cdb.service.AuthorityService;
 import com.excilys.cdb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,20 +44,20 @@ public class UsersController {
         return  authorityService.listAll();
     }
 
-    @PostMapping("/addUser")
+    @PostMapping("/add")
     public void addUser (@RequestBody AddUserDTO addUserDTO) {
         userService.add(addUserDTO);
     }
 
-//    @PostMapping("/enableUser/{userName}")
-//    public void enableUser (@PathVariable String userName){
-//        jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userName)).disabled(false).build());
-//    }
+    @PostMapping("/enable/{userName}")
+    public void enableUser (@PathVariable String userName){
+        userService.enable(userName);
+    }
 
-//    @PostMapping("/disableUser/{userName}")
-//    public void disableUser (@PathVariable String userName){
-//        jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userName)).disabled(true).build());
-//    }
+    @PostMapping("/disable/{userName}")
+    public void disableUser (@PathVariable String userName){
+        userService.disable((userName));
+    }
 
 //    @PutMapping()
 //    public void manageRole (@RequestBody UserUpdateRoleDTO userUpdateRoleDTO){

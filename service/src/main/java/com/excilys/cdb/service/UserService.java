@@ -56,6 +56,12 @@ public class UserService implements UserDetailsService {
         userDAO.add(addUserDTO.getUsername(),addUserDTO.getPassword());
     }
 
+    public void enable (String username){
+        userDAO.setEnable(username,"1");
+    }
 
+    public void disable (String username){
+        userDAO.setEnable(username,"0");
+    }
 
 }

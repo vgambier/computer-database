@@ -63,5 +63,16 @@ public class UserDAO {
         session.close();
     }
 
+    @Transactional
+    public void setEnable (String username, String enable){
+        User user = getByUserName(username);
+        user.setEnabled(enable);
+        Session session = sessionFactory.openSession();
+        Transaction t = session.beginTransaction();
+        session.saveOrUpdate(user);
+        t.commit();
+        session.close();
+    }
+
 
 }
