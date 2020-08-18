@@ -17,7 +17,7 @@ public class Authority {
 
     public Authority () {}
 
-    public Authority (String username, String authority){
+    public Authority (String authority){
         this.authority = authority;
     }
 

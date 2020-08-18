@@ -45,8 +45,6 @@ public class ComputerDAOTest {
     @Autowired
     private ComputerDAO computerDAO;
     @Autowired
-    private SessionFactory sessionFactory;
-    @Autowired
     private ComputerDTOMapper computerDTOMapper;
     @Autowired
     private HikariDataSource hikariDataSource;

@@ -1,18 +1,42 @@
 <!ELEMENT dataset (
-        company*,
-        computer*)>
+    authorities*,
+    users*,
+    authority*,
+    company*,
+    computer*)>
 
-        <!ELEMENT company EMPTY>
-        <!ATTLIST company
-                id CDATA #REQUIRED
-                name CDATA #IMPLIED
-                >
+<!ELEMENT authorities EMPTY>
+<!ATTLIST authorities
+    id CDATA #REQUIRED
+    authority CDATA #REQUIRED
+>
 
-        <!ELEMENT computer EMPTY>
-        <!ATTLIST computer
-                id CDATA #REQUIRED
-                name CDATA #IMPLIED
-                introduced CDATA #IMPLIED
-                discontinued CDATA #IMPLIED
-                company_id CDATA #IMPLIED
-                >
+<!ELEMENT users EMPTY>
+<!ATTLIST users
+    id CDATA #REQUIRED
+    username CDATA #REQUIRED
+    password CDATA #REQUIRED
+    enabled CDATA #IMPLIED
+>
+
+<!ELEMENT authority EMPTY>
+<!ATTLIST authority
+    user_id CDATA #REQUIRED
+    authority_id CDATA #REQUIRED
+>
+
+<!ELEMENT company EMPTY>
+<!ATTLIST company
+    id CDATA #REQUIRED
+    name CDATA #IMPLIED
+>
+
+<!ELEMENT computer EMPTY>
+<!ATTLIST computer
+    id CDATA #REQUIRED
+    name CDATA #IMPLIED
+    introduced CDATA #IMPLIED
+    discontinued CDATA #IMPLIED
+    company_id CDATA #IMPLIED
+>
+

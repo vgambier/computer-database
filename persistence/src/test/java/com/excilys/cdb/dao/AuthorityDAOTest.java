@@ -1,11 +1,7 @@
-package com.excilys.cdb.controller;
+package com.excilys.cdb.dao;
 
 import com.excilys.cdb.config.HibernateConfig;
-import com.excilys.cdb.config.RESTConfiguration;
-import com.excilys.cdb.config.RESTWebAppInitializer;
-import com.excilys.cdb.exception.ComputerNotFoundException;
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Authority;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
@@ -17,30 +13,29 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-@ContextConfiguration(classes = {RESTWebAppInitializer.class, HibernateConfig.class, RESTConfiguration.class})
+@ContextConfiguration(classes = {HibernateConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         DbUnitTestExecutionListener.class ,
         TransactionalTestExecutionListener.class})
 @DbUnitConfiguration(databaseConnection = "hikariDataSource")
 @DatabaseSetup("/dataset.xml")
-public class ComputerControllerTest {
+public class AuthorityDAOTest {
 
     @Autowired
-    private ComputerController computerController;
+    private AuthorityDAO authorityDAO;
 
     @Test
-    public void test_get_computer_1 () throws ComputerNotFoundException {
-        Computer expected = new Computer(1,"Computer1", LocalDate.parse("2010-10-10"),LocalDate.parse("2010-10-12"),new Company(1,"Company1"));
-        Computer result = computerController.getComputerJSON("1");
+    public void test_listAll (){
+        List<Authority> authoritySet = authorityDAO.listAll();
 
-        assertEquals(expected,result);
+        assertEquals(authoritySet.get(0).getAuthority(), "ROLE_ADMIN");
+        assertEquals(authoritySet.get(1).getAuthority(), "ROLE_USER");
+        assertEquals(authoritySet.get(2).getAuthority(), "ROLE_TEST");
     }
 }

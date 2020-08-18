@@ -27,12 +27,12 @@ public class User implements Serializable {
 
     @JoinTable(name = "authority",
             joinColumns = {
-                @JoinColumn(name = "users_id",
+                @JoinColumn(name = "user_id",
                         referencedColumnName = "id"),
 
             },
             inverseJoinColumns = {
-                @JoinColumn(name = "authorities_id",
+                @JoinColumn(name = "authority_id",
                         referencedColumnName = "id")
             })
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

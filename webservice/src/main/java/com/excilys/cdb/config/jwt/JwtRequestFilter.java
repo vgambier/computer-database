@@ -19,7 +19,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 public class JwtRequestFilter<JwtUserDetailsService> extends OncePerRequestFilter {
 
     @Autowired
-    UserDetailsService jdbcUserDetailsManager;
+    UserDetailsService userDetailsService;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
@@ -43,7 +43,7 @@ public class JwtRequestFilter<JwtUserDetailsService> extends OncePerRequestFilte
             logger.warn("JWT Token does not begin with Bearer String");
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = jdbcUserDetailsManager.loadUserByUsername(username);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

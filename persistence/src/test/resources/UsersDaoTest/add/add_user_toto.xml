@@ -1,0 +1,39 @@
+<!DOCTYPE dataset SYSTEM "src/test/resources/dataset.dtd">
+<dataset>
+
+    <users id="1"
+           username="admin"
+           password="$2a$10$ZXletnyPCSAPYxJqoW2vfuBfxQ8M.Td.aC8/jOEOyGlk5YotfgPmO"
+           enabled="1"/>
+    <users id="2"
+           username="user"
+           password="$2a$10$Oi0B8zq3qj7AWTsETTbP5eyVpcs5Bo0Y81.eNIu0pw/5laMmK95Wa"
+           enabled="1"/>
+    <users id="3"
+           username="userDisable"
+           password="$2a$10$Uz1rd1E3jvEthg29AufvL.9zlA5g/SUnErrGDBpf2AObxZtXWvXjG"
+           enabled="0"/>
+    <users id="4"
+           username="userEnable"
+           password="$2a$10$cIeVWdzweJ4h79nfE0VNzeeisiYTHYoAglyjgCXZW7b7bxkc718Am"
+           enabled="1"/>
+    <users id="5"
+           username="toto"
+           password="$2a$10$cIeVWdzweJ4h79nfE0VNzeeisiYTHYoAglyjgCXZW7b7bxkc718Am"
+           enabled="0"/>
+
+
+    <authority user_id="1"
+               authority_id="1"/>
+    <authority user_id="1"
+               authority_id="2"/>
+    <authority user_id="2"
+               authority_id="2"/>
+    <authority user_id="3"
+               authority_id="2"/>
+    <authority user_id="4"
+               authority_id="2"/>
+    <authority user_id="5"
+               authority_id="2"/>
+
+</dataset>

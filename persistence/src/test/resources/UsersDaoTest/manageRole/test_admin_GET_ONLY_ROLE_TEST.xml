@@ -1,0 +1,13 @@
+<!DOCTYPE dataset SYSTEM "src/test/resources/dataset.dtd">
+<dataset>
+
+    <authority user_id="1"
+               authority_id="3"/>
+    <authority user_id="2"
+               authority_id="2"/>
+    <authority user_id="3"
+               authority_id="2"/>
+    <authority user_id="4"
+               authority_id="2"/>
+
+</dataset>
