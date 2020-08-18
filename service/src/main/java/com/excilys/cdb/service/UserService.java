@@ -64,4 +64,8 @@ public class UserService implements UserDetailsService {
         userDAO.setEnable(username,"0");
     }
 
+    public void manageRole( String username, String[] roles){
+        userDAO.manageRole(username,roles);
+    }
+
 }
