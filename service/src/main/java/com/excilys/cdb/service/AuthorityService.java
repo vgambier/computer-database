@@ -2,10 +2,8 @@ package com.excilys.cdb.service;
 
 import com.excilys.cdb.dao.AuthorityDAO;
 import com.excilys.cdb.dto.AuthorityDTO;
-import com.excilys.cdb.dto.UserDTO;
 import com.excilys.cdb.mapper.AuthorityDTOMapper;
 import com.excilys.cdb.model.Authority;
-import com.excilys.cdb.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +24,7 @@ public class AuthorityService {
 
     public List<AuthorityDTO> listAll() {
         List <Authority> temp = authorityDAO.listAll();
-        List <AuthorityDTO> authorityDTOList = temp.stream().map(authority -> authorityDTOMapper.authorityToDTO(authority)).collect(Collectors.toList());
-        return authorityDTOList;
+        return temp.stream().map(authorityDTOMapper::authorityToDTO).collect(Collectors.toList());
     }
 
 }

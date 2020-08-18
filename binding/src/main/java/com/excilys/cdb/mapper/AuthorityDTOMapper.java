@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class AuthorityDTOMapper {
     public AuthorityDTO authorityToDTO (Authority authority){
         AuthorityDTO result = new AuthorityDTO();
+        result.setId(authority.getId().toString());
         result.setAuthority(authority.getAuthority());
         return result;
     }
