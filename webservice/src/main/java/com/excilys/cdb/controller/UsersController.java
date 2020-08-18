@@ -34,7 +34,12 @@ public class UsersController {
         return userService.listAll();
     }
 
-     @GetMapping("/authorities")
+    @GetMapping("/{username}")
+    public UserNoPaDTO getUser (@PathVariable String username){
+        return userService.getUser(username);
+    }
+
+    @GetMapping("/authorities")
     public List<AuthorityDTO> getAuthorities (){
         return  authorityService.listAll();
     }

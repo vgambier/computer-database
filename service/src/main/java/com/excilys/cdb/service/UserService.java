@@ -47,6 +47,11 @@ public class UserService implements UserDetailsService {
         return userList.stream().map(userDTOMapper::userToUserNoPaDTO).collect(Collectors.toList());
     }
 
+    public UserNoPaDTO getUser (String username){
+        User user = userDAO.getByUserName(username);
+        return userDTOMapper.userToUserNoPaDTO(user);
+    }
+
     public void add (AddUserDTO addUserDTO){
         userDAO.add(addUserDTO.getUsername(),addUserDTO.getPassword());
     }
