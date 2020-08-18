@@ -13,9 +13,9 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository("userDAOBean")
-public class UserDAO  {
+public class UserDAO {
 
-    private static final String SELECT_ALL_USERS_HQL = "FROM User";
+    private final static String SELECT_ALL_USERS_HQL = "FROM User";
     private final static String GET_USER_BY_USERNAME = "FROM User WHERE username=:username";
 
     private final SessionFactory sessionFactory;
@@ -26,6 +26,16 @@ public class UserDAO  {
         this.sessionFactory = sessionFactory;
         this.passwordEncoder = passwordEncoder;
     }
+
+
+    public User getByUserName(String username) {
+        Session session = sessionFactory.openSession();
+        TypedQuery<User> query = session.createQuery(GET_USER_BY_USERNAME,User.class).setParameter("username",username);
+        User result = query.getSingleResult();
+        session.close();
+        return result;
+    }
+
 
     public List<User> listAll() {
 

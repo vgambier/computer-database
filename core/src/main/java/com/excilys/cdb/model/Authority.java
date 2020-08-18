@@ -12,25 +12,13 @@ public class Authority {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username")
-    private String user;
-
     @Column(name = "authority")
     private String authority;
 
     public Authority () {}
 
     public Authority (String username, String authority){
-        this.user = username;
         this.authority = authority;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
     }
 
     public String getAuthority() {
@@ -48,16 +36,19 @@ public class Authority {
 
         Authority authority = (Authority) o;
 
-        if (user != null ? !user.equals(authority.user) : authority.user != null) return false;
-        if (authority != null ? !authority.equals(authority.authority) : authority.authority != null) return false;
-
-        return true;
+        if (id != null ? !id.equals(authority.id) : authority.id != null) return false;
+        return authority != null ? authority.equals(authority.authority) : authority.authority == null;
     }
 
     @Override
     public int hashCode() {
-        int result = user != null ? user.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (authority != null ? authority.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString (){
+        return this.authority.substring(5);
     }
 }

@@ -2,6 +2,7 @@ package com.excilys.cdb.config.jwt;
 
 import com.excilys.cdb.config.jwt.dto.JwtRequest;
 import com.excilys.cdb.config.jwt.dto.JwtResponse;
+import com.excilys.cdb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
@@ -21,7 +23,7 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
+    @Autowired()
     private UserDetailsService userDetailsService;
 
     @RequestMapping(value = "/api/authenticate", method = RequestMethod.POST)

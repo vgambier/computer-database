@@ -16,24 +16,21 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UsersController {
 
-    private final JdbcUserDetailsManager jdbcUserDetailsManager;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final AuthorityService authorityService;
 
     @Autowired
-    public UsersController (JdbcUserDetailsManager jdbcUserDetailsManager,
-                            PasswordEncoder passwordEncoder,
+    public UsersController (PasswordEncoder passwordEncoder,
                             UserService userService,
                             AuthorityService authorityService){
-        this.jdbcUserDetailsManager = jdbcUserDetailsManager;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.authorityService = authorityService;
     }
 
-    @GetMapping("/users")
-    public List<UserDTO> getUsers() {
+    @GetMapping
+    public List<UserNoPaDTO> getUsers (){
         return userService.listAll();
     }
 
@@ -42,37 +39,33 @@ public class UsersController {
         return  authorityService.listAll();
     }
 
-    @GetMapping
-    public List<UserNoPaDTO> getUser (){
-        return userService.listAll2();
-    }
 
-    @PostMapping("/addUser")
-    public void createUser (  @RequestBody UserDTO userDTO ) {
-        jdbcUserDetailsManager.createUser(User.builder().username(userDTO.getUsername())
-                .password(passwordEncoder.encode(userDTO.getPassword())).disabled(true).authorities("ROLE_USER").build());
 
-    }
+//    @PostMapping("/addUser")
+//    public void createUser (  @RequestBody UserDTO userDTO ) {
+//        jdbcUserDetailsManager.createUser(User.builder().username(userDTO.getUsername())
+//                .password(passwordEncoder.encode(userDTO.getPassword())).disabled(true).authorities("ROLE_USER").build());
+//
+//    }
 
     @PostMapping("/addUserV2")
     public void createUserV2 (@RequestBody AddUserDTO addUserDTO) {
         userService.add(addUserDTO);
-
     }
 
-    @PostMapping("/enableUser/{userName}")
-    public void enableUser (@PathVariable String userName){
-        jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userName)).disabled(false).build());
-    }
+//    @PostMapping("/enableUser/{userName}")
+//    public void enableUser (@PathVariable String userName){
+//        jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userName)).disabled(false).build());
+//    }
 
-    @PostMapping("/disableUser/{userName}")
-    public void disableUser (@PathVariable String userName){
-        jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userName)).disabled(true).build());
-    }
+//    @PostMapping("/disableUser/{userName}")
+//    public void disableUser (@PathVariable String userName){
+//        jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userName)).disabled(true).build());
+//    }
 
-    @PutMapping()
-    public void manageRole (@RequestBody UserUpdateRoleDTO userUpdateRoleDTO){
-        jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userUpdateRoleDTO.getUserName())).authorities(userUpdateRoleDTO.getRoles()).build());
-    }
+//    @PutMapping()
+//    public void manageRole (@RequestBody UserUpdateRoleDTO userUpdateRoleDTO){
+//        jdbcUserDetailsManager.updateUser(User.withUserDetails(jdbcUserDetailsManager.loadUserByUsername(userUpdateRoleDTO.getUserName())).authorities(userUpdateRoleDTO.getRoles()).build());
+//    }
 
 }

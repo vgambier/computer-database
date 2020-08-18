@@ -2,6 +2,7 @@ package com.excilys.cdb.config;
 
 import com.excilys.cdb.config.jwt.JwtAuthenticationEntryPoint;
 import com.excilys.cdb.config.jwt.JwtRequestFilter;
+import com.excilys.cdb.service.UserService;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -34,15 +34,13 @@ public class RESTSecuConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
+    @Autowired
+    private UserDetailsService userDetailService;
 
-    @Bean
-    public UserDetailsService configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        return new JdbcUserDetailsManager(dataSource);
-    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(configAuthentication(auth)).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -64,6 +62,7 @@ public class RESTSecuConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/computers/**").hasAnyRole("ADMIN", "USER")
                 .antMatchers(HttpMethod.GET, "/api/companies/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.PUT).hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET).hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/users/enableUser/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/users/disableUser/**").hasAnyRole("ADMIN")
                 .and()

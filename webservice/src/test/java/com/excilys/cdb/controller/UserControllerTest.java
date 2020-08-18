@@ -34,23 +34,23 @@ public class UserControllerTest {
     private UsersController usersController;
 
 
-    @Test
-    @ExpectedDatabase(value = "/UsersControllerTest/test_enable_user.xml",
-            assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
-    public void test_enable_user(){
-        usersController.enableUser("testDisable");
-    }
+//    @Test
+//    @ExpectedDatabase(value = "/UsersControllerTest/test_enable_user.xml",
+//            assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+////    public void test_enable_user(){
+////        usersController.enableUser("testDisable");
+////    }
 
-    @Test
-    @ExpectedDatabase(value = "/UsersControllerTest/test_manage_role.xml",
-            assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
-    public void test_manage_role(){
-        UserUpdateRoleDTO userUpdateRoleDTO = new UserUpdateRoleDTO();
-        userUpdateRoleDTO.setUserName("user");
-        userUpdateRoleDTO.setRoles(new String[]{"ROLE_USER","ROLE_ADMIN"});
-
-        usersController.manageRole(userUpdateRoleDTO);
-    }
+//    @Test
+//    @ExpectedDatabase(value = "/UsersControllerTest/test_manage_role.xml",
+//            assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+//    public void test_manage_role(){
+//        UserUpdateRoleDTO userUpdateRoleDTO = new UserUpdateRoleDTO();
+//        userUpdateRoleDTO.setUserName("user");
+//        userUpdateRoleDTO.setRoles(new String[]{"ROLE_USER","ROLE_ADMIN"});
+//
+//        usersController.manageRole(userUpdateRoleDTO);
+//    }
 
 
 }

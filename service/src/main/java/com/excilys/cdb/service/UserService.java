@@ -2,25 +2,24 @@ package com.excilys.cdb.service;
 
 import com.excilys.cdb.dao.UserDAO;
 import com.excilys.cdb.dto.AddUserDTO;
-import com.excilys.cdb.dto.UserDTO;
 import com.excilys.cdb.dto.UserNoPaDTO;
-import com.excilys.cdb.dto.UserUpdateRoleDTO;
 import com.excilys.cdb.mapper.UserDTOMapper;
 import com.excilys.cdb.model.Authority;
 import com.excilys.cdb.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service("userServiceBean")
-public class UserService {
+public class UserService implements UserDetailsService {
 
-    private UserDAO userDAO;
-    private UserDTOMapper userDTOMapper;
+    private final UserDAO userDAO;
+    private final UserDTOMapper userDTOMapper;
 
     @Autowired
     public UserService(UserDAO userDAO, UserDTOMapper userDTOMapper) {
@@ -28,23 +27,30 @@ public class UserService {
         this.userDTOMapper = userDTOMapper;
     }
 
-    public List<UserDTO> listAll() {
-        List <User> temp = userDAO.listAll();
-        List <UserDTO> userDTOList = temp.stream().map(user -> userDTOMapper.userToDto(user)).collect(Collectors.toList());
-        return userDTOList;
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userDAO.getByUserName(username);
+        if (user == null ) {
+            throw new UsernameNotFoundException("User \"" + username +"\" not found");
+        }
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .roles(user.getAuthoritySet().stream().map(Authority::toString).toArray(String[]::new))
+                .build();
     }
 
-    public List <UserNoPaDTO> listAll2 (){
+
+    public List <UserNoPaDTO> listAll (){
         List<User> userList = userDAO.listAll();
-        User u1 = userList.get(0);
-        User u2 = userList.get(1);
-        List<UserNoPaDTO> userNoPaDTOList = userList.stream().map(user -> userDTOMapper.userToUserNoPaDTO(user)).collect(Collectors.toList());
-        return userNoPaDTOList;
+        return userList.stream().map(userDTOMapper::userToUserNoPaDTO).collect(Collectors.toList());
     }
 
     public void add (AddUserDTO addUserDTO){
         userDAO.add(addUserDTO.getUsername(),addUserDTO.getPassword());
     }
+
 
 
 }
