@@ -4,23 +4,21 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.cdb.dto.CompanyDTO;
-import com.excilys.cdb.dto.ComputerDTO;
-import com.excilys.cdb.mapper.CompanyDTOMapper;
-import com.excilys.cdb.mapper.ComputerDTOMapper;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.excilys.cdb.config.BindingBeansConfig;
 import com.excilys.cdb.config.HibernateConfig;
 import com.excilys.cdb.config.ServiceBeansConfig;
-import com.excilys.cdb.model.Company;
+import com.excilys.cdb.dao.PersistenceException;
+import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.dto.ComputerDTO;
+import com.excilys.cdb.mapper.CompanyDTOMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.ComputerPage;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.BindingValidator;
-import com.excilys.cdb.dao.PersistenceException;
 
 /**
  * @author Victor Gambier
@@ -45,7 +43,8 @@ public class CLI {
     // This needs to be an attribute so that it can be closed at the end of the program
     // Otherwise, it would be inaccessible
     private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-            ServiceBeansConfig.class, HibernateConfig.class, BindingBeansConfig.class,CompanyDTOMapper.class);
+            ServiceBeansConfig.class, HibernateConfig.class, BindingBeansConfig.class,
+            CompanyDTOMapper.class);
 
     private static ComputerService computerService = (ComputerService) context
             .getBean("computerServiceBean");
@@ -319,7 +318,8 @@ public class CLI {
 
         Computer updatedComputer = new Computer.Builder().withId(computerID)
                 .withName(newComputerName).withIntroduced(newIntroducedDate)
-                .withDiscontinued(newDiscontinuedDate).withCompany(companyDtoMapper.fromDTOtoModel(company)).build();
+                .withDiscontinued(newDiscontinuedDate)
+                .withCompany(companyDtoMapper.fromDTOtoModel(company)).build();
 
         computerService.updateComputer(updatedComputer);
         System.out.println("Entry updated.");
@@ -365,7 +365,7 @@ public class CLI {
                         "Company ID must be a positive integer and correspond to an existing entry.");
             } else {
                 int companyID = Integer.valueOf(arr[1]);
-                companyService.deleteCompany(companyDtoMapper.fromDTOtoModel(companyService.getCompany(companyID)));;
+                companyService.deleteCompany(companyID);
                 System.out.println("Company succesfully deleted.");
             }
         } else {

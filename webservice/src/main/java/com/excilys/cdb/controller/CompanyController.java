@@ -1,15 +1,20 @@
 package com.excilys.cdb.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.excilys.cdb.dto.CompanyDTO;
+import com.excilys.cdb.exception.CompanyNotFoundException;
 import com.excilys.cdb.mapper.CompanyDTOMapper;
-import com.excilys.cdb.model.Company;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.validator.BindingValidator;
-import com.excilys.cdb.exception.CompanyNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin
 @RequestMapping("/api/companies")
@@ -21,16 +26,16 @@ public class CompanyController {
     private final CompanyDTOMapper companyDTOMapper;
 
     @Autowired
-    public CompanyController(CompanyService companyService,  BindingValidator validator, CompanyDTOMapper companyDTOMapper
-                             ) {
+    public CompanyController(CompanyService companyService, BindingValidator validator,
+            CompanyDTOMapper companyDTOMapper) {
         this.companyService = companyService;
         this.validator = validator;
-        this.companyDTOMapper=companyDTOMapper;
+        this.companyDTOMapper = companyDTOMapper;
     }
 
-
     @GetMapping("/{stringID}")
-    public CompanyDTO getCompanyJSON(@PathVariable String stringID) throws CompanyNotFoundException {
+    public CompanyDTO getCompanyJSON(@PathVariable String stringID)
+            throws CompanyNotFoundException {
 
         if (validator.isStringInteger(stringID)) {
             int id = Integer.parseInt(stringID);
@@ -40,8 +45,7 @@ public class CompanyController {
             } else {
                 throw new CompanyNotFoundException();
             }
-        }
-        else {
+        } else {
             throw new CompanyNotFoundException();
         }
     }
@@ -49,15 +53,14 @@ public class CompanyController {
     @GetMapping()
     public List<CompanyDTO> getCompanies() {
 
-       return companyService.listAllCompanies();
-        }
+        return companyService.listAllCompanies();
+    }
 
     @GetMapping("/count")
     public int countCompanies() {
 
         return companyService.countCompanies();
     }
-
 
     @DeleteMapping("/{stringID}")
     public void deleteCompany(@PathVariable String stringID) throws CompanyNotFoundException {
@@ -67,8 +70,7 @@ public class CompanyController {
         if (validator.isStringInteger(stringID)) {
             int id = Integer.parseInt(stringID);
             if (companyService.doesCompanyEntryExist(id)) {
-                Company deletedCompany = companyDTOMapper.fromDTOtoModel(companyService.getCompany(id));
-                companyService.deleteCompany(deletedCompany);
+                companyService.deleteCompany(id);
                 found = true;
             }
         }

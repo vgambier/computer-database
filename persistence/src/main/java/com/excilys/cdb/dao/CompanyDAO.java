@@ -32,11 +32,11 @@ public class CompanyDAO extends DAO<Company> {
      *            a Company object, representing the entry that must be deleted
      */
     @Transactional(rollbackFor = {Exception.class})
-    public void delete(Company company) {
+    public void delete(int id) {
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.delete(company);
+        session.delete(session.get(Company.class, id));
         session.getTransaction().commit();
         session.close();
     }

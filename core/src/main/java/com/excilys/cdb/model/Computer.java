@@ -44,8 +44,8 @@ public class Computer implements Serializable {
     @Column(name = "discontinued")
     private LocalDate discontinued;
 
+    @Cascade(CascadeType.DELETE)
     @ManyToOne
-    @Cascade({CascadeType.DELETE})
     @JoinColumn(name = "company_id")
     private Company company;
 
