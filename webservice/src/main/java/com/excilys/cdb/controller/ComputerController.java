@@ -57,7 +57,7 @@ public class ComputerController {
 
 
     @GetMapping(value = {"/page/{numPage}","/page/{numPage}/{pageLength}","/page/{numPage}/{pageLength}/{orderBy}","/page/{numPage}/{pageLength}/{orderBy}/{ascendingOrder}","/page/{numPage}/{pageLength}/{orderBy}/{ascendingOrder}/{searchTerm}"})
-    public List<ComputerDTO> getComputerPageJSON2(@PathVariable String numPage,
+    public List<ComputerDTO> getComputerPageJSON(@PathVariable String numPage,
                                                  @PathVariable(required = false) String searchTerm,
                                                  @PathVariable(required = false) String orderBy,
                                                  @PathVariable(required = false) String pageLength,
