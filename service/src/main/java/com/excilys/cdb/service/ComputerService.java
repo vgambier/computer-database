@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.mapper.CompanyDTOMapper;
 import com.excilys.cdb.mapper.ComputerDTOMapper;
+import com.excilys.cdb.model.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,5 +77,9 @@ public class ComputerService {
 
         // These query parameters work even for the last page which only has
         // (nbEntries % MAX_ITEMS_PER_PAGE) entries, because of the way "LIMIT" works in SQL
+    }
+
+    public List<ComputerDTO> getPageComputers (Page computerPage){
+        return computerDAO.findByPage(computerPage).stream().map(computerDTOMapper::fromModeltoDTO).collect(Collectors.toList());
     }
 }
