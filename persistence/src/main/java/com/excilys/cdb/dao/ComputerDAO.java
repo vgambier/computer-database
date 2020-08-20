@@ -20,7 +20,7 @@ import javax.persistence.TypedQuery;
 @Component("computerDAOBean")
 public class ComputerDAO extends DAO<Computer> {
 
-    private final static String QUERYHQL_FIND_COMPUTER_BY_PAGE = "FROM Computer computer LEFT JOIN FETCH computer.company WHERE computer.name LIKE :searchTerm OR computer.company.name LIKE :searchTerm ORDER BY ";
+    private final static String QUERYHQL_FIND_COMPUTER_BY_PAGE = "FROM Computer computer LEFT JOIN FETCH computer.company WHERE computer.name LIKE :searchTerm OR computer.company.name LIKE :searchTerm ORDER BY :attribute :order NULLS LAST";
 
 
     @Autowired
@@ -123,7 +123,9 @@ public class ComputerDAO extends DAO<Computer> {
 
 
     public List<Computer> findByPage (Page page){
-        String stringQuery = QUERYHQL_FIND_COMPUTER_BY_PAGE + page.getAttributeToOrder() + " " + page.getCurrentOrder();
+        String stringQuery = QUERYHQL_FIND_COMPUTER_BY_PAGE;
+        stringQuery = stringQuery.replace(":attribute" , page.getAttributeToOrder());
+        stringQuery = stringQuery.replace(":order", page.getCurrentOrder());
 
         Session session = sessionFactory.openSession();
         TypedQuery<Computer> query = session.createQuery(stringQuery,Computer.class)
