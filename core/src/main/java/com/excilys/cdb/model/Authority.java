@@ -2,6 +2,7 @@ package com.excilys.cdb.model;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "authorities")
@@ -42,10 +43,10 @@ public class Authority {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Authority authority = (Authority) o;
+        Authority authority1 = (Authority) o;
 
-        if (id != null ? !id.equals(authority.id) : authority.id != null) return false;
-        return authority != null ? authority.equals(authority.authority) : authority.authority == null;
+        if (!Objects.equals(id, authority1.id)) return false;
+        return Objects.equals(authority, authority1.authority);
     }
 
     @Override
