@@ -1,9 +1,10 @@
 package com.excilys.cdb.model;
 
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,6 +37,7 @@ public class User implements Serializable {
                         referencedColumnName = "id")
             })
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Cascade({org.hibernate.annotations.CascadeType.DELETE})
     private Set<Authority> authoritySet = new HashSet<Authority>();
 
     public User () {}

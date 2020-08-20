@@ -6,10 +6,7 @@ import com.excilys.cdb.exception.ComputerNotFoundException;
 import com.excilys.cdb.exception.InvalidNewEntryException;
 import com.excilys.cdb.exception.PageNotFoundException;
 import com.excilys.cdb.mapper.CompanyDTOMapper;
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.model.ComputerPage;
-import com.excilys.cdb.model.ModelException;
+import com.excilys.cdb.model.*;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.validator.BindingValidator;
@@ -59,42 +56,22 @@ public class ComputerController {
     }
 
 
-@GetMapping(value = {"/page/{id}","/page/{id}/{nbEntries}","/page/{id}/{nbEntries}/{orderBy}","/page/{id}/{nbEntries}/{orderBy}/{searchTerm}"})
-public List<ComputerDTO> getComputerPageJSON(@PathVariable String id,
-                                          @PathVariable(required = false) String searchTerm,
-                                          @PathVariable(required = false) String orderBy,
-                                          @PathVariable(required = false) String nbEntries)
-        throws PersistenceException, ModelException, PageNotFoundException {
+    @GetMapping(value = {"/page/{numPage}","/page/{numPage}/{pageLength}","/page/{numPage}/{pageLength}/{orderBy}","/page/{numPage}/{pageLength}/{orderBy}/{ascendingOrder}","/page/{numPage}/{pageLength}/{orderBy}/{ascendingOrder}/{searchTerm}"})
+    public List<ComputerDTO> getComputerPageJSON(@PathVariable String numPage,
+                                                 @PathVariable(required = false) String searchTerm,
+                                                 @PathVariable(required = false) String orderBy,
+                                                 @PathVariable(required = false) String pageLength,
+                                                 @PathVariable(required = false) String ascendingOrder ) {
 
-    // Default values for optional parameters
+        Page pageComputer = new Page(computerService.countComputerEntries(),Computer.parseAttribute(orderBy));
+        pageComputer.setPageLength(pageLength);
+        pageComputer.setSearch(searchTerm);
+        pageComputer.goTo(numPage);
+        pageComputer.setAscendingOrder(ascendingOrder);
 
-    if (nbEntries == null) {
-        nbEntries = "25";
+        return computerService.getPageComputers(pageComputer);
+
     }
-    if (searchTerm == null) {
-        searchTerm = "";
-    }
-    if (orderBy == null) {
-        orderBy = "computer.id";
-    }
-
-    // Updating number of entries per page
-
-    if (validator.isStringInteger(nbEntries)) {
-        int newNbEntriesPerPage = Integer.parseInt(nbEntries);
-        ComputerPage.setMaxItemsPerPage(newNbEntriesPerPage);
-    }
-
-    // Gathering list of computers in the page
-
-    int nbComputers = computerService.countComputerEntries();
-    if (validator.isPageIDStringValid(nbComputers, id)) {
-        ComputerPage computerPage = new ComputerPage(nbComputers, Integer.parseInt(id));
-        return computerService.getPageComputers(computerPage, searchTerm, orderBy);
-    }
-    throw new PageNotFoundException();
-
-}
 
     @PostMapping()
     public String addComputerJSON(@RequestBody ComputerDTO computerDto) throws InvalidNewEntryException {

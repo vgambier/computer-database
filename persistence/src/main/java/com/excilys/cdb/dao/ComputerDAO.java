@@ -2,6 +2,7 @@ package com.excilys.cdb.dao;
 
 import java.util.List;
 
+import com.excilys.cdb.model.Page;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -10,12 +11,17 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.cdb.model.Computer;
 
+import javax.persistence.TypedQuery;
+
 /**
  * @author Victor Gambier
  *
  */
 @Component("computerDAOBean")
 public class ComputerDAO extends DAO<Computer> {
+
+    private final static String QUERYHQL_FIND_COMPUTER_BY_PAGE = "FROM Computer computer LEFT JOIN FETCH computer.company WHERE computer.name LIKE :searchTerm OR computer.company.name LIKE :searchTerm ORDER BY ";
+
 
     @Autowired
     public ComputerDAO(SessionFactory sessionFactory) {
@@ -113,6 +119,20 @@ public class ComputerDAO extends DAO<Computer> {
         session.close();
 
         return computers;
+    }
+
+
+    public List<Computer> findByPage (Page page){
+        String stringQuery = QUERYHQL_FIND_COMPUTER_BY_PAGE + page.getAttributeToOrder() + " " + page.getCurrentOrder();
+
+        Session session = sessionFactory.openSession();
+        TypedQuery<Computer> query = session.createQuery(stringQuery,Computer.class)
+                .setParameter("searchTerm" ,"%" + page.getSearch() + "%")
+                .setFirstResult(page.getOffset())
+                .setMaxResults(page.getPageLength());
+        List<Computer> computerList = query.getResultList();
+        session.close();
+        return computerList;
     }
 
     @Override

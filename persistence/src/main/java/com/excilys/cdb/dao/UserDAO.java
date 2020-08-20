@@ -2,7 +2,6 @@ package com.excilys.cdb.dao;
 
 import com.excilys.cdb.model.Authority;
 import com.excilys.cdb.model.User;
-import javassist.bytecode.stackmap.BasicBlock;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -94,6 +93,18 @@ public class UserDAO {
         session.getTransaction().commit();
         session.close();
 
+    }
+
+    public void deleteUser (String username) {
+        User user = getByUserName(username);
+
+        Session session = sessionFactory.openSession();
+        user.setAuthoritySet(Collections.EMPTY_SET);
+        session.beginTransaction();
+        session.saveOrUpdate(user);
+        session.delete(user);
+        session.getTransaction().commit();
+        session.close();
     }
 
 
