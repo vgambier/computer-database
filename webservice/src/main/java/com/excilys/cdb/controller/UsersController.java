@@ -65,4 +65,8 @@ public class UsersController {
         userService.manageRole(userUpdateRoleDTO.getUserName(), userUpdateRoleDTO.getRoles());
     }
 
+    @DeleteMapping("/{username}")
+    public void deleteUser (@PathVariable String username){
+        userService.deleteUser(username);
+    }
 }

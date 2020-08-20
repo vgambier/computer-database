@@ -68,4 +68,8 @@ public class UserService implements UserDetailsService {
         userDAO.manageRole(username,roles);
     }
 
+    public void deleteUser(String username){
+        userDAO.deleteUser(username);
+    }
+
 }
