@@ -62,7 +62,7 @@ public class UsersController {
 
     @PutMapping()
     public void manageRole (@RequestBody UserUpdateRoleDTO userUpdateRoleDTO){
-        userService.manageRole(userUpdateRoleDTO.getUserName(), userUpdateRoleDTO.getRoles());
+        userService.manageRole(userUpdateRoleDTO.getUsername(), userUpdateRoleDTO.getAuthorities());
     }
 
 }

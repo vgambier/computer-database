@@ -1,22 +1,22 @@
 package com.excilys.cdb.dto;
 
 public class UserUpdateRoleDTO {
-    String userName;
-    String[] roles;
+    String username;
+    String[] authorities;
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String[] getRoles() {
-        return roles;
+    public String[] getAuthorities() {
+        return authorities;
     }
 
-    public void setRoles(String[] roles) {
-        this.roles = roles;
+    public void setAuthorities(String[] authorities) {
+        this.authorities = authorities;
     }
 }
