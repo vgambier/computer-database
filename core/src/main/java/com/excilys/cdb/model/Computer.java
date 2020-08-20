@@ -46,8 +46,11 @@ public class Computer implements Serializable {
     private Company company;
 
     public enum attributes {
-        ID("computer.id"), NAME("computer.name"), INTRODUCED("computer.introduced"), DISCONTINUED(
-                "computer.discontinued"), COMPANY("computer.company.name");
+        ID ("computer.id"),
+        NAME ("computer.name"),
+        INTRODUCED ("computer.introduced"),
+        DISCONTINUED ("computer.discontinued"),
+        COMPANY ("computer.company.name");
 
         private final String attribute;
         attributes(String name) {
@@ -151,18 +154,13 @@ public class Computer implements Serializable {
         return company == null ? null : company.getName();
     }
 
-    public static String parseAttribute(String attribute) {
-        switch (attribute.toUpperCase()) {
-            case "NAME" :
-                return attributes.NAME.getAttribute();
-            case "INTRODUCED" :
-                return attributes.INTRODUCED.getAttribute();
-            case "DISCONTINUED" :
-                return attributes.DISCONTINUED.getAttribute();
-            case "COMPANY" :
-                return attributes.COMPANY.getAttribute();
-            default :
-                return attributes.ID.getAttribute();
+    public static String parseAttribute(String attribute){
+        switch (attribute.toUpperCase()){
+            case "NAME"         : return attributes.NAME.getAttribute();
+            case "INTRODUCED"   : return attributes.INTRODUCED.getAttribute();
+            case "DISCONTINUED" : return attributes.DISCONTINUED.getAttribute();
+            case "COMPANY"      : return attributes.COMPANY.getAttribute();
+            default             : return attributes.ID.getAttribute();
         }
     }
 
