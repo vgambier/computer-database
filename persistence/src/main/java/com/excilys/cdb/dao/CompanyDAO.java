@@ -28,8 +28,8 @@ public class CompanyDAO extends DAO<Company> {
     /**
      * Deletes the entry of the given company as well as all of its computers.
      *
-     * @param company
-     *            a Company object, representing the entry that must be deleted
+     * @param id
+     *            a Company id, representing the entry that must be deleted
      */
     @Transactional(rollbackFor = {Exception.class})
     public void delete(int id) {
