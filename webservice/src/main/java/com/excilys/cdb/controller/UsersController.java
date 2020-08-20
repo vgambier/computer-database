@@ -6,9 +6,12 @@ import com.excilys.cdb.dto.UserNoPaDTO;
 import com.excilys.cdb.dto.UserUpdateRoleDTO;
 import com.excilys.cdb.service.AuthorityService;
 import com.excilys.cdb.service.UserService;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -47,7 +50,12 @@ public class UsersController {
 
     @PostMapping("/add")
     public void addUser (@RequestBody AddUserDTO addUserDTO) {
-        userService.add(addUserDTO);
+        try{
+            userService.add(addUserDTO);
+        }catch (ConstraintViolationException exception){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"username already exist",exception);
+        }
+
     }
 
     @PostMapping("/enable/{userName}")
