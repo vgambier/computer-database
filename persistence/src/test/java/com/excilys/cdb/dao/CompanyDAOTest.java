@@ -38,8 +38,7 @@ public class CompanyDAOTest  {
     @Test
     @ExpectedDatabase(value = "/CompanyDAOTest/testDelete.xml", table = "company" )
     public void testDelete() {
-        Company toBeDeleted=companyDAO.find(6);
-        companyDAO.delete(toBeDeleted);
+        companyDAO.delete(6);
     }
 
     @Test
