@@ -60,6 +60,13 @@ public class UserDAOTest {
     }
 
     @Test
+    @ExpectedDatabase(value = "/UsersDaoTest/manageRole/test_admin_DO_NOT_CHANGE.xml",
+            assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+    public void test_admin_DO_NOT_CHANGE(){
+        userDAO.manageRole("admin",new String[] {"ROLE_ADMIN","ROLE_USER"});
+    }
+
+    @Test
     @ExpectedDatabase(value = "/UsersDaoTest/add/add_user_toto.xml",
             assertionMode = DatabaseAssertionMode.NON_STRICT,
             columnFilters = {FilterId.class,FilterPassword.class})
