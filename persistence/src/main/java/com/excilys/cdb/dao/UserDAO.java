@@ -11,10 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.TypedQuery;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository("userDAOBean")
@@ -79,12 +76,17 @@ public class UserDAO {
 
 
     public void manageRole (String username, String[] roles){
-        Set<Authority> authorities = null;
-        try {
-            authorities = Arrays.stream(roles).map(authorityDAO::getAuthority).collect(Collectors.toSet());
-        } catch (Exception e){
-            //TODO Generate role does not existe (le faire dans le service)
+        Set<Authority> authorities = new HashSet<>();
+
+        for (String role : roles) {
+            try{
+                Authority authority = authorityDAO.getAuthority(role);
+                authorities.add(authority);
+            }catch (Exception e){
+                //TODO Generate role does not existe (le faire dans le service)
+            }
         }
+
         User user = getByUserName(username);
         user.setAuthoritySet(authorities);
         Session session = sessionFactory.openSession();
