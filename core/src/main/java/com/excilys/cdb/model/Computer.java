@@ -54,7 +54,7 @@ public class Computer implements Serializable {
         NAME ("computer.name"),
         INTRODUCED ("computer.introduced"),
         DISCONTINUED ("computer.discontinued"),
-        COMPANY ("computer.company_id");
+        COMPANY ("computer.company.name");
 
         private final String attribute;
         attributes(String name) {
