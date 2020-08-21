@@ -41,7 +41,6 @@ public abstract class DAO<T> {
     public int countEntriesMatching(String searchTerm) {
 
         Session session = sessionFactory.openSession();
-
         @SuppressWarnings("unchecked")
         Query<Long> query = session.createQuery(getCountEntriesWhereHQLStatement());
         query.setParameter("searchTerm", "%" + searchTerm + "%");

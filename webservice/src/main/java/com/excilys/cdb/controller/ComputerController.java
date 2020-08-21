@@ -1,10 +1,8 @@
 package com.excilys.cdb.controller;
 
-import com.excilys.cdb.dao.PersistenceException;
 import com.excilys.cdb.dto.ComputerDTO;
 import com.excilys.cdb.exception.ComputerNotFoundException;
 import com.excilys.cdb.exception.InvalidNewEntryException;
-import com.excilys.cdb.exception.PageNotFoundException;
 import com.excilys.cdb.mapper.CompanyDTOMapper;
 import com.excilys.cdb.model.*;
 import com.excilys.cdb.service.CompanyService;
@@ -35,7 +33,13 @@ public class ComputerController {
     }
 
 
-    @GetMapping("/count")
+    @GetMapping( "/count/{searchTerm}")
+    public int countComputers(@PathVariable String searchTerm)
+    {
+        return computerService.countComputerEntriesWhere(searchTerm);
+    }
+
+    @GetMapping( "/countAll")
     public int countComputers()
     {
         return computerService.countComputerEntries();
