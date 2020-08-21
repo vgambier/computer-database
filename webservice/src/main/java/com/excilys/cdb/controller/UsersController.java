@@ -1,9 +1,8 @@
 package com.excilys.cdb.controller;
 
-import com.excilys.cdb.dto.AddUserDTO;
-import com.excilys.cdb.dto.AuthorityDTO;
-import com.excilys.cdb.dto.UserNoPaDTO;
-import com.excilys.cdb.dto.UserUpdateRoleDTO;
+import com.excilys.cdb.config.jwt.JwtTokenUtil;
+import com.excilys.cdb.config.jwt.dto.JwtResponse;
+import com.excilys.cdb.dto.*;
 import com.excilys.cdb.service.AuthorityService;
 import com.excilys.cdb.service.UserService;
 import org.hibernate.exception.ConstraintViolationException;
@@ -23,14 +22,17 @@ public class UsersController {
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final AuthorityService authorityService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public UsersController (PasswordEncoder passwordEncoder,
-                            UserService userService,
-                            AuthorityService authorityService){
+    public UsersController(PasswordEncoder passwordEncoder,
+                           UserService userService,
+                           AuthorityService authorityService,
+                           JwtTokenUtil jwtTokenUtil){
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.authorityService = authorityService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @GetMapping
@@ -46,6 +48,12 @@ public class UsersController {
     @GetMapping("/authorities")
     public List<AuthorityDTO> getAuthorities (){
         return  authorityService.listAll();
+    }
+
+    @PostMapping("/userFromToken")
+    public UserNoPaDTO getUserFomToken (@RequestBody TokenDTO jwtToken){
+        String username = jwtTokenUtil.getUsernameFromToken(jwtToken.getJwtToken());
+        return getUser(username);
     }
 
     @PostMapping("/add")
@@ -77,4 +85,5 @@ public class UsersController {
     public void deleteUser (@PathVariable String username){
         userService.deleteUser(username);
     }
+
 }
