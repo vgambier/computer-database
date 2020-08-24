@@ -54,7 +54,7 @@ public class RESTSecuConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/computers/**").hasAnyRole("ADMIN", "USER")
                 .antMatchers(HttpMethod.GET, "/api/companies/**").hasAnyRole("ADMIN", "USER")
-                .antMatchers(HttpMethod.PUT).hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.PUT).hasAnyRole("ADMIN", "USER")
                 .antMatchers(HttpMethod.GET).hasAnyRole("ADMIN", "USER")
                 .antMatchers(HttpMethod.POST,"/api/users/enableUser/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/users/disableUser/**").hasAnyRole("ADMIN")
