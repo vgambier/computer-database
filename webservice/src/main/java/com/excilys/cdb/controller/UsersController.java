@@ -1,7 +1,6 @@
 package com.excilys.cdb.controller;
 
 import com.excilys.cdb.config.jwt.JwtTokenUtil;
-import com.excilys.cdb.config.jwt.dto.JwtResponse;
 import com.excilys.cdb.dto.*;
 import com.excilys.cdb.service.AuthorityService;
 import com.excilys.cdb.service.UserService;
@@ -78,7 +77,7 @@ public class UsersController {
 
     @PutMapping()
     public void manageRole (@RequestBody UserUpdateRoleDTO userUpdateRoleDTO){
-        userService.manageRole(userUpdateRoleDTO.getUsername(), userUpdateRoleDTO.getAuthorities());
+        userService.manageRole(userUpdateRoleDTO.getUsername(), userUpdateRoleDTO.getAuthorityList());
     }
 
     @DeleteMapping("/{username}")

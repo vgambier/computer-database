@@ -2,7 +2,7 @@ package com.excilys.cdb.dto;
 
 public class UserUpdateRoleDTO {
     String username;
-    String[] authorities;
+    String[] authorityList;
 
     public String getUsername() {
         return username;
@@ -12,11 +12,11 @@ public class UserUpdateRoleDTO {
         this.username = username;
     }
 
-    public String[] getAuthorities() {
-        return authorities;
+    public String[] getAuthorityList() {
+        return authorityList;
     }
 
-    public void setAuthorities(String[] authorities) {
-        this.authorities = authorities;
+    public void setAuthorityList(String[] authorityList) {
+        this.authorityList = authorityList;
     }
 }
